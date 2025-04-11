@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ShadowForge
 
-## Getting Started
+**Convert D&D 5e content to Shadowdark RPG using AI-powered tools.**
 
-First, run the development server:
+ShadowForge is a developer-friendly web app that helps Game Masters (GMs) convert Dungeons & Dragons 5th Edition (5e) materials into formats compatible with the Shadowdark RPG system. It supports PDF and DOCX file uploads or direct text input, and uses an AI-powered backend to provide plausible Shadowdark-style conversions for monsters, treasure, room text, and more.
+
+## Features
+
+- **AI-Powered Conversion:** Uses LLMs (via LangChain + OpenAI API) to generate Shadowdark equivalents of 5e content.
+- **PDF/DOCX Uploads:** Extract content from 5e adventure files.
+- **Text Input:** Paste or type 5e blocks directly.
+- **Modular Backend:** Clean API routes and conversion service structure.
+- **Prompt Engineering:** Custom prompt templates for monsters, treasure, and encounters.
+- **Privacy First:** Uploaded content is processed ephemerally — never stored.
+
+## Tech Stack
+
+| Layer          | Stack                                   |
+| -------------- | --------------------------------------- |
+| Frontend       | Next.js, React, Tailwind CSS            |
+| Backend        | Node.js, Next.js API Routes             |
+| AI Integration | LangChain.js, OpenAI API                |
+| File Handling  | Formidable (upload), pdf-parse, mammoth |
+| Dev Tools      | TypeScript, ESLint, Prettier, Vercel    |
+
+## 📂 File Structure
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+shadowforge/
+├── pages/                 # Next.js routes
+│   ├── api/convert/       # API endpoints (text, file)
+│   └── index.tsx          # Main UI
+├── lib/                   # Core logic (conversion modules, file utils)
+├── prompts/               # PromptTemplates for each conversion type
+├── styles/                # Tailwind setup
+├── public/                # Static assets
+├── .env.example           # Example env vars
+└── README.md
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
