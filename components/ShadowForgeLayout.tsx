@@ -23,6 +23,7 @@ export default function ShadowForgeLayout({
   handleConvert,
 }: ShadowForgeLayoutProps) {
   const [previewMode, setPreviewMode] = useState(true);
+
   return (
     <div className='min-h-screen bg-[#fefae0] dark:bg-[#121212] text-[#1a1a1a] dark:text-[#fefae0] font-sans'>
       <header className='flex items-center justify-between px-6 py-4 border-b border-gray-300 dark:border-gray-700'>
@@ -52,6 +53,29 @@ export default function ShadowForgeLayout({
             >
               {loading ? 'Converting...' : 'Convert'}
             </button>
+
+            <div>
+              <label className='inline=block px-4 py-2 bg-cyan-600 text-white rounded cursor-pointer hover:bg-cyan-700'>
+                Upload .txt
+                <input
+                  type='file'
+                  accept='.txt'
+                  className='hidden'
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        const fileText = event.target?.result as string;
+                        setInput(fileText);
+                      };
+                      reader.readAsText(file);
+                    }
+                  }}
+                />
+              </label>
+            </div>
+
             <label className='flex items-center space-x-2 text-sm'>
               <span>Normalize text</span>
               <input
