@@ -9,7 +9,7 @@ export async function convertToShadowdark(input: string): Promise<string> {
   const userPrompt = `Convert this DnD 5e room to Shadowdark format:\n\n${input}`;
 
   const completion = await openai.chat.completions.create({
-    model: 'gpt-4',
+    model: 'gpt-3.5-turbo',
     temperature: 0.3,
     messages: [
       { role: 'system', content: shadowdarkPrompt },
