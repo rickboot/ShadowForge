@@ -8,7 +8,7 @@ This tool addresses a common challenge faced by GMs wanting to use 5e adventures
 
 *NOTE: The project is currently in the Minimum Viable Product (MVP) development stage; some features described below are planned or in progress.*
 
-** Features**
+**Features**
 
 * **AI-Powered Conversion:** Uses LLMs (via LangChain + OpenAI API) to generate Shadowdark equivalents of 5e content.
 * **Flexible Input:** Accepts direct text pasting or file uploads (PDF/DOCX).
@@ -19,11 +19,11 @@ This tool addresses a common challenge faced by GMs wanting to use 5e adventures
 * **Dual Output Modes:** (Planned) Option to generate both a GM version (with full details) and a player-facing version (e.g., read-aloud text only).
 * **Original Text Preservation:** (Planned) Option to include the original 5e text alongside the conversion for easy comparison and reference.
 
-** Example Use Case**
+**Example Use Case**
 
 A GM uploads a DOCX file of a 5e dungeon module. ShadowForge extracts the text, normalizes it, and breaks it into manageable chunks based on room descriptions. The GM selects the "Encounter/Room Text" conversion option. ShadowForge processes each chunk, returning Shadowdark-ready room versions—complete with appropriate read-aloud text, simplified monster stats reflecting Shadowdark lethality, potential light-based traps or environmental effects, and relevant treasure parcels adjusted for a GP=XP system.
 
-** Tech Stack & Pipeline**
+**Tech Stack & Pipeline**
 
 * **Frontend:** Next.js, React, Tailwind CSS
 * **Backend:** Node.js, Next.js API Routes
@@ -34,7 +34,7 @@ A GM uploads a DOCX file of a 5e dungeon module. ShadowForge extracts the text, 
 * **Development:** TypeScript, ESLint, Prettier
 * **Deployment:** Vercel
 
-** Prompt Strategy**
+**Prompt Strategy**
 
 ShadowForge employs carefully engineered prompts designed to capture Shadowdark’s core gameplay principles:
 
@@ -45,7 +45,7 @@ ShadowForge employs carefully engineered prompts designed to capture Shadowdark�
 
 Each content type (monster, treasure, room) utilizes distinct `PromptTemplate`s within LangChain. These prompts were iteratively tested using content from official 5e modules (e.g., *Curse of Strahd*, *The Sunless Citadel*) to refine the output style, rules adherence, and overall pacing to feel appropriate for Shadowdark gameplay.
 
-** File Structure**
+**File Structure**
 
 ```
 shadowforge/
