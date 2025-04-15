@@ -1,8 +1,18 @@
 @import 'tailwindcss';
+@plugin "@tailwindcss/typography";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+.prose {
+  --tw-prose-spacing: 0.5rem;
+  --tw-prose-headings-margin-top: 0.75em;
+  --tw-prose-paragraph-spacing: 0.5em;
+  --tw-prose-line-height: 1.4;
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
 
 @theme inline {

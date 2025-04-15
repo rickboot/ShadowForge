@@ -1,6 +1,7 @@
 'user client';
 
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 
 interface ShadowForgeLayoutProps {
   input: string;
@@ -61,8 +62,10 @@ export default function ShadowForgeLayout({
         {/* === output === */}
         <section className='flex-1 space-y-4'>
           <h2 className='text-lg font-medium'>Output</h2>
-          <div className='w-full h-120 p-4 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-black font-mono text-sm whitespace-pre-wrap overflow-auto'>
-            {output || <p className='italic text-gray-500'>Nothing yet...</p>}
+          <div className='w-full h-120 p-4 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-black overflow-auto'>
+            <div className='prose prose-sm max-w-none dark:prose-invert'>
+              <ReactMarkdown>{output}</ReactMarkdown>
+            </div>
           </div>
         </section>
       </main>
