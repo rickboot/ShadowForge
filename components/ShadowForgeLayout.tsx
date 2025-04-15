@@ -1,6 +1,6 @@
-'user client';
+'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 interface ShadowForgeLayoutProps {
@@ -22,6 +22,7 @@ export default function ShadowForgeLayout({
   setNormalize,
   handleConvert,
 }: ShadowForgeLayoutProps) {
+  const [previewMode, setPreviewMode] = useState(true);
   return (
     <div className='min-h-screen bg-[#fefae0] dark:bg-[#121212] text-[#1a1a1a] dark:text-[#fefae0] font-sans'>
       <header className='flex items-center justify-between px-6 py-4 border-b border-gray-300 dark:border-gray-700'>
@@ -36,36 +37,56 @@ export default function ShadowForgeLayout({
         <section className='flex-1 space-y-4'>
           <h2 className='text-lg font-medium'>Input</h2>
           <textarea
-            className='w-full h-120 p-4 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-black font-mono text-sm'
+            resize-none
+            className='w-full resize-none h-120 p-4 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-black font-mono text-sm'
             placeholder='Paste your 5e content here...'
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
-          <button
-            onClick={handleConvert}
-            disabled={loading || !input.trim()}
-            className='bg-black text-white dark:bg-white dark:text-black px-6 py-2 text-sm font-medium rounded hover:opacity-90 disabled:opacity-50'
-          >
-            {loading ? 'Converting...' : 'Convert'}
-          </button>
-          <label className='flex items-center space-x-2 text-sm'>
-            <input
-              type='checkbox'
-              checked={normalize}
-              onChange={(e) => setNormalize(e.target.checked)}
-              className='form-checkbox'
-            />
-            <span>Normalize text</span>
-          </label>
+
+          <div className='flex items-center h-12 justify-between gap-2 mb-2'>
+            <button
+              onClick={handleConvert}
+              disabled={loading || !input.trim()}
+              className='bg-black text-white dark:bg-white dark:text-black px-6 py-2 text-sm font-medium rounded hover:opacity-90 disabled:opacity-50'
+            >
+              {loading ? 'Converting...' : 'Convert'}
+            </button>
+            <label className='flex items-center space-x-2 text-sm'>
+              <span>Normalize text</span>
+              <input
+                type='checkbox'
+                checked={normalize}
+                onChange={(e) => setNormalize(e.target.checked)}
+                className='form-checkbox accent-cyan-600'
+              />
+            </label>
+          </div>
         </section>
 
         {/* === output === */}
         <section className='flex-1 space-y-4'>
           <h2 className='text-lg font-medium'>Output</h2>
           <div className='w-full h-120 p-4 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-black overflow-auto'>
-            <div className='prose prose-sm max-w-none dark:prose-invert'>
-              <ReactMarkdown>{output}</ReactMarkdown>
-            </div>
+            {previewMode ? (
+              <div className='prose prose-sm max-w-none dark:prose-invert'>
+                <ReactMarkdown>{output}</ReactMarkdown>
+              </div>
+            ) : (
+              <pre className='whitespace-pre-wrap font-mono text-sm'>
+                {output}
+              </pre>
+            )}
+          </div>
+
+          <div className='flex h-12 items-center justify-end gap-2 mb-2'>
+            <label className='text-sm font-medium'>Preview Mode</label>
+            <input
+              type='checkbox'
+              checked={previewMode}
+              onChange={() => setPreviewMode(!previewMode)}
+              className='form-checkbox accent-cyan-600'
+            />
           </div>
         </section>
       </main>
