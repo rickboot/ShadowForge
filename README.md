@@ -2,30 +2,52 @@
 
 **Convert D&D 5e content to Shadowdark RPG using AI-powered tools.**
 
-ShadowForge is a developer-friendly web app that helps Game Masters (GMs) convert Dungeons & Dragons 5th Edition (5e) materials into formats compatible with the Shadowdark RPG system. It supports PDF and DOCX file uploads or direct text input, and uses an AI-powered backend to provide plausible Shadowdark-style conversions for monsters, treasure, room text, and more.
+ShadowForge is an AI-powered, developer-friendly web app designed to help tabletop RPG game masters (GMs) convert Dungeons & Dragons 5e content into the gritty, old-school format of the Shadowdark RPG. It assists with transforming monster stats, treasure parcels, room descriptions, and rule mechanics (like skill checks) into formats suitable for direct use in Shadowdark games.
 
-## Features
+This tool addresses a common challenge faced by GMs wanting to use 5e adventures in Shadowdark: the conversion process is often slow, manual, and tedious, requiring constant referencing of multiple rulebooks. ShadowForge aims to make this process faster and easier, while ensuring the final creative decisions remain firmly in the hands of the GM.
 
-- **AI-Powered Conversion:** Uses LLMs (via LangChain + OpenAI API) to generate Shadowdark equivalents of 5e content.
-- **PDF/DOCX Uploads:** Extract content from 5e adventure files.
-- **Text Input:** Paste or type 5e blocks directly.
-- **Modular Backend:** Clean API routes and conversion service structure.
-- **Prompt Engineering:** Custom prompt templates for monsters, treasure, and encounters.
-- **Privacy First:** Uploaded content is processed ephemerally — never stored.
+*NOTE: The project is currently in the Minimum Viable Product (MVP) development stage; some features described below are planned or in progress.*
 
-## Tech Stack
+**🧩 Features**
 
-| Layer          | Stack                                   |
-| -------------- | --------------------------------------- |
-| Frontend       | Next.js, React, Tailwind CSS            |
-| Backend        | Node.js, Next.js API Routes             |
-| AI Integration | LangChain.js, OpenAI API                |
-| File Handling  | Formidable (upload), pdf-parse, mammoth |
-| Dev Tools      | TypeScript, ESLint, Prettier, Vercel    |
+* **AI-Powered Conversion:** Uses LLMs (via LangChain + OpenAI API) to generate Shadowdark equivalents of 5e content.
+* **Flexible Input:** Accepts direct text pasting or file uploads (PDF/DOCX).
+* **Targeted Conversion:** Options to convert specific elements like **Monster Stats**, **Treasure Blocks** (adjusting for **Shadowdark economy/GP=XP**), **Encounters/Rooms** (including rule mechanics like **skill check DCs**), or generic text blocks.
+* **Structured Prompts:** Leverages LangChain to route input to task-specific prompt templates that inject core Shadowdark design principles and rules for more accurate conversion.
+* **GM-Friendly Output:** Results are formatted in markdown (e.g., using boxed text, clear headings, concise notes) designed for **easy readability and use by the GM at the table**.
+* **Privacy First:** Uploaded content is processed ephemerally — never stored. *(Note: Kept from original README)*
+* **Dual Output Modes:** (Planned) Option to generate both a GM version (with full details) and a player-facing version (e.g., read-aloud text only).
+* **Original Text Preservation:** (Planned) Option to include the original 5e text alongside the conversion for easy comparison and reference.
 
-## 📂 File Structure
+**📂 Example Use Case**
 
-```bash
+A GM uploads a DOCX file of a 5e dungeon module. ShadowForge extracts the text, normalizes it, and breaks it into manageable chunks based on room descriptions. The GM selects the "Encounter/Room Text" conversion option. ShadowForge processes each chunk, returning Shadowdark-ready room versions—complete with appropriate read-aloud text, simplified monster stats reflecting Shadowdark lethality, potential light-based traps or environmental effects, and relevant treasure parcels adjusted for a GP=XP system.
+
+**🔧 Tech Stack & Pipeline**
+
+* **Frontend:** Next.js, React, Tailwind CSS
+* **Backend:** Node.js, Next.js API Routes
+* **LLM Pipeline:** LangChain.js utilizing GPT-3.5 Turbo (chosen for favorable token limits and cost-efficiency).
+* **File Handling:** Text extraction from PDF/DOCX uploads (using `pdf-parse`, `mammoth`), file uploads handled via `Formidable`.
+* **Preprocessing:** Includes text normalization routines to improve content quality from potential OCR errors and ensure input consistency for the LLM.
+* **Processing Strategy:** Implements input chunking to manage LLM context window limitations, allowing for the processing of large documents.
+* **Development:** TypeScript, ESLint, Prettier
+* **Deployment:** Vercel
+
+**🧠 Prompt Strategy**
+
+ShadowForge employs carefully engineered prompts designed to capture Shadowdark’s core gameplay principles:
+
+* Stingy, loot-based economy (GP=XP focus)
+* Low HP, high-tension encounters
+* Emphasis on light/dark mechanics (integrated where appropriate)
+* Classic fantasy tone
+
+Each content type (monster, treasure, room) utilizes distinct `PromptTemplate`s within LangChain. These prompts were iteratively tested using content from official 5e modules (e.g., *Curse of Strahd*, *The Sunless Citadel*) to refine the output style, rules adherence, and overall pacing to feel appropriate for Shadowdark gameplay.
+
+**📁 File Structure**
+
+```
 shadowforge/
 ├── pages/                 # Next.js routes
 │   ├── api/convert/       # API endpoints (text, file)
@@ -37,3 +59,10 @@ shadowforge/
 ├── .env.example           # Example env vars
 └── README.md
 ```
+
+**🛠️ Future Plans**
+
+* Implement semantic memory for better context consistency between connected rooms or encounters.
+* Develop full adventure chunking with automatic classification (Room vs. Lore vs. GM Guidance).
+* Introduce user-editable conversion mappings for handling homebrew rules or custom preferences.
+* Explore potential VTT integration (e.g., Fantasy Grounds, Foundry VTT).
