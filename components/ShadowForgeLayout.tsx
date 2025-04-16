@@ -34,8 +34,8 @@ export default function ShadowForgeLayout({
         </button>
       </header>
 
-      {/* === input === */}
-      <main className='flex flex-col xl:flex-row px-6 py-8 gap-6'>
+      <main className='flex flex-col lg:flex-row px-6 py-8 gap-6'>
+        {/* === input === */}
         <section className='flex-1 space-y-4'>
           <h2 className='text-lg font-medium'>Input</h2>
           <textarea
@@ -55,7 +55,7 @@ export default function ShadowForgeLayout({
             </button>
 
             <div>
-              <label className='inline=block px-4 py-2 bg-cyan-600 text-white rounded cursor-pointer hover:bg-cyan-700'>
+              <label className='inline-block px-4 py-2 bg-cyan-600 text-white rounded cursor-pointer hover:bg-cyan-700'>
                 Upload txt or pdf
                 <input
                   type='file'
@@ -66,7 +66,7 @@ export default function ShadowForgeLayout({
                     if (!file) return;
 
                     try {
-                      const isPdf = file.name.toLowerCase().endsWith('pdf');
+                      const isPdf = file.name.toLowerCase().endsWith('.pdf');
                       const text = isPdf
                         ? await extractTextFromPDF(file)
                         : await file.text();
