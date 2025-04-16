@@ -1,8 +1,8 @@
 'use client';
 
-import { extractTextFromPDF } from '@/lib/extractPdfText';
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import FileUpload from './FileUpload';
 
 interface ShadowForgeLayoutProps {
   input: string;
@@ -54,32 +54,7 @@ export default function ShadowForgeLayout({
               {loading ? 'Converting...' : 'Convert'}
             </button>
 
-            <div>
-              <label className='inline-block px-4 py-2 bg-cyan-600 text-white rounded cursor-pointer hover:bg-cyan-700'>
-                Upload txt or pdf
-                <input
-                  type='file'
-                  accept='.txt,.pdf'
-                  className='hidden'
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-
-                    try {
-                      const isPdf = file.name.toLowerCase().endsWith('.pdf');
-                      const text = isPdf
-                        ? await extractTextFromPDF(file)
-                        : await file.text();
-
-                      setInput(text);
-                    } catch (err) {
-                      console.error('File read error:', err);
-                      alert('Failed to read file.');
-                    }
-                  }}
-                />
-              </label>
-            </div>
+            <FileUpload onLoad={setInput} />
 
             <label className='flex items-center space-x-2 text-sm'>
               <span>Normalize text</span>
