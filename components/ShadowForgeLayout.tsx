@@ -1,5 +1,6 @@
 'use client';
 
+import { extractTextFromPDF } from '@/lib/extractPdfText';
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
@@ -38,7 +39,6 @@ export default function ShadowForgeLayout({
         <section className='flex-1 space-y-4'>
           <h2 className='text-lg font-medium'>Input</h2>
           <textarea
-            resize-none
             className='w-full resize-none h-120 p-4 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-black font-mono text-sm'
             placeholder='Paste your 5e content here...'
             value={input}
@@ -56,20 +56,25 @@ export default function ShadowForgeLayout({
 
             <div>
               <label className='inline=block px-4 py-2 bg-cyan-600 text-white rounded cursor-pointer hover:bg-cyan-700'>
-                Upload .txt
+                Upload txt or pdf
                 <input
                   type='file'
-                  accept='.txt'
+                  accept='.txt,.pdf'
                   className='hidden'
-                  onChange={(e) => {
+                  onChange={async (e) => {
                     const file = e.target.files?.[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onload = (event) => {
-                        const fileText = event.target?.result as string;
-                        setInput(fileText);
-                      };
-                      reader.readAsText(file);
+                    if (!file) return;
+
+                    try {
+                      const isPdf = file.name.toLowerCase().endsWith('pdf');
+                      const text = isPdf
+                        ? await extractTextFromPDF(file)
+                        : await file.text();
+
+                      setInput(text);
+                    } catch (err) {
+                      console.error('File read error:', err);
+                      alert('Failed to read file.');
                     }
                   }}
                 />
