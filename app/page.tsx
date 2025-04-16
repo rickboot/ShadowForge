@@ -6,7 +6,7 @@ export default function Home() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [normalize, setNormalize] = useState(false);
+  const [normalize, setNormalize] = useState(true);
 
   const handleConvert = async () => {
     setLoading(true);
