@@ -2,35 +2,22 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* --background: #fefae0; */
+  /* --foreground: #1a1a1a; */
 }
 
-.prose {
-  --tw-prose-spacing: 0.5rem;
-  --tw-prose-headings-margin-top: 0.75em;
-  --tw-prose-paragraph-spacing: 0.5em;
-  --tw-prose-line-height: 1.4;
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html.dark {
+  /* --background: #121212; */
+  /* --foreground: #fefae0; */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  /* background-color: var(--background); */
+  transition: background-color 0.3s, color 0.3s;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.prose {
+  font-size: 0.8rem;
+  line-height: 1.7;
 }

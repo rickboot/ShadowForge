@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import FileUpload from './FileUpload';
 
@@ -24,13 +24,38 @@ export default function ShadowForgeLayout({
   handleConvert,
 }: ShadowForgeLayoutProps) {
   const [previewMode, setPreviewMode] = useState(true);
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    if (typeof window === 'undefined') {
+      return 'light';
+    }
+    return (localStorage.getItem('theme') as 'dark' | 'light') || 'light';
+  });
+
+  useEffect(() => {
+    const htmlTag = document.documentElement;
+
+    if (theme === 'dark') {
+      htmlTag.classList.add('dark');
+    } else {
+      htmlTag.classList.remove('dark');
+    }
+
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
 
   return (
-    <div className='min-h-screen bg-[#fefae0] dark:bg-[#121212] text-[#1a1a1a] dark:text-[#fefae0] font-sans'>
+    <div className='min-h-screen font-sans'>
       <header className='flex items-center justify-between px-6 py-4 border-b border-gray-300 dark:border-gray-700'>
         <h1 className='text-2xl font-serif tracking-wide'>ShadowForge</h1>
-        <button className='text-sm px-3 py-1 border rounded dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800'>
-          Toggle Theme
+        <button
+          className='text-sm w-16 h-8 px-3 py-1 border rounded dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800'
+          onClick={toggleTheme}
+        >
+          {theme === 'dark' ? 'Dark' : 'Light'}
         </button>
       </header>
 

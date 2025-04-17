@@ -1,6 +1,14 @@
 'use client';
-import ShadowForgeLayout from '@/components/ShadowForgeLayout';
 import { useState } from 'react';
+
+// skip SSR. pdfjs-dist needs DOM during build
+import dynamic from 'next/dynamic';
+const ShadowForgeLayout = dynamic(
+  () => import('@/components/ShadowForgeLayout'),
+  {
+    ssr: false,
+  }
+);
 
 export default function Home() {
   const [input, setInput] = useState('');
@@ -25,6 +33,7 @@ export default function Home() {
     } catch (error) {
       console.error('Conversion error:', error);
       setOutput('Error connecting to server.');
+      console.log(error);
     } finally {
       setLoading(false);
     }
