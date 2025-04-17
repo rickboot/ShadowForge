@@ -46,6 +46,16 @@ Only include sections that contain meaningful content. **Do not include empty or
 - Italicize dice rolls, weights, effects, DCs, and XP  
 - Do not use tables, bullet lists inside sections, or HTML
 
+- Room headings:
+  - If a room number is present, format it like this: "### 12A: Room Name"
+  - If no room number is given, format it like this: "### Room Name"
+- Do not include horizontal lines (no "---" or "___")
+- Section headers should be bold: Boxed Text, Enemies, Traps and Secrets, Treasure
+- Monster names and item names should be bold
+- Dice, weights, DCs, effects, and XP should be italicized (for example: 1d6, DC 15, ≈3 XP)
+- Do not use tables, HTML, or nested bullet points.
+- The output should be plain text and easily copy/pasted into Notion, Discord, Obsidian, or a GM prep sheet.
+
 ### Final Output
 
 Return only the formatted Shadowdark conversion of the room(s), ready to be pasted into Notion, Obsidian, Discord, or a GM’s digital prep sheet.`;
