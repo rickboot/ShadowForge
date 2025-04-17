@@ -44,15 +44,17 @@ export default function ShadowForgeLayout({
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
   };
 
   return (
     <div className='min-h-screen font-sans'>
       <header className='flex items-center justify-between px-6 py-4 border-b border-gray-300 dark:border-gray-700'>
-        <h1 className='text-2xl font-serif tracking-wide'>ShadowForge</h1>
+        <h1 className='text-2xl font-serif tracking-wide text-black dark:text-white'>
+          ShadowForge
+        </h1>
         <button
-          className='text-sm w-16 h-8 px-3 py-1 border rounded dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800'
+          className='text-sm w-16 h-8 px-3 py-1 border rounded bg-white dark:text-white dark:bg-black dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800'
           onClick={toggleTheme}
         >
           {theme === 'dark' ? 'Dark' : 'Light'}
@@ -64,7 +66,7 @@ export default function ShadowForgeLayout({
         <section className='flex-1 space-y-4'>
           <h2 className='text-lg font-medium'>Input</h2>
           <textarea
-            className='w-full resize-none h-120 p-4 border border-gray-300 dark:border-gray-700 rounded bg-white text-white dark:bg-black font-mono text-sm'
+            className='w-full resize-none h-120 p-4 border border-gray-300 dark:text-white dark:border-gray-700 rounded bg-white text-black dark:bg-black font-mono text-sm'
             placeholder='Paste your 5e content here...'
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -81,7 +83,7 @@ export default function ShadowForgeLayout({
 
             <FileUpload onLoad={setInput} />
 
-            <label className='flex items-center space-x-2 text-sm'>
+            <label className='flex items-center space-x-2 text-sm dark:text-white'>
               <span>Normalize text</span>
               <input
                 type='checkbox'
@@ -108,7 +110,7 @@ export default function ShadowForgeLayout({
             )}
           </div>
 
-          <div className='flex h-12 items-center justify-end gap-2 mb-2'>
+          <div className='flex h-12 items-center justify-end gap-2 mb-2 dark:text-white'>
             <label className='text-sm font-medium'>Preview Mode</label>
             <input
               type='checkbox'
