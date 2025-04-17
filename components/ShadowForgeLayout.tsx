@@ -64,7 +64,7 @@ export default function ShadowForgeLayout({
         <section className='flex-1 space-y-4'>
           <h2 className='text-lg font-medium'>Input</h2>
           <textarea
-            className='w-full resize-none h-120 p-4 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-black font-mono text-sm'
+            className='w-full resize-none h-120 p-4 border border-gray-300 dark:border-gray-700 rounded bg-white text-white dark:bg-black font-mono text-sm'
             placeholder='Paste your 5e content here...'
             value={input}
             onChange={(e) => setInput(e.target.value)}
