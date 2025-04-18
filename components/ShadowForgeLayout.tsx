@@ -64,9 +64,11 @@ export default function ShadowForgeLayout({
       <main className='flex flex-col lg:flex-row px-6 py-8 gap-6'>
         {/* === input === */}
         <section className='flex-1 space-y-4'>
-          <h2 className='text-lg font-medium'>Input</h2>
+          <h2 className='text-lg text-black dark:text-white font-medium'>
+            Input
+          </h2>
           <textarea
-            className='w-full resize-none h-120 p-4 border border-gray-300 dark:text-white dark:border-gray-700 rounded bg-white text-black dark:bg-black font-mono text-sm'
+            className='w-full resize-none h-120 p-4 border border-gray-300 dark:text-white dark:border-gray-700 rounded bg-white text-black dark:bg-black font-mono text-xs'
             placeholder='Paste your 5e content here...'
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -97,7 +99,9 @@ export default function ShadowForgeLayout({
 
         {/* === output === */}
         <section className='flex-1 space-y-4'>
-          <h2 className='text-lg font-medium'>Output</h2>
+          <h2 className='text-lg text-black dark:text-white font-medium'>
+            Output
+          </h2>
           <div className='w-full h-120 p-4 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-black overflow-auto'>
             {previewMode ? (
               <div className='prose prose-sm max-w-none dark:prose-invert'>
