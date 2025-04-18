@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import FileUpload from './FileUpload';
+import CopyOutputButton from './CopyOutputButton';
 
 interface ShadowForgeLayoutProps {
   input: string;
@@ -113,7 +114,7 @@ export default function ShadowForgeLayout({
               </pre>
             )}
           </div>
-
+          <CopyOutputButton text={output} />
           <div className='flex h-12 items-center justify-end gap-2 mb-2 dark:text-white'>
             <label className='text-sm font-medium'>Preview Mode</label>
             <input
