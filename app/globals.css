@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography"; /* needed for markdown preview */
+/* following two lines needed for typography and markdown preview to work */
+@plugin "@tailwindcss/typography";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #fefae0;
