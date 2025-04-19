@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 /* following two lines needed for typography and markdown preview to work */
 @plugin "@tailwindcss/typography";
 @custom-variant dark (&:where(.dark, .dark *));
@@ -6,21 +6,25 @@
 :root {
   --background: #fefae0;
   --foreground: #1a1a1a;
-  --surface: #fff; /* text box bg in light mode */
-  --surface-contrast: #c57171; /* borders and over/active in dark mode */
-  --button-bg: #222;
-  --button-text: #fff;
-  --button-hover-bg: #444;
+
+  --surface: #fff;
+  --surface-contrast: #bbb;
+
+  --button-bg: #3a3a3a;
+  --button-text: #fefae0;
+  --button-hover-bg: #585858;
 }
 
 html.dark {
   --background: #121212;
   --foreground: #fefae0;
-  --surface: #000; /* text box bg in dark mode */
-  --surface-contrast: #2d323b; /* borders and over/active in dark mode */
-  --button-bg: #fefae0;
+
+  --surface: #000;
+  --surface-contrast: #2d323b;
+
+  --button-bg: #d6b25c;
   --button-text: #121212;
-  --button-hover-bg: #e0c36a;
+  --button-hover-bg: #f4d67e;
 }
 
 body {

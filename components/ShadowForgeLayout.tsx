@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import FileUpload from './FileUpload';
-import CopyOutputButton from './CopyOutputButton';
-import DownloadOutput from './DownloadOutput';
+import CopyButton from './CopyButton';
+import DownloadButton from './DownloadButton';
+import UploadButton from './UploadButton';
 
 interface ShadowForgeLayoutProps {
   input: string;
@@ -113,7 +113,7 @@ export default function ShadowForgeLayout({
               {loading ? 'Converting...' : 'Convert'}
             </button>
 
-            <FileUpload onLoad={setInput} />
+            <UploadButton onLoad={setInput} />
 
             <label className="flex items-center space-x-2 text-sm dark:text-white">
               <span>Normalize text</span>
@@ -121,7 +121,7 @@ export default function ShadowForgeLayout({
                 type="checkbox"
                 checked={normalize}
                 onChange={(e) => setNormalize(e.target.checked)}
-                className="form-checkbox accent-cyan-600"
+                className="h-4 w-4 rounded-sm bg-[color:var(--surface)] text-[color:var(--button-bg)] accent-[color:var(--button-bg)]"
               />
             </label>
           </div>
@@ -150,16 +150,16 @@ export default function ShadowForgeLayout({
           </div>
 
           <div className="mb-2 flex h-12 items-center justify-evenly gap-2 dark:text-white">
-            <CopyOutputButton text={output} />
-            <DownloadOutput content={output} filename="sd-conversion.md" />
+            <CopyButton text={output} />
+            <DownloadButton content={output} filename="sd-conversion.md" />
             <div className="flex h-6 w-20 items-center justify-center gap-1">
               <label className="text-sm font-medium">Preview</label>
               <input
                 type="checkbox"
                 checked={previewMode}
                 onChange={() => setPreviewMode(!previewMode)}
-                className="form-checkbox accent-cyan-600"
-              />{' '}
+                className="h-4 w-4 rounded-sm bg-[color:var(--surface)] text-[color:var(--button-bg)] accent-[color:var(--button-bg)]"
+              />
             </div>
           </div>
         </section>

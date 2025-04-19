@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { Upload as UploadIcon } from "lucide-react";
-import { extractTextFromPDF } from "@/lib/extractPdfText";
-import { useRef } from "react";
-import { buttonClasses } from "@/lib/styles";
+import { Upload as UploadIcon } from 'lucide-react';
+import { extractTextFromPDF } from '@/lib/extractPdfText';
+import { useRef } from 'react';
+import { buttonClasses } from '@/lib/styles';
 
-interface FileUploadProps {
+interface UploadButtonProps {
   onLoad: (text: string) => void;
 }
 
-export default function FileUpload({ onLoad }: FileUploadProps) {
+export default function UploadButton({ onLoad }: UploadButtonProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
@@ -21,12 +21,12 @@ export default function FileUpload({ onLoad }: FileUploadProps) {
     if (!file) return;
 
     try {
-      const isPdf = file.name.toLowerCase().endsWith(".pdf");
+      const isPdf = file.name.toLowerCase().endsWith('.pdf');
       const text = isPdf ? await extractTextFromPDF(file) : await file.text();
       onLoad(text);
     } catch (err) {
-      console.error("File read error:", err);
-      alert("Failed to read file.");
+      console.error('File read error:', err);
+      alert('Failed to read file.');
     }
   };
 
