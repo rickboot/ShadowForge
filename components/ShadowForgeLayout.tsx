@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import FileUpload from "./FileUpload";
 import CopyOutputButton from "./CopyOutputButton";
+import DownloadOutput from "./DownloadOutput";
 
 interface ShadowForgeLayoutProps {
   input: string;
@@ -147,8 +148,10 @@ export default function ShadowForgeLayout({
               </pre>
             )}
           </div>
-          <CopyOutputButton text={output} />
-          <div className="mb-2 flex h-12 items-center justify-end gap-2 dark:text-white">
+
+          <div className="mb-2 flex h-12 items-center justify-center gap-2 dark:text-white">
+            <CopyOutputButton text={output} />
+            <DownloadOutput text={output} filename="sd-conversion.md" />
             <label className="text-sm font-medium">Preview Mode</label>
             <input
               type="checkbox"

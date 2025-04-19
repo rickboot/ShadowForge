@@ -1,37 +1,47 @@
 "use client";
 
+import { Upload as UploadIcon } from "lucide-react";
 import { extractTextFromPDF } from "@/lib/extractPdfText";
+import { useRef } from "react";
+import { buttonClasses } from "@/lib/styles";
 
 interface FileUploadProps {
   onLoad: (text: string) => void;
 }
 
 export default function FileUpload({ onLoad }: FileUploadProps) {
-  // className="h-9 rounded px-6 py-2 text-sm font-medium"
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = () => {
+    inputRef.current?.click();
+  };
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const isPdf = file.name.toLowerCase().endsWith(".pdf");
+      const text = isPdf ? await extractTextFromPDF(file) : await file.text();
+      onLoad(text);
+    } catch (err) {
+      console.error("File read error:", err);
+      alert("Failed to read file.");
+    }
+  };
+
   return (
-    <label className="inline-block h-9 cursor-pointer rounded bg-cyan-600 px-4 py-2 text-sm text-white hover:bg-cyan-700">
-      Upload file
+    <>
+      <button type="button" onClick={handleClick} className={buttonClasses}>
+        <UploadIcon size={16} />
+      </button>
       <input
+        ref={inputRef}
         type="file"
         accept=".txt,.pdf"
+        onChange={handleChange}
         className="hidden"
-        onChange={async (e) => {
-          const file = e.target.files?.[0];
-          if (!file) return;
-
-          try {
-            const isPdf = file.name.toLowerCase().endsWith(".pdf");
-            const text = isPdf
-              ? await extractTextFromPDF(file)
-              : await file.text();
-
-            onLoad(text);
-          } catch (err) {
-            console.error("File read error:", err);
-            alert("Failed to read file.");
-          }
-        }}
       />
-    </label>
+    </>
   );
 }

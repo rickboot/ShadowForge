@@ -1,5 +1,7 @@
-import { Copy as CopyIcon } from 'lucide-react';
-import { useState } from 'react';
+import { Copy as CopyIcon } from "lucide-react";
+import { Check as CheckIcon } from "lucide-react";
+import { useState } from "react";
+import { buttonClasses } from "@/lib/styles";
 
 interface CopyOutputButtonProps {
   text: string;
@@ -16,8 +18,8 @@ export default function CopyOutputButton({ text }: CopyOutputButtonProps) {
 
   return (
     <div>
-      <button className='text-white' onClick={handleCopy}>
-        {!copied ? <CopyIcon size={16} /> : 'copied!'}
+      <button className={buttonClasses} onClick={handleCopy}>
+        {!copied ? <CopyIcon size={16} /> : <CheckIcon size={16} />}
       </button>
     </div>
   );
