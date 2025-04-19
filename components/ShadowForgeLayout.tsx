@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import FileUpload from "./FileUpload";
-import CopyOutputButton from "./CopyOutputButton";
-import DownloadOutput from "./DownloadOutput";
+import React, { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import FileUpload from './FileUpload';
+import CopyOutputButton from './CopyOutputButton';
+import DownloadOutput from './DownloadOutput';
 
 interface ShadowForgeLayoutProps {
   input: string;
@@ -26,54 +26,54 @@ export default function ShadowForgeLayout({
   handleConvert,
 }: ShadowForgeLayoutProps) {
   const [previewMode, setPreviewMode] = useState(true);
-  const [theme, setTheme] = useState<"dark" | "light">(() => {
-    if (typeof window === "undefined") {
-      return "light";
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    if (typeof window === 'undefined') {
+      return 'light';
     }
-    return (localStorage.getItem("theme") as "dark" | "light") || "light";
+    return (localStorage.getItem('theme') as 'dark' | 'light') || 'light';
   });
 
   useEffect(() => {
     const htmlTag = document.documentElement;
 
-    if (theme === "dark") {
-      htmlTag.classList.add("dark");
+    if (theme === 'dark') {
+      htmlTag.classList.add('dark');
     } else {
-      htmlTag.classList.remove("dark");
+      htmlTag.classList.remove('dark');
     }
 
-    localStorage.setItem("theme", theme);
+    localStorage.setItem('theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
+    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
   };
 
   return (
     <div
       className="min-h-screen font-sans"
       style={{
-        backgroundColor: "var(--background)",
-        color: "var(--foreground)",
+        backgroundColor: 'var(--background)',
+        color: 'var(--foreground)',
       }}
     >
       <header className="flex items-center justify-between border-b border-gray-300 px-6 py-4 dark:border-gray-700">
         <h1 className="font-serif text-2xl tracking-wide">ShadowForge</h1>
         <button
           style={{
-            backgroundColor: "var(--button-bg)",
-            color: "var(--button-text)",
+            backgroundColor: 'var(--button-bg)',
+            color: 'var(--button-text)',
           }}
           className="h- w-16 rounded border px-3 py-1 text-sm"
           onMouseOver={(e) =>
-            (e.currentTarget.style.backgroundColor = "var(--button-hover-bg)")
+            (e.currentTarget.style.backgroundColor = 'var(--button-hover-bg)')
           }
           onMouseOut={(e) =>
-            (e.currentTarget.style.backgroundColor = "var(--button-bg)")
+            (e.currentTarget.style.backgroundColor = 'var(--button-bg)')
           }
           onClick={toggleTheme}
         >
-          {theme === "dark" ? "Dark" : "Light"}
+          {theme === 'dark' ? 'Dark' : 'Light'}
         </button>
       </header>
 
@@ -87,30 +87,30 @@ export default function ShadowForgeLayout({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             style={{
-              backgroundColor: "var(--surface)",
-              color: "var(--foreground)",
-              borderColor: "var(--surface-contrast)",
+              backgroundColor: 'var(--surface)',
+              color: 'var(--foreground)',
+              borderColor: 'var(--surface-contrast)',
             }}
           />
 
-          <div className="mb-2 flex h-12 items-center justify-between gap-2">
+          <div className="mb-2 flex h-12 items-center justify-evenly gap-2">
             <button
               onClick={handleConvert}
               disabled={loading || !input.trim()}
               style={{
-                backgroundColor: "var(--button-bg)",
-                color: "var(--button-text)",
+                backgroundColor: 'var(--button-bg)',
+                color: 'var(--button-text)',
               }}
-              className="h-9 rounded px-6 py-2 text-sm font-medium"
+              className="h-7 rounded px-3 text-sm font-medium"
               onMouseOver={(e) =>
                 (e.currentTarget.style.backgroundColor =
-                  "var(--button-hover-bg)")
+                  'var(--button-hover-bg)')
               }
               onMouseOut={(e) =>
-                (e.currentTarget.style.backgroundColor = "var(--button-bg)")
+                (e.currentTarget.style.backgroundColor = 'var(--button-bg)')
               }
             >
-              {loading ? "Converting..." : "Convert"}
+              {loading ? 'Converting...' : 'Convert'}
             </button>
 
             <FileUpload onLoad={setInput} />
@@ -133,9 +133,9 @@ export default function ShadowForgeLayout({
           <div
             className="h-120 w-full overflow-auto rounded border p-4"
             style={{
-              backgroundColor: "var(--surface)",
-              color: "var(--foreground)",
-              borderColor: "var(--surface-contrast)",
+              backgroundColor: 'var(--surface)',
+              color: 'var(--foreground)',
+              borderColor: 'var(--surface-contrast)',
             }}
           >
             {previewMode ? (
@@ -149,16 +149,18 @@ export default function ShadowForgeLayout({
             )}
           </div>
 
-          <div className="mb-2 flex h-12 items-center justify-center gap-2 dark:text-white">
+          <div className="mb-2 flex h-12 items-center justify-evenly gap-2 dark:text-white">
             <CopyOutputButton text={output} />
-            <DownloadOutput text={output} filename="sd-conversion.md" />
-            <label className="text-sm font-medium">Preview Mode</label>
-            <input
-              type="checkbox"
-              checked={previewMode}
-              onChange={() => setPreviewMode(!previewMode)}
-              className="form-checkbox accent-cyan-600"
-            />
+            <DownloadOutput content={output} filename="sd-conversion.md" />
+            <div className="flex h-6 w-20 items-center justify-center gap-1">
+              <label className="text-sm font-medium">Preview</label>
+              <input
+                type="checkbox"
+                checked={previewMode}
+                onChange={() => setPreviewMode(!previewMode)}
+                className="form-checkbox accent-cyan-600"
+              />{' '}
+            </div>
           </div>
         </section>
       </main>
