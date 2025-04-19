@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import FileUpload from './FileUpload';
-import CopyOutputButton from './CopyOutputButton';
+import React, { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import FileUpload from "./FileUpload";
+import CopyOutputButton from "./CopyOutputButton";
 
 interface ShadowForgeLayoutProps {
   input: string;
@@ -25,109 +25,109 @@ export default function ShadowForgeLayout({
   handleConvert,
 }: ShadowForgeLayoutProps) {
   const [previewMode, setPreviewMode] = useState(true);
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    if (typeof window === 'undefined') {
-      return 'light';
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof window === "undefined") {
+      return "light";
     }
-    return (localStorage.getItem('theme') as 'dark' | 'light') || 'light';
+    return (localStorage.getItem("theme") as "dark" | "light") || "light";
   });
 
   useEffect(() => {
     const htmlTag = document.documentElement;
 
-    if (theme === 'dark') {
-      htmlTag.classList.add('dark');
+    if (theme === "dark") {
+      htmlTag.classList.add("dark");
     } else {
-      htmlTag.classList.remove('dark');
+      htmlTag.classList.remove("dark");
     }
 
-    localStorage.setItem('theme', theme);
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
+    setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
   };
 
   return (
-    <div className='min-h-screen font-sans'>
-      <header className='flex items-center justify-between px-6 py-4 border-b border-gray-300 dark:border-gray-700'>
-        <h1 className='text-2xl font-serif tracking-wide text-black dark:text-white'>
+    <div className="min-h-screen font-sans">
+      <header className="flex items-center justify-between border-b border-gray-300 px-6 py-4 dark:border-gray-700">
+        <h1 className="font-serif text-2xl tracking-wide text-black dark:text-white">
           ShadowForge
         </h1>
         <button
-          className='text-sm w-16 h-8 px-3 py-1 border rounded bg-white dark:text-white dark:bg-black dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800'
+          className="h-8 w-16 rounded border bg-white px-3 py-1 text-sm hover:bg-gray-100 dark:border-gray-600 dark:bg-black dark:text-white dark:hover:bg-gray-800"
           onClick={toggleTheme}
         >
-          {theme === 'dark' ? 'Dark' : 'Light'}
+          {theme === "dark" ? "Dark" : "Light"}
         </button>
       </header>
 
-      <main className='flex flex-col lg:flex-row px-6 py-8 gap-6'>
+      <main className="flex flex-col gap-6 px-6 py-8 lg:flex-row">
         {/* === input === */}
-        <section className='flex-1 space-y-4'>
-          <h2 className='text-lg text-black dark:text-white font-medium'>
+        <section className="flex-1 space-y-4">
+          <h2 className="text-lg font-medium text-black dark:text-white">
             Input
           </h2>
           <textarea
-            className='w-full resize-none h-120 p-4 border border-gray-300 dark:text-white dark:border-gray-700 rounded bg-white text-black dark:bg-black font-mono text-xs'
-            placeholder='Paste your 5e content here...'
+            className="h-120 w-full resize-none rounded border border-gray-300 bg-white p-4 font-mono text-xs text-black dark:border-gray-700 dark:bg-black dark:text-white"
+            placeholder="Paste your 5e content here..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
 
-          <div className='flex items-center h-12 justify-between gap-2 mb-2'>
+          <div className="mb-2 flex h-12 items-center justify-between gap-2">
             <button
               onClick={handleConvert}
               disabled={loading || !input.trim()}
-              className='bg-black text-white dark:bg-white dark:text-black px-6 py-2 text-sm font-medium rounded hover:opacity-90 disabled:opacity-50'
+              className="rounded bg-black px-6 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50 dark:bg-white dark:text-black"
             >
-              {loading ? 'Converting...' : 'Convert'}
+              {loading ? "Converting..." : "Convert"}
             </button>
 
             <FileUpload onLoad={setInput} />
 
-            <label className='flex items-center space-x-2 text-sm dark:text-white'>
+            <label className="flex items-center space-x-2 text-sm dark:text-white">
               <span>Normalize text</span>
               <input
-                type='checkbox'
+                type="checkbox"
                 checked={normalize}
                 onChange={(e) => setNormalize(e.target.checked)}
-                className='form-checkbox accent-cyan-600'
+                className="form-checkbox accent-cyan-600"
               />
             </label>
           </div>
         </section>
 
         {/* === output === */}
-        <section className='flex-1 space-y-4'>
-          <h2 className='text-lg text-black dark:text-white font-medium'>
+        <section className="flex-1 space-y-4">
+          <h2 className="text-lg font-medium text-black dark:text-white">
             Output
           </h2>
-          <div className='w-full h-120 p-4 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-black overflow-auto'>
+          <div className="h-120 w-full overflow-auto rounded border border-gray-300 bg-white p-4 dark:border-gray-700 dark:bg-black">
             {previewMode ? (
-              <div className='prose prose-sm max-w-none dark:prose-invert'>
+              <div className="prose prose-sm dark:prose-invert max-w-none">
                 <ReactMarkdown>{output}</ReactMarkdown>
               </div>
             ) : (
-              <pre className='whitespace-pre-wrap font-mono text-sm'>
+              <pre className="font-mono text-sm whitespace-pre-wrap">
                 {output}
               </pre>
             )}
           </div>
           <CopyOutputButton text={output} />
-          <div className='flex h-12 items-center justify-end gap-2 mb-2 dark:text-white'>
-            <label className='text-sm font-medium'>Preview Mode</label>
+          <div className="mb-2 flex h-12 items-center justify-end gap-2 dark:text-white">
+            <label className="text-sm font-medium">Preview Mode</label>
             <input
-              type='checkbox'
+              type="checkbox"
               checked={previewMode}
               onChange={() => setPreviewMode(!previewMode)}
-              className='form-checkbox accent-cyan-600'
+              className="form-checkbox accent-cyan-600"
             />
           </div>
         </section>
       </main>
 
-      <footer className='text-sm text-center text-gray-500 dark:text-gray-400 py-4 border-t border-gray-200 dark:border-gray-700'>
+      <footer className="border-t border-gray-200 py-4 text-center text-sm text-gray-500 dark:border-gray-700 dark:text-gray-400">
         &copy; 2025 ShadowForge. Convert responsibly.
       </footer>
     </div>
