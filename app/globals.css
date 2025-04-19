@@ -1,18 +1,28 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #fefae0;
   --foreground: #1a1a1a;
+  --surface: #fff; /* text box bg in light mode */
+  --surface-contrast: #c57171; /* borders and over/active in dark mode */
+  --button-bg: #222;
+  --button-text: #fff;
+  --button-hover-bg: #444;
 }
 
 html.dark {
   --background: #121212;
   --foreground: #fefae0;
+  --surface: #000; /* text box bg in dark mode */
+  --surface-contrast: #2d323b; /* borders and over/active in dark mode */
+  --button-bg: #fefae0;
+  --button-text: #121212;
+  --button-hover-bg: #e0c36a;
 }
 
 body {
   background-color: var(--background);
+  color: var(--foreground);
   transition:
     background-color 0.3s,
     color 0.3s;

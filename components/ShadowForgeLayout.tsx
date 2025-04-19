@@ -49,37 +49,65 @@ export default function ShadowForgeLayout({
   };
 
   return (
-    <div className="min-h-screen font-sans">
+    <div
+      className="min-h-screen font-sans"
+      style={{
+        backgroundColor: "var(--background)",
+        color: "var(--foreground)",
+      }}
+    >
       <header className="flex items-center justify-between border-b border-gray-300 px-6 py-4 dark:border-gray-700">
-        <h1 className="font-serif text-2xl tracking-wide text-black dark:text-white">
-          ShadowForge
-        </h1>
+        <h1 className="font-serif text-2xl tracking-wide">ShadowForge</h1>
         <button
-          className="h-8 w-16 rounded border bg-white px-3 py-1 text-sm hover:bg-gray-100 dark:border-gray-600 dark:bg-black dark:text-white dark:hover:bg-gray-800"
+          style={{
+            backgroundColor: "var(--button-bg)",
+            color: "var(--button-text)",
+          }}
+          className="h- w-16 rounded border px-3 py-1 text-sm"
+          onMouseOver={(e) =>
+            (e.currentTarget.style.backgroundColor = "var(--button-hover-bg)")
+          }
+          onMouseOut={(e) =>
+            (e.currentTarget.style.backgroundColor = "var(--button-bg)")
+          }
           onClick={toggleTheme}
         >
           {theme === "dark" ? "Dark" : "Light"}
         </button>
       </header>
 
-      <main className="flex flex-col gap-6 px-6 py-8 lg:flex-row">
+      <main className="flex flex-col gap-6 px-6 py-8 md:flex-row">
         {/* === input === */}
         <section className="flex-1 space-y-4">
-          <h2 className="text-lg font-medium text-black dark:text-white">
-            Input
-          </h2>
+          <h2 className="text-lg font-medium">Input</h2>
           <textarea
-            className="h-120 w-full resize-none rounded border border-gray-300 bg-white p-4 font-mono text-xs text-black dark:border-gray-700 dark:bg-black dark:text-white"
+            className="h-120 w-full resize-none rounded border border-gray-300 p-4 font-mono text-xs"
             placeholder="Paste your 5e content here..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            style={{
+              backgroundColor: "var(--surface)",
+              color: "var(--foreground)",
+              borderColor: "var(--surface-contrast)",
+            }}
           />
 
           <div className="mb-2 flex h-12 items-center justify-between gap-2">
             <button
               onClick={handleConvert}
               disabled={loading || !input.trim()}
-              className="rounded bg-black px-6 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50 dark:bg-white dark:text-black"
+              style={{
+                backgroundColor: "var(--button-bg)",
+                color: "var(--button-text)",
+              }}
+              className="h-9 rounded px-6 py-2 text-sm font-medium"
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor =
+                  "var(--button-hover-bg)")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "var(--button-bg)")
+              }
             >
               {loading ? "Converting..." : "Convert"}
             </button>
@@ -100,10 +128,15 @@ export default function ShadowForgeLayout({
 
         {/* === output === */}
         <section className="flex-1 space-y-4">
-          <h2 className="text-lg font-medium text-black dark:text-white">
-            Output
-          </h2>
-          <div className="h-120 w-full overflow-auto rounded border border-gray-300 bg-white p-4 dark:border-gray-700 dark:bg-black">
+          <h2 className="text-lg font-medium">Output</h2>
+          <div
+            className="h-120 w-full overflow-auto rounded border p-4"
+            style={{
+              backgroundColor: "var(--surface)",
+              color: "var(--foreground)",
+              borderColor: "var(--surface-contrast)",
+            }}
+          >
             {previewMode ? (
               <div className="prose prose-sm dark:prose-invert max-w-none">
                 <ReactMarkdown>{output}</ReactMarkdown>
