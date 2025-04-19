@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography"; /* needed for markdown preview */
 
 :root {
   --background: #fefae0;
