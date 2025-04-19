@@ -4,27 +4,25 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #fefae0;
-  --foreground: #1a1a1a;
-
-  --surface: #fff;
-  --surface-contrast: #bbb;
-
-  --button-bg: #3a3a3a;
-  --button-text: #fefae0;
-  --button-hover-bg: #585858;
+  --background: #f8f0e6;
+  --foreground: #181817;
+  --surface: #dfd8cf;
+  --surface-contrast: #7c7873;
+  --button-bg: #4a4845;
+  --button-text: #f8f0e6;
+  --button-hover-bg: #63605c;
+  --border: #c6c0b8;
 }
 
 html.dark {
-  --background: #121212;
-  --foreground: #fefae0;
-
-  --surface: #000;
-  --surface-contrast: #2d323b;
-
-  --button-bg: #d6b25c;
-  --button-text: #121212;
-  --button-hover-bg: #f4d67e;
+  --background: #181817;
+  --foreground: #f8f0e6;
+  --surface: #31302e;
+  --surface-contrast: #94908a;
+  --button-bg: #dfd8cf;
+  --button-text: #181817;
+  --button-hover-bg: #c6c0b8;
+  --border: #4a4845;
 }
 
 body {
