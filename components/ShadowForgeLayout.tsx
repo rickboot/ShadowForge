@@ -1,10 +1,11 @@
-'use client';
+('use client');
 
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import CopyButton from './CopyButton';
 import DownloadButton from './DownloadButton';
 import UploadButton from './UploadButton';
+import { ToggleTheme } from './ToggleTheme';
 
 interface ShadowForgeLayoutProps {
   input: string;
@@ -59,22 +60,7 @@ export default function ShadowForgeLayout({
     >
       <header className="flex items-center justify-between border-b border-gray-300 px-6 py-4 dark:border-gray-700">
         <h1 className="font-serif text-2xl tracking-wide">ShadowForge</h1>
-        <button
-          style={{
-            backgroundColor: 'var(--button-bg)',
-            color: 'var(--button-text)',
-          }}
-          className="h- w-16 rounded border px-3 py-1 text-sm"
-          onMouseOver={(e) =>
-            (e.currentTarget.style.backgroundColor = 'var(--button-hover-bg)')
-          }
-          onMouseOut={(e) =>
-            (e.currentTarget.style.backgroundColor = 'var(--button-bg)')
-          }
-          onClick={toggleTheme}
-        >
-          {theme === 'dark' ? 'Dark' : 'Light'}
-        </button>
+        <ToggleTheme toggleTheme={toggleTheme} theme={theme} />
       </header>
 
       <main className="flex flex-col gap-6 px-6 py-8 md:flex-row">
