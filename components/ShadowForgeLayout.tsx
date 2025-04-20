@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import CopyButton from './CopyButton';
-import DownloadButton from './DownloadButton';
-import UploadButton from './UploadButton';
-import { ToggleTheme } from './ToggleTheme';
+import CopyButton from './ui/CopyButton';
+import DownloadButton from './ui/DownloadButton';
+import UploadButton from './ui/UploadButton';
+import { ToggleTheme } from './ui/ToggleThemeButton';
 
 interface ShadowForgeLayoutProps {
   input: string;

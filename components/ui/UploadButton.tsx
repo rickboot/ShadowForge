@@ -3,7 +3,7 @@
 import { Upload as UploadIcon } from 'lucide-react';
 import { extractTextFromPDF } from '@/lib/extractPdfText';
 import { useRef } from 'react';
-import { buttonClasses } from '@/lib/styles';
+import { buttonClasses } from '@/lib/sharedStyles';
 
 interface UploadButtonProps {
   onLoad: (text: string) => void;
