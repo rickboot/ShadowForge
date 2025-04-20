@@ -1,7 +1,7 @@
 ![ShadowForge Screenshot](./assets/sf-screenshot.png)
-**Convert D&D 5e content to Shadowdark RPG using AI-powered tools.**
 
 # ShadowForge
+**Convert D&D 5e content to Shadowdark RPG using AI-powered tools.**
 
 ShadowForge is an AI-powered, developer-friendly web app designed to help tabletop RPG game masters (GMs) convert Dungeons & Dragons 5e content into the gritty, old-school format of the Shadowdark RPG. It assists with transforming monster stats, treasure parcels, room descriptions, and rule mechanics (like skill checks) into formats suitable for direct use in Shadowdark games.
 
