@@ -58,8 +58,16 @@ export default function ShadowForgeLayout({
         color: 'var(--foreground)',
       }}
     >
-      <header className="flex items-center justify-between border-b border-gray-300 px-6 py-4 dark:border-gray-700">
-        <h1 className="font-serif text-2xl tracking-wide">ShadowForge</h1>
+      <header
+        className="flex items-start justify-between border-b px-6 py-4"
+        style={{
+          borderColor: 'var(--border)',
+        }}
+      >
+        <div>
+          <h1 className="font-serif text-2xl tracking-wide">ShadowForge</h1>
+          <h2>Reforge D&D content for Shadowdark</h2>
+        </div>
         <ToggleTheme toggleTheme={toggleTheme} theme={theme} />
       </header>
 
@@ -69,7 +77,9 @@ export default function ShadowForgeLayout({
           <h2 className="text-lg font-medium">Input</h2>
           <textarea
             className="h-120 w-full resize-none rounded border border-gray-300 p-4 font-mono text-xs"
-            placeholder="Paste your 5e content here..."
+            placeholder={`> Opening the mailbox reveals: D&D 5e content.
+
+Paste your 5e content here...`}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             style={{
@@ -151,8 +161,13 @@ export default function ShadowForgeLayout({
         </section>
       </main>
 
-      <footer className="border-t border-gray-200 py-4 text-center text-sm text-gray-500 dark:border-gray-700 dark:text-gray-400">
-        &copy; 2025 ShadowForge. Convert responsibly.
+      <footer
+        className="border-t py-4 text-center text-sm"
+        style={{
+          borderColor: 'var(--border)',
+        }}
+      >
+        &copy; 2025 Rick Allen. Convert responsibly.
       </footer>
     </div>
   );
