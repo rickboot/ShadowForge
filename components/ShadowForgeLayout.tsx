@@ -65,7 +65,7 @@ export default function ShadowForgeLayout({
         }}
       >
         <div>
-          <h1 className="font-serif text-2xl tracking-wide">ShadowForge</h1>
+          <h1 className="font-serif text-4xl tracking-wide">ShadowForge</h1>
           <h2>Reforge D&D content for Shadowdark</h2>
         </div>
         <ToggleTheme toggleTheme={toggleTheme} theme={theme} />
