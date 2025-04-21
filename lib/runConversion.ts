@@ -5,7 +5,7 @@ export async function runConversion(inputText: string) {
   const estTokens = estimateTokenCount(inputText);
 
   if (!canUseTokens(estTokens)) {
-    throw new Error('Daily conversion limit reached. Try again tomorrow');
+    throw new Error('Content too large or daily limit reached.');
   }
 
   const response = await fetch('/api/convert', {

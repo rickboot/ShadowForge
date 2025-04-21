@@ -6,6 +6,7 @@ import CopyButton from './ui/CopyButton';
 import DownloadButton from './ui/DownloadButton';
 import UploadButton from './ui/UploadButton';
 import { ToggleTheme } from './ui/ToggleThemeButton';
+import { extractTextFromPDF } from '@/lib/extractPdfText';
 
 interface ShadowForgeLayoutProps {
   input: string;
@@ -50,6 +51,22 @@ export default function ShadowForgeLayout({
     setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
   };
 
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+
+    let text = '';
+    if (file.type === 'application/pdf') {
+      text = await extractTextFromPDF(file);
+      setInput(text);
+    } else {
+      text = await file.text();
+    }
+    setInput(text);
+  };
+
   return (
     <div
       className="min-h-screen font-sans"
@@ -72,21 +89,23 @@ export default function ShadowForgeLayout({
       </header>
 
       <main className="flex flex-col gap-6 px-6 py-8 md:flex-row">
-        {/* === input === */}
+        {/* ============ INPUT ============ */}
         <section className="flex-1 space-y-4">
           <h2 className="text-lg font-medium">Input</h2>
           <textarea
             className="h-120 w-full resize-none rounded border border-gray-300 p-4 font-mono text-xs"
-            placeholder={`> Opening the mailbox reveals: D&D 5e content.
-
-Paste your 5e content here...`}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
             style={{
               backgroundColor: 'var(--surface)',
               color: 'var(--foreground)',
               borderColor: 'var(--surface-contrast)',
             }}
+            placeholder={
+              '> Opening the mailbox reveals: D&D 5e content.\n\nPaste or drop your 5e content here...'
+            }
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onDrop={handleDrop}
+            onDragOver={(e) => e.preventDefault()}
           />
 
           <div className="mb-2 flex h-12 items-center justify-evenly gap-2">
@@ -123,7 +142,7 @@ Paste your 5e content here...`}
           </div>
         </section>
 
-        {/* === output === */}
+        {/* ============ OUTPUT ============ */}
         <section className="flex-1 space-y-4">
           <h2 className="text-lg font-medium">Output</h2>
           <div
