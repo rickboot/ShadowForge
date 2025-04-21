@@ -1,13 +1,10 @@
 'use client';
 import { useState } from 'react';
-
-// skip SSR. pdfjs-dist needs DOM during build
-import dynamic from 'next/dynamic';
+import { runConversion } from '@/lib/runConversion';
+import dynamic from 'next/dynamic'; // skip SSR. pdfjs-dist needs DOM during build
 const ShadowForgeLayout = dynamic(
   () => import('@/components/ShadowForgeLayout'),
-  {
-    ssr: false,
-  }
+  { ssr: false },
 );
 
 export default function Home() {
@@ -20,20 +17,11 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/convert', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: input, normalize }),
-      });
-
-      const data = await response.json();
-      setOutput(data.converted || 'Conversion failed');
-    } catch (error) {
+      const result = await runConversion(input);
+      setOutput(result);
+    } catch (error: any) {
       console.error('Conversion error:', error);
-      setOutput('Error connecting to server.');
-      console.log(error);
+      setOutput(error.message || 'Error during conversion.');
     } finally {
       setLoading(false);
     }

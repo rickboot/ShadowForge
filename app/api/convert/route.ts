@@ -20,14 +20,11 @@ export async function POST(req: NextRequest) {
   const chunks = chunkInputText(text);
 
   const convertedChunks = await Promise.all(
-    chunks.map((chunk) => convertToShadowdark(chunk))
+    chunks.map((chunk) => convertToShadowdark(chunk)),
   );
-
-  console.log('[convert] normalize:', normalize);
-  console.log(`[convert] chunks created: ${chunks.length}`);
 
   return new NextResponse(
     JSON.stringify({ converted: convertedChunks.join('\n\n') }),
-    { status: 200 }
+    { status: 200 },
   );
 }
