@@ -30,9 +30,9 @@ export default function ShadowForgeLayout({
   const [previewMode, setPreviewMode] = useState(true);
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     if (typeof window === 'undefined') {
-      return 'light';
+      return 'dark';
     }
-    return (localStorage.getItem('theme') as 'dark' | 'light') || 'light';
+    return (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
   });
 
   useEffect(() => {
