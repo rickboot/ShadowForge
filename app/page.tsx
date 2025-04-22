@@ -19,9 +19,14 @@ export default function Home() {
     try {
       const result = await runConversion(input);
       setOutput(result);
-    } catch (error: any) {
-      console.error('Conversion error:', error);
-      setOutput(error.message || 'Error during conversion.');
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Conversion error:', error);
+        setOutput(error.message || 'Error during conversion.');
+      } else {
+        console.error('Unknown error:', error);
+        setOutput('An unexpected error occurred.');
+      }
     } finally {
       setLoading(false);
     }
