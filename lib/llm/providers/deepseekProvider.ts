@@ -2,36 +2,37 @@ import OpenAI from 'openai';
 import { ModelProvider } from '../types';
 import { ChatCompletionMessageParam } from 'openai/resources';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({
+  baseURL: 'https://api.deepseek.com/v1', // No trailing slash
+  apiKey: process.env.DEEPSEEK_API_KEY,
+});
 
-export const openAIProvider: ModelProvider = {
-  name: 'openai',
+export const deepseekProvider: ModelProvider = {
+  name: 'deepseek',
 
   async call({
     systemPrompt,
     userPrompt,
-    model = 'gpt-3.5-turbo',
+    model = 'deepseek-chat',
     temperature = 0.3,
   }) {
     const messages: ChatCompletionMessageParam[] = [
       { role: 'system', content: systemPrompt },
       { role: 'user', content: userPrompt },
     ];
-
     try {
       const completion = await openai.chat.completions.create({
         model,
         temperature,
         messages,
       });
-
       return completion.choices[0]?.message?.content?.trim() || '';
     } catch (error) {
-      console.error('[OpenAIProvider] Error:', error);
+      console.error('[Deepseek] Error:', error);
       if (error instanceof Error) {
-        return `OpenAI error: ${error.message}`;
+        return `Deepseek error: ${error.message}`;
       }
-      return 'OpenAI error: Unknown error occurred.';
+      return 'Deepseek error: Unknown error occurred.';
     }
   },
 };

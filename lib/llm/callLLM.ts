@@ -1,9 +1,11 @@
 import { ModelProvider } from './types';
+import { deepseekProvider } from './providers/deepseekProvider';
 import { openAIProvider } from './providers/openAiProvider';
 
-//todo: swap provider from config or env
-const currentProvider: ModelProvider = openAIProvider;
+const providerName = process.env.LLM_PROVIDER || 'openai';
 
+const currentProvider: ModelProvider =
+  providerName === 'openai' ? openAIProvider : deepseekProvider;
 interface CallLLMOptions {
   systemPrompt: string;
   userPrompt: string;

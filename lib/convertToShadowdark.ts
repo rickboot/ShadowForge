@@ -7,7 +7,7 @@ export async function convertToShadowdark(input: string): Promise<string> {
   const result = await callLLM({
     systemPrompt: shadowdarkPrompt,
     userPrompt,
-    model: 'gpt-3.5-turbo',
+    // model: 'gpt-3.5-turbo',
     temperature: 0.3,
   });
 
