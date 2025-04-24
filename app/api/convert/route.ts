@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
   for (const [i, chunk] of chunks.entries()) {
     const converted = await convertToShadowdark(chunk);
     convertedChunks.push(converted);
-    tokenTotal += logTokenUsage(`Input chunked ${i + 1}:`, chunk);
+    tokenTotal += logTokenUsage(`Input chunk ${i + 1}:`, chunk);
   }
   console.log(
     `\x1b[36m[Token Debug]\x1b[0m \x1b[33mTotal input usage: ${tokenTotal}\x1b[0m`,
