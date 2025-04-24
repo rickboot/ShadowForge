@@ -76,7 +76,7 @@ export default function ShadowForgeLayout({
       }}
     >
       <header
-        className="flex items-start justify-between border-b px-6 py-4"
+        className="flex items-start justify-between border-b px-12 py-4"
         style={{
           borderColor: 'var(--border)',
         }}
@@ -88,12 +88,12 @@ export default function ShadowForgeLayout({
         <ToggleTheme toggleTheme={toggleTheme} theme={theme} />
       </header>
 
-      <main className="flex flex-col gap-6 px-6 py-8 md:flex-row">
+      <main className="flex flex-col gap-6 px-12 py-8 md:flex-row">
         {/* ============ INPUT ============ */}
         <section className="flex-1 space-y-4">
-          <h2 className="text-lg font-medium">Input</h2>
+          <h2 className="text-2xl font-medium">Input</h2>
           <textarea
-            className="h-120 w-full resize-none rounded border border-gray-300 p-4 font-mono text-xs"
+            className="h-180 w-full resize-none rounded border border-gray-300 p-4 font-mono text-sm"
             style={{
               backgroundColor: 'var(--surface)',
               color: 'var(--foreground)',
@@ -144,9 +144,9 @@ export default function ShadowForgeLayout({
 
         {/* ============ OUTPUT ============ */}
         <section className="flex-1 space-y-4">
-          <h2 className="text-lg font-medium">Output</h2>
+          <h2 className="text-2xl font-medium">Output</h2>
           <div
-            className="h-120 w-full overflow-auto rounded border p-4"
+            className="h-180 w-full overflow-auto rounded border p-4"
             style={{
               backgroundColor: 'var(--surface)',
               color: 'var(--foreground)',
@@ -158,7 +158,7 @@ export default function ShadowForgeLayout({
                 <ReactMarkdown>{output}</ReactMarkdown>
               </div>
             ) : (
-              <pre className="font-mono text-sm whitespace-pre-wrap">
+              <pre className="text-lag font-mono whitespace-pre-wrap">
                 {output}
               </pre>
             )}

@@ -4,7 +4,10 @@ import { estimateTokenCount } from './tokenEstimator';
 export async function runConversion(inputText: string) {
   const estTokens = estimateTokenCount(inputText);
 
-  if (!canUseTokens(estTokens)) {
+  if (
+    process.env.DEV_SHADOWFORGE_DEV_MODE === 'false' &&
+    !canUseTokens(estTokens)
+  ) {
     throw new Error('Content too large or daily limit reached.');
   }
 
@@ -21,7 +24,7 @@ export async function runConversion(inputText: string) {
     throw new Error(error.error || 'Conversion failed.');
   }
 
-  const data = await response.json();
+  const { convertedText } = await response.json();
   addTokenUsage(estTokens);
-  return data.converted;
+  return convertedText;
 }
