@@ -93,7 +93,7 @@ export default function ShadowForgeLayout({
         <section className="flex-1 space-y-4">
           <h2 className="text-2xl font-medium">Input</h2>
           <textarea
-            className="h-180 w-full resize-none rounded border border-gray-300 p-4 font-mono text-sm"
+            className="h-150 w-full resize-none rounded border border-gray-300 p-4 font-mono text-sm"
             style={{
               backgroundColor: 'var(--surface)',
               color: 'var(--foreground)',
@@ -146,7 +146,7 @@ export default function ShadowForgeLayout({
         <section className="flex-1 space-y-4">
           <h2 className="text-2xl font-medium">Output</h2>
           <div
-            className="h-180 w-full overflow-auto rounded border p-4"
+            className="h-150 w-full overflow-auto rounded border p-4"
             style={{
               backgroundColor: 'var(--surface)',
               color: 'var(--foreground)',
