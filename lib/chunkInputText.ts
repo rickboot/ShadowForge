@@ -1,7 +1,8 @@
-import { getContextLimit } from './modelConfig';
+import { getContextLimit } from './lllmConfig';
 
 export function chunkInputText(input: string) {
-  const model = process.env.LLM_PROVIDER;
+  const model = process.env.LLM_PROVIDER || 'openai';
+
   const maxTokens = getContextLimit(model);
   console.log('CHUNKING!');
 

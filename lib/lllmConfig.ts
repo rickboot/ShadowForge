@@ -1,11 +1,11 @@
-export interface ModelConfig {
+export interface LLMConfig {
   model: string;
   provider: 'openai' | 'deepseek' | 'gemini' | 'mistral' | 'anthropic';
   contextWindow: number;
   description?: string;
 }
 
-export const modelConfig: Record<string, ModelConfig> = {
+export const llmConfig: Record<string, LLMConfig> = {
   'chat-gpt3.5-turbo': {
     model: 'chat-gpt3.5-turbo',
     provider: 'openai',
@@ -39,5 +39,5 @@ export const modelConfig: Record<string, ModelConfig> = {
 };
 
 export function getContextLimit(model: string): number {
-  return modelConfig[model]?.contextWindow || 4096;
+  return llmConfig[model]?.contextWindow || 4096;
 }
