@@ -1,4 +1,3 @@
-import { ModelConfig } from './modelConfig';
 export interface ModelConfig {
   model: string;
   provider: 'openai' | 'deepseek' | 'gemini' | 'mistral' | 'anthropic';
