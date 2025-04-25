@@ -1,13 +1,12 @@
 import { ModelProvider } from './types';
 import { deepseekProvider } from './providers/deepseekProvider';
 import { openAIProvider } from './providers/openAiProvider';
-import { getLLMConfig } from '../getLLMConfig';
+import { getLLMConfig } from '../llmConfig';
 
-const providerName = getLLMConfig().provider;
+const llmModel = getLLMConfig().model;
 
 const currentProvider: ModelProvider =
-  // todo: more providers
-  providerName === 'openai' ? openAIProvider : deepseekProvider;
+  llmModel === 'chat-gpt3.5-turbo' ? openAIProvider : deepseekProvider;
 interface CallLLMOptions {
   systemPrompt: string;
   userPrompt: string;

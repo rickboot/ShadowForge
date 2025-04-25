@@ -37,3 +37,9 @@ export const llmConfig: Record<string, LLMConfig> = {
     contextWindow: 200000,
   },
 };
+
+export function getLLMConfig() {
+  const llm = process.env.LLM_MODEL || 'chat-gpt3.5-turbo';
+  const config = llmConfig[llm];
+  return { ...config };
+}
