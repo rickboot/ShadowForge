@@ -1,10 +1,12 @@
 import { ModelProvider } from './types';
 import { deepseekProvider } from './providers/deepseekProvider';
 import { openAIProvider } from './providers/openAiProvider';
+import { getLLMConfig } from '../getLLMConfig';
 
-const providerName = process.env.LLM_PROVIDER || 'openai';
+const providerName = getLLMConfig().provider;
 
 const currentProvider: ModelProvider =
+  // todo: more providers
   providerName === 'openai' ? openAIProvider : deepseekProvider;
 interface CallLLMOptions {
   systemPrompt: string;

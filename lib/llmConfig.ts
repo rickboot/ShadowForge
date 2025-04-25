@@ -37,7 +37,3 @@ export const llmConfig: Record<string, LLMConfig> = {
     contextWindow: 200000,
   },
 };
-
-export function getContextLimit(model: string): number {
-  return llmConfig[model]?.contextWindow || 4096;
-}

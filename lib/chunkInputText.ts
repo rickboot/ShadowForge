@@ -1,9 +1,7 @@
-import { getContextLimit } from './lllmConfig';
+import { getLLMConfig } from './getLLMConfig';
 
 export function chunkInputText(input: string) {
-  const model = process.env.LLM_PROVIDER || 'openai';
-
-  const maxTokens = getContextLimit(model);
+  const maxTokens = getLLMConfig().contextWindow;
   console.log('CHUNKING!');
 
   const paragraphs = input.split(/\n\s*\n/); // split on vertical blank lines
