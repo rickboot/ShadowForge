@@ -1,4 +1,4 @@
-export function normalizeInputText(text: string | null | undefined): string {
+export function normalizeText(text: string | null | undefined): string {
   if (!text || typeof text !== 'string') return '';
 
   const lines = text.replace(/\r\n/g, '\n').trim().split('\n');

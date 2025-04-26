@@ -1,5 +1,9 @@
-import { addTokenUsage, canUseTokens } from '@/lib/utils/tokenUtils';
-import { estimateTokenCount } from '@/lib/utils/tokenUtils';
+import {
+  addTokenUsage,
+  canUseTokens,
+  estimateTokenCount,
+} from '@/lib/utils/tokenUtils';
+import { ConversionAPIResponse } from '../types/api';
 
 export async function callConversionAPI(inputText: string) {
   const estTokens = estimateTokenCount(inputText);
@@ -24,7 +28,10 @@ export async function callConversionAPI(inputText: string) {
     throw new Error(error.error || 'Conversion failed.');
   }
 
-  const { convertedText } = await response.json();
-  addTokenUsage(estTokens);
+  const { convertedText, tokenUsage }: ConversionAPIResponse =
+    await response.json();
+
+  addTokenUsage(tokenUsage);
+
   return convertedText;
 }

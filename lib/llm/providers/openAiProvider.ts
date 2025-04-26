@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { ModelProvider } from '../types';
+import { ModelProvider } from '../../types/llm';
 import { ChatCompletionMessageParam } from 'openai/resources';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });

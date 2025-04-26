@@ -1,4 +1,4 @@
-import { ModelProvider } from '@/lib/llm/types';
+import { ModelProvider } from '@/lib/types/llm';
 import { deepseekProvider } from '@/lib/llm/providers/deepseekProvider';
 import { openAIProvider } from '@/lib/llm/providers/openAiProvider';
 import { getLLMConfig } from '@/lib/llm/llmConfig';
