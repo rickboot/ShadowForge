@@ -6,7 +6,7 @@ import CopyButton from './ui/CopyButton';
 import DownloadButton from './ui/DownloadButton';
 import UploadButton from './ui/UploadButton';
 import { ToggleTheme } from './ui/ToggleThemeButton';
-import { extractTextFromPDF } from '@/lib/extractPdfText';
+import { extractTextFromPDF } from '@/lib/utils/extractPdfText';
 
 interface ShadowForgeLayoutProps {
   input: string;

@@ -1,9 +1,9 @@
 'use client';
 
 import { Upload as UploadIcon } from 'lucide-react';
-import { extractTextFromPDF } from '@/lib/extractPdfText';
+import { extractTextFromPDF } from '@/lib/utils/extractPdfText';
 import { useRef } from 'react';
-import { buttonClasses } from '@/lib/sharedStyles';
+import { buttonClasses } from '@/lib/styles/sharedStyles';
 
 interface UploadButtonProps {
   onLoad: (text: string) => void;

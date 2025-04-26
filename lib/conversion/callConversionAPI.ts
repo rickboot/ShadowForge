@@ -1,7 +1,7 @@
-import { addTokenUsage, canUseTokens } from './tokenTracker';
-import { estimateTokenCount } from './tokenEstimator';
+import { addTokenUsage, canUseTokens } from '@/lib/utils/tokenUtils';
+import { estimateTokenCount } from '@/lib/utils/tokenUtils';
 
-export async function runConversion(inputText: string) {
+export async function callConversionAPI(inputText: string) {
   const estTokens = estimateTokenCount(inputText);
 
   if (

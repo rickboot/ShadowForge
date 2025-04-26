@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { convertToShadowdark } from '@/lib/convertToShadowdark';
-import { normalizeInputText } from '@/lib/normalizeInputText';
-import { chunkInputText } from '@/lib/chunkInputText';
-import { logTokenUsage } from '@/lib/tokenTracker';
+import { convertToShadowdark } from '@/lib/conversion/convertToShadowdark';
+import { normalizeInputText } from '@/lib/conversion/normalizeText';
+import { chunkInputText } from '@/lib/conversion/chunkText';
+import { logTokenUsage } from '@/lib/utils/tokenUtils';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

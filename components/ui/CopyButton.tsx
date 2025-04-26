@@ -1,7 +1,7 @@
 import { Copy as CopyIcon } from 'lucide-react';
 import { Check as CheckIcon } from 'lucide-react';
 import { useState } from 'react';
-import { buttonClasses } from '@/lib/sharedStyles';
+import { buttonClasses } from '@/lib/styles/sharedStyles';
 
 interface CopyOutputButtonProps {
   text: string;

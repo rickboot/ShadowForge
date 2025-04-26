@@ -1,10 +1,3 @@
-/**
- * Normalizes adventure module text by merging broken lines,
- * preserving logical paragraphs, and splitting on headings and subheadings.
- *
- * @param {string | null | undefined} text Raw adventure text input
- * @returns {string} Cleaned text with paragraph breaks
- */
 export function normalizeInputText(text: string | null | undefined): string {
   if (!text || typeof text !== 'string') return '';
 

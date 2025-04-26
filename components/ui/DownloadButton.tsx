@@ -1,7 +1,7 @@
 'use client';
 
 import { Download as DownloadIcon } from 'lucide-react';
-import { buttonClasses } from '@/lib/sharedStyles';
+import { buttonClasses } from '@/lib/styles/sharedStyles';
 
 interface DownloadButtonProps {
   content: string;

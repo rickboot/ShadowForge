@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { runConversion } from '@/lib/runConversion';
+import { callConversionAPI } from '@/lib/conversion/callConversionAPI';
 import dynamic from 'next/dynamic'; // skip SSR. pdfjs-dist needs DOM during build
 const ShadowForgeLayout = dynamic(
   () => import('@/components/ShadowForgeLayout'),
@@ -17,7 +17,7 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const result = await runConversion(input);
+      const result = await callConversionAPI(input);
       setOutput(result);
     } catch (error) {
       if (error instanceof Error) {
