@@ -1,7 +1,7 @@
 import { chunkText } from '@/lib/conversion/chunkText';
 import { estimateTokenCount } from '@/lib/utils/tokenUtils';
 
-describe('chunkTest', () => {
+describe('chunkText', () => {
   it('splits input text into chunks smaller than LLM context limit', () => {
     const hugeText = 'Do you find it risible? '.repeat(5000);
     const MAX_TOKENS = 4096;
