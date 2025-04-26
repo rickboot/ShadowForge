@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { normalizeInputText } from '../lib/conversion/normalizeText';
+import { normalizeInputText } from '@/lib/conversion/normalizeText';
 
 const inputPath = path.resolve(__dirname, 'sample.txt');
 const raw = fs.readFileSync(inputPath, 'utf-8');
