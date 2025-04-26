@@ -1,7 +1,4 @@
-import { getLLMConfig } from '@/lib/llm/llmConfig';
-
-export function chunkText(input: string) {
-  const maxTokens = getLLMConfig().contextWindow;
+export function chunkText(input: string, maxTokens: number) {
   console.log('CHUNKING!');
 
   const paragraphs = input.split(/\n\s*\n/); // split on vertical blank lines

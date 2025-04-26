@@ -6,7 +6,7 @@ import { chunkText } from '@/lib/conversion/chunkText';
 const inputPath = path.resolve(__dirname, 'sample.txt');
 const raw = fs.readFileSync(inputPath, 'utf-8');
 
-const chunks = chunkText(raw);
+const chunks = chunkText(raw, 2000);
 
 console.log(`Chunks: ${chunks.length}`);
 

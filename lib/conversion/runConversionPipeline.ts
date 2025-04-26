@@ -2,6 +2,7 @@ import { chunkText } from '@/lib/conversion/chunkText';
 import { convertToShadowdark } from '@/lib/conversion/convertToShadowdark';
 import { logTokenUsage } from '@/lib/utils/tokenUtils';
 import { normalizeText } from '@/lib/conversion/normalizeText';
+import { getLLMConfig } from '../llm/llmConfig';
 
 interface runConversionPipelineProps {
   text: string;
@@ -15,8 +16,9 @@ export async function runConversionPipeline({
   if (normalize) {
     text = normalizeText(text);
   }
+  const maxTokens = getLLMConfig().contextWindow;
 
-  const chunks = chunkText(text);
+  const chunks = chunkText(text, maxTokens);
 
   const convertedChunks: string[] = [];
   let tokenUsage = 0;
