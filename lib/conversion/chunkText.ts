@@ -1,6 +1,6 @@
 import { getLLMConfig } from '@/lib/llm/llmConfig';
 
-export function chunkInputText(input: string) {
+export function chunkText(input: string) {
   const maxTokens = getLLMConfig().contextWindow;
   console.log('CHUNKING!');
 

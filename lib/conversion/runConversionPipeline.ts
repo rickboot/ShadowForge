@@ -1,4 +1,4 @@
-import { chunkInputText } from '@/lib/conversion/chunkText';
+import { chunkText } from '@/lib/conversion/chunkText';
 import { convertToShadowdark } from '@/lib/conversion/convertToShadowdark';
 import { logTokenUsage } from '@/lib/utils/tokenUtils';
 import { normalizeText } from '@/lib/conversion/normalizeText';
@@ -16,7 +16,7 @@ export async function runConversionPipeline({
     text = normalizeText(text);
   }
 
-  const chunks = chunkInputText(text);
+  const chunks = chunkText(text);
 
   const convertedChunks: string[] = [];
   let tokenUsage = 0;
