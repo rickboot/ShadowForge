@@ -16,7 +16,7 @@ export function normalizeText(text: string | null | undefined): string {
   const n = lines.length;
 
   for (let i = 0; i < n; i++) {
-    const line = lines[i].trim();
+    const line = lines[i].trim().replace(/\s+/g, ' ');
 
     if (isBlank(line)) {
       if (!currentParagraph) continue;
