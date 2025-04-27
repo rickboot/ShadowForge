@@ -8,7 +8,6 @@ export async function convertToShadowdark(input: string): Promise<string> {
     systemPrompt: shadowdarkPrompt,
     userPrompt,
     temperature: 0.3,
-    // model: 'gpt-3.5-turbo',
   });
 
   return result || 'Conversion failed.';

@@ -3,7 +3,7 @@ export interface ModelProvider {
   call(params: {
     systemPrompt: string;
     userPrompt: string;
-    model?: string;
+    model: string;
     temperature?: number;
   }): Promise<string>;
 }

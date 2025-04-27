@@ -10,12 +10,7 @@ const openai = new OpenAI({
 export const deepseekProvider: ModelProvider = {
   name: 'deepseek',
 
-  async call({
-    systemPrompt,
-    userPrompt,
-    model = 'deepseek-chat',
-    temperature = 0.3,
-  }) {
+  async call({ systemPrompt, userPrompt, model, temperature = 0.3 }) {
     const messages: ChatCompletionMessageParam[] = [
       { role: 'system', content: systemPrompt },
       { role: 'user', content: userPrompt },
