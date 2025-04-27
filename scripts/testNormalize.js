@@ -1,11 +1,6 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'fs';
+import path from 'path';
 import { normalizeText } from '../lib/conversion/normalizeText';
-
-// Rebuild __dirname and __filename
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 try {
   const inputFile = process.argv[2] || 'sample.txt';

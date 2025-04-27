@@ -1,5 +1,11 @@
+import { sanitizeText } from './sanitizeText';
+
 export function normalizeText(text: string | null | undefined): string {
   if (!text || typeof text !== 'string') return '';
+
+  text = sanitizeText(text);
+  // remove Unicode Replacement Character
+  text = text.replace(/\uFFFD/g, '');
 
   // Normalize line endings to '\n' and split into lines
   const lines = text.replace(/\r\n/g, '\n').trim().split('\n');
@@ -20,10 +26,7 @@ export function normalizeText(text: string | null | undefined): string {
 
   // Detect simple subheadings ("Treasure", "Monster Stats")
   const isHeader = (line: string): boolean =>
-    // All uppercase words ("MONSTER STATS")
-    (/^[A-Z][A-Z\s]+$/.test(line) ||
-      // Title case words ("Treasure", "Monster Stats")
-      /^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)$/.test(line)) &&
+    /^[A-Z][A-Za-z]+(?:\s+[A-Z][a-z]+)*$/.test(line) &&
     line.length <= 40 &&
     !line.endsWith('.');
 
