@@ -37,35 +37,41 @@ export default function ClientLayout({
   return (
     <div>
       <header
-        className="flex items-center justify-between border-b px-12 py-4"
+        className="flex items-center justify-between border-b px-5 py-3 md:px-12 md:py-4"
         style={{
           borderColor: 'var(--border)',
         }}
       >
         <div className="flow-row flex items-center justify-start gap-4">
-          <Link href="/">
-            <Image
-              src="/sf-logo-black.webp"
-              alt="Shadowforge Logo"
-              width={40}
-              height={20}
-              className="block object-contain dark:hidden"
-            />
-            <Image
-              src="/sf-logo-white.webp"
-              alt="Shadowforge Logo"
-              width={40}
-              height={20}
-              className="hidden object-contain dark:block"
-            />
+          <Link href="/" aria-label="Home">
+            <div className="relative h-10 w-6">
+              <Image
+                src="/sf-logo-black.webp"
+                alt="Shadowforge Logo"
+                fill
+                className="block object-contain dark:hidden"
+              />
+              <Image
+                src="/sf-logo-white.webp"
+                alt="Shadowforge Logo"
+                fill
+                className="hidden object-contain dark:block"
+              />
+            </div>
           </Link>
+
           <div className="flex flex-col pt-1">
-            <h1 className="font-serif text-3xl tracking-wide">ShadowForge</h1>
-            <h2 className="text-sm">Reforge D&D content for Shadowdark</h2>
+            <h1 className="font-serif text-2xl tracking-wide md:text-3xl">
+              ShadowForge
+            </h1>
+            <h2 className="hidden text-sm md:flex">
+              Reforge D&D content for Shadowdark
+            </h2>
           </div>
         </div>
-        <div className="flex items-center gap-12">
-          <nav className="flex gap-8">
+
+        <div className="flex flex-col items-center gap-12 md:flex-row">
+          <nav className="hidden gap-8 md:flex">
             <Link href="/about" className="text-xl hover:underline">
               <span className="">About</span>
             </Link>
