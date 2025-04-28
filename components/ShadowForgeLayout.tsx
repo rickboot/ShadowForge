@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import CopyButton from './ui/CopyButton';
 import DownloadButton from './ui/DownloadButton';
 import UploadButton from './ui/UploadButton';
-import { ToggleTheme } from './ui/ToggleThemeButton';
 import { extractTextFromPDF } from '@/lib/utils/extractPdfText';
 
 interface ShadowForgeLayoutProps {
@@ -28,28 +27,6 @@ export default function ShadowForgeLayout({
   handleConvert,
 }: ShadowForgeLayoutProps) {
   const [previewMode, setPreviewMode] = useState(true);
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    if (typeof window === 'undefined') {
-      return 'dark';
-    }
-    return (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
-  });
-
-  useEffect(() => {
-    const htmlTag = document.documentElement;
-
-    if (theme === 'dark') {
-      htmlTag.classList.add('dark');
-    } else {
-      htmlTag.classList.remove('dark');
-    }
-
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
-  };
 
   const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault();
@@ -75,19 +52,6 @@ export default function ShadowForgeLayout({
         color: 'var(--foreground)',
       }}
     >
-      <header
-        className="flex items-start justify-between border-b px-12 py-4"
-        style={{
-          borderColor: 'var(--border)',
-        }}
-      >
-        <div>
-          <h1 className="font-serif text-4xl tracking-wide">ShadowForge</h1>
-          <h2>Reforge D&D content for Shadowdark</h2>
-        </div>
-        <ToggleTheme toggleTheme={toggleTheme} theme={theme} />
-      </header>
-
       <main className="flex flex-col gap-6 px-12 py-8 md:flex-row">
         {/* ============ INPUT ============ */}
         <section className="flex-1 space-y-4">
@@ -179,15 +143,6 @@ export default function ShadowForgeLayout({
           </div>
         </section>
       </main>
-
-      <footer
-        className="border-t py-4 text-center text-sm"
-        style={{
-          borderColor: 'var(--border)',
-        }}
-      >
-        &copy; 2025 Rick Allen. Convert responsibly.
-      </footer>
     </div>
   );
 }
