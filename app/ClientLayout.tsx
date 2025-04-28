@@ -5,8 +5,8 @@
 'use client';
 import { ToggleTheme } from '@/components/ui/ToggleThemeButton';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function ClientLayout({
   children,
@@ -64,7 +64,20 @@ export default function ClientLayout({
             <h2 className="text-sm">Reforge D&D content for Shadowdark</h2>
           </div>
         </div>
-        <ToggleTheme toggleTheme={toggleTheme} theme={theme} />
+        <div className="flex items-center gap-12">
+          <nav className="flex gap-8">
+            <Link href="/about" className="text-xl hover:underline">
+              <span className="">About</span>
+            </Link>
+            <a
+              href="mailto:rickallen@gmail.com"
+              className="text-xl hover:underline"
+            >
+              Contact me
+            </a>
+          </nav>
+          <ToggleTheme toggleTheme={toggleTheme} theme={theme} />
+        </div>
       </header>
 
       {children}

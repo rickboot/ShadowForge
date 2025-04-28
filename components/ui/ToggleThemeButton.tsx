@@ -37,12 +37,12 @@ interface ToggleThemeProps {
 export function ToggleTheme({ theme, toggleTheme }: ToggleThemeProps) {
   return (
     <button
+      className="flex h-5 w-9 items-center justify-start rounded-full border-1 text-sm dark:justify-end"
       style={{
         backgroundColor: 'var(--foreground)',
         color: 'var(--background)',
         borderColor: 'var(--surface-contrast)',
       }}
-      className="flex w-9 items-center justify-start rounded-full border-1 text-sm dark:justify-end"
       onMouseOver={(e) =>
         (e.currentTarget.style.backgroundColor = 'var(--button-hover-bg)')
       }
