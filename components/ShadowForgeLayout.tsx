@@ -71,8 +71,7 @@ export default function ShadowForgeLayout({
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
           />
-
-          <div className="mb-2 flex h-12 items-center justify-evenly gap-2">
+          <div className="mb-2 flex h-12 items-center justify-center gap-12">
             <button
               onClick={handleConvert}
               disabled={loading || !input.trim()}
@@ -94,8 +93,8 @@ export default function ShadowForgeLayout({
 
             <UploadButton onLoad={setInput} />
 
-            <label className="flex items-center space-x-2 text-sm dark:text-white">
-              <span>Normalize text</span>
+            <label className="flex items-center justify-center gap-2 text-sm">
+              <span>Normalize</span>
               <input
                 type="checkbox"
                 checked={normalize}
@@ -128,10 +127,10 @@ export default function ShadowForgeLayout({
             )}
           </div>
 
-          <div className="mb-2 flex h-12 items-center justify-evenly gap-2 dark:text-white">
+          <div className="mb-2 flex h-12 items-center justify-center gap-12">
             <CopyButton text={output} />
             <DownloadButton content={output} filename="sd-conversion.md" />
-            <div className="flex h-6 w-20 items-center justify-center gap-1">
+            <div className="flex items-center justify-center gap-2">
               <label className="text-sm font-medium">Preview</label>
               <input
                 type="checkbox"
