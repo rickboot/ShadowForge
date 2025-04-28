@@ -43,13 +43,14 @@ export function logTokenUsage(label: string, text: string) {
   return tokens;
 }
 
-const encoder = getEncoding('cl100k_base'); // works for GPT-4, GPT-3.5, etc.
-
 export function countTokens(text: string): number {
+  const encoder = getEncoding('cl100k_base'); // works for GPT-4, GPT-3.5, etc.
   return encoder.encode(text).length;
 }
 
-export function estimateTokenCount(input: string): number {
-  const wordCount = input.split(/\s+/).length;
-  return Math.round(wordCount * 1.5);
+export function estimateTokenCount(text: string): number {
+  // const encoder = getEncoding('cl100k_base'); // works for GPT-4, GPT-3.5, etc.
+  // return encoder.encode(text).length;
+  const wordCount = text.split(/\s+/).length;
+  return Math.round(wordCount * 1.5); // ~1.3 + 0.2 buffer
 }

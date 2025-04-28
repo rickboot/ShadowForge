@@ -1,7 +1,7 @@
 export function chunkText(input: string, maxTokens: number) {
   console.log('CHUNKING!');
 
-  const TOKEN_MULTIPLIER = 1.5;
+  const TOKEN_MULTIPLIER = 1.5; // ~1.3 + 0.2 buffer
   const rawParagraphs = input.split(/\n\s*\n/); // split on vertical blank lines
 
   // chunk oversize paragraphs into smaller paragraphs
@@ -20,8 +20,8 @@ export function chunkText(input: string, maxTokens: number) {
     }
   });
 
-  // console.log('RAW PARAGRAPHS', rawParagraphs);
-  // console.log('CONVERTED PARAGRAPHS', paragraphs);
+  console.log('RAW PARAGRAPHS', rawParagraphs);
+  console.log('CONVERTED PARAGRAPHS', paragraphs);
 
   // build up chunks from small paragraphs
   const chunks: string[] = [];
