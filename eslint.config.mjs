@@ -1,21 +1,15 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
+import nextPlugin from 'eslint-config-next/base';
 import jestA11y from 'eslint-plugin-jsx-a11y';
-import nextPlugin from 'eslint-config-next';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
 export default [
-  ...compat.extends('next/core-web-vitals'),
-  nextPlugin(),
-  jestA11y.configs.recommended,
   {
+    extends: ['next/core-web-vitals'],
+    plugins: ['jsx-a11y'],
     rules: {
       'jsx-a11y/alt-text': 'error',
       'jsx-a11y/aria-role': 'error',

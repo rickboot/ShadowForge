@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["deepseek", "LLMAPI", "subheaders"]
+  "cSpell.words": ["deepseek", "LLMAPI", "subheaders"],
+  "editor.formatOnSave": true,
 }

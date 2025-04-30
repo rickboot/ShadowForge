@@ -7,7 +7,7 @@ function Moon() {
       className="rounded-full p-0.5"
       size={18}
       style={{
-        backgroundColor: 'var(--background',
+        backgroundColor: 'var(--background)',
         color: 'var(--foreground)',
         borderColor: 'var(--foreground)',
       }}
@@ -21,7 +21,7 @@ function Sun() {
       className="rounded-full p-0.5"
       size={18}
       style={{
-        backgroundColor: 'var(--background',
+        backgroundColor: 'var(--background)',
         color: 'var(--foreground)',
         borderColor: 'var(--foreground)',
       }}

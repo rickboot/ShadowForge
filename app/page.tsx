@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { callConversionAPI } from '@/lib/conversion/callConversionAPI';
 import dynamic from 'next/dynamic'; // skip SSR. pdfjs-dist needs DOM during build
+import ThreeBackground from '@/components/ThreeBackground';
+
 const ShadowForgeLayout = dynamic(
   () => import('@/components/ShadowForgeLayout'),
   { ssr: false },
@@ -33,14 +35,17 @@ export default function Home() {
   };
 
   return (
-    <ShadowForgeLayout
-      input={input}
-      output={output}
-      loading={loading}
-      normalize={normalize}
-      setNormalize={setNormalize}
-      setInput={setInput}
-      handleConvert={handleConvert}
-    />
+    <>
+      <ThreeBackground />
+      <ShadowForgeLayout
+        input={input}
+        output={output}
+        loading={loading}
+        normalize={normalize}
+        setNormalize={setNormalize}
+        setInput={setInput}
+        handleConvert={handleConvert}
+      />
+    </>
   );
 }

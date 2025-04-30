@@ -37,12 +37,12 @@ export default function ClientLayout({
   return (
     <div>
       <header
-        className="flex items-center justify-between border-b px-5 py-3 md:px-12 md:py-4"
+        className="flex items-center justify-between border-b px-5 py-3 md:px-12 md:py-4 "
         style={{
           borderColor: 'var(--border)',
         }}
       >
-        <div className="flow-row flex items-center justify-start gap-4">
+        <div className="flow-row flex items-center justify-start gap-4 ">
           <Link href="/" aria-label="Home">
             <div className="relative h-10 w-6">
               <Image
@@ -70,7 +70,7 @@ export default function ClientLayout({
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-12 md:flex-row">
+        <div className="flex flex-col items-center gap-12 md:flex-row z-10">
           <nav className="hidden gap-8 md:flex">
             <Link href="/about" className="text-xl hover:underline">
               <span className="">About</span>
@@ -82,7 +82,7 @@ export default function ClientLayout({
               Contact me
             </a>
           </nav>
-          <ToggleTheme toggleTheme={toggleTheme} theme={theme} />
+          <ToggleTheme  toggleTheme={toggleTheme} theme={theme} />
         </div>
       </header>
 
