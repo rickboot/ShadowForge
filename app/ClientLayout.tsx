@@ -42,9 +42,9 @@ export default function ClientLayout({
           borderColor: 'var(--border)',
         }}
       >
-        <div className="flow-row flex items-center justify-start gap-4 ">
+        <div className="flow-row flex items-center justify-start gap-2 md:gap-4">
           <Link href="/" aria-label="Home">
-            <div className="relative h-10 w-6">
+            <div className="relative h-10 w-6 md:h-16 md:w-10">
               <Image
                 src="/sf-logo-black.webp"
                 alt="Shadowforge Logo"
