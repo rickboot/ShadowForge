@@ -3,10 +3,9 @@
   but Nextjs requires Metadata to be SSR. Hence layout.tsx > ClientLayout.tsx
 */
 'use client';
-import { ToggleThemeButton } from '@/components/ui/ToggleThemeButton';
+// import { ToggleThemeButton } from '@/components/ui/ToggleThemeButton';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import NavBar from './NavBar';
 
 export default function ClientLayout({
   children,
@@ -39,57 +38,11 @@ export default function ClientLayout({
 
   return (
     <div>
-      <header
-        className="flex items-center justify-between border-b px-5 py-3 md:px-12 md:py-4 "
-        style={{
-          borderColor: 'var(--border)',
-        }}
-      >
-        <div className="flow-row flex items-center justify-start gap-2 md:gap-4">
-          <Link href="/" aria-label="Home">
-            <div className="relative h-10 w-6 md:h-16 md:w-10">
-              <Image
-                src="/sf-logo-black.webp"
-                alt="Shadowforge Logo"
-                fill
-                className="block object-contain dark:hidden"
-              />
-              <Image
-                src="/sf-logo-white.webp"
-                alt="Shadowforge Logo"
-                fill
-                className="hidden object-contain dark:block"
-              />
-            </div>
-          </Link>
-
-          <div className="flex flex-col pt-1">
-            <h1 className="font-serif text-2xl tracking-wide md:text-3xl">
-              ShadowForge
-            </h1>
-            <h2 className="hidden text-sm md:flex">
-              Reforge D&D content for Shadowdark
-            </h2>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center gap-12 md:flex-row z-10">
-          <nav className="hidden gap-8 md:flex">
-            <Link href="/about" className="text-xl hover:underline">
-              <span className="">About</span>
-            </Link>
-            <a
-              href="mailto:rickallen@gmail.com"
-              className="text-xl hover:underline"
-            >
-              Contact me
-            </a>
-          </nav>
-          <ToggleThemeButton  toggleTheme={toggleTheme} theme={theme} />
-        </div>
-      </header>
-
-      {children}
+      <NavBar theme={theme} toggleTheme={toggleTheme} />
+      
+      <main className="min-h-screen md:px-12 md:py-8">
+        {children}
+      </main>
 
       <footer
         className="border-t py-4 text-center text-sm"

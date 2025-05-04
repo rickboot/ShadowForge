@@ -58,9 +58,9 @@ Each content type (monster, treasure, room) utilizes distinct PromptTemplate's w
 `;
 export default function AboutPage() {
   return (
-    <main className="flex justify-center gap-6 p-12">
+    <main className="flex justify-center px-6 py-4 md:px-12 md:py-8">
       <div
-        className="w-180 rounded border border-[color:var(--border)] p-12"
+        className="w-180 rounded border border-[color:var(--border)] p-6 md:p-12"
         style={{
           backgroundColor: 'var(--surface)',
           color: 'var(--foreground)',
