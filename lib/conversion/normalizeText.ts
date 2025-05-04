@@ -24,9 +24,9 @@ export function normalizeText(text: string | null | undefined): string {
     line.length <= 40 &&
     !line.endsWith(',');
 
-  // Detect simple subheadings ("Treasure", "Monster Stats")
+  // Detect simple subheadings ("Treasure", "Monster Stats", "MONSTER STATS")
   const isHeader = (line: string): boolean =>
-    /^[A-Z][A-Za-z]+(?:\s+[A-Z][a-z]+)*$/.test(line) &&
+    /^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*|[A-Z]+(?:\s+[A-Z]+)*)$/.test(line) &&
     line.length <= 40 &&
     !line.endsWith('.');
 
@@ -35,7 +35,6 @@ export function normalizeText(text: string | null | undefined): string {
   const numberOfLines = lines.length;
 
   // MAIN LOOP
-
   for (let i = 0; i < numberOfLines; i++) {
     // trim leading/trailing whitespace, normalize inner whitespace to ' '
     const line = lines[i].trim().replace(/\s+/g, ' ');
