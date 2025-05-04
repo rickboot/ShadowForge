@@ -49,8 +49,9 @@ export function countTokens(text: string): number {
 }
 
 export function estimateTokenCount(text: string): number {
-  // const encoder = getEncoding('cl100k_base'); // works for GPT-4, GPT-3.5, etc.
-  // return encoder.encode(text).length;
-  const wordCount = text.split(/\s+/).length;
-  return Math.round(wordCount * 1.5); // ~1.3 + 0.2 buffer
+  const encoder = getEncoding('cl100k_base'); // works for GPT-4, GPT-3.5, etc.
+  return encoder.encode(text).length;
+
+  // const wordCount = text.split(/\s+/).length;
+  // return Math.round(wordCount * 1.5); // ~1.3 + 0.2 buffer
 }

@@ -20,8 +20,8 @@ export function chunkText(input: string, maxTokens: number) {
     }
   });
 
-  console.log('RAW PARAGRAPHS', rawParagraphs);
-  console.log('CONVERTED PARAGRAPHS', paragraphs);
+  // console.log('RAW PARAGRAPHS', rawParagraphs);
+  // console.log('CONVERTED PARAGRAPHS', paragraphs);
 
   // build up chunks from small paragraphs
   const chunks: string[] = [];
@@ -34,7 +34,7 @@ export function chunkText(input: string, maxTokens: number) {
       chunks.push(currentChunk.trim());
       currentChunk = para;
     } else {
-      currentChunk += (currentChunk ? /\n\n/ : '') + para;
+      currentChunk += (currentChunk ? '\n\n' : '') + para;
     }
   }
 
