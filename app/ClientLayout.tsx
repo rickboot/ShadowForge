@@ -3,7 +3,7 @@
   but Nextjs requires Metadata to be SSR. Hence layout.tsx > ClientLayout.tsx
 */
 'use client';
-import { ToggleTheme } from '@/components/ui/ToggleThemeButton';
+import { ToggleThemeButton } from '@/components/ui/ToggleThemeButton';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,12 +13,15 @@ export default function ClientLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    if (typeof window === 'undefined') {
-      return 'dark';
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  // Load theme preference after mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light';
+    if (savedTheme) {
+      setTheme(savedTheme);
     }
-    return (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
-  });
+  }, []);
 
   useEffect(() => {
     const htmlTag = document.documentElement;
@@ -82,7 +85,7 @@ export default function ClientLayout({
               Contact me
             </a>
           </nav>
-          <ToggleTheme  toggleTheme={toggleTheme} theme={theme} />
+          <ToggleThemeButton  toggleTheme={toggleTheme} theme={theme} />
         </div>
       </header>
 
