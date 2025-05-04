@@ -73,21 +73,21 @@ export default function NavBar({
           <div className="absolute right-5 top-4 w-44 rounded z-50 border flex flex-col bg-[var(--surface)]">
             <Link
               href="/"
-              className="block px-4 py-2 hover:bg-gray-100"
+              className="block px-4 py-2 hover:bg-[var(--button-hover-bg)] hover:text-[var(--button-text)]"
               onClick={() => setMenuOpen(false)}
             >
               Home
             </Link>
             <Link
               href="/about"
-              className="block px-4 py-2 hover:bg-red"
+              className="block px-4 py-2 hover:bg-[var(--button-hover-bg)] hover:text-[var(--button-text)]"
               onClick={() => setMenuOpen(false)}
             >
               About
             </Link>
             <Link
               href="mailto:rickallen@gmail.com"
-              className="block px-4 py-2 hover:bg-gray-100"
+              className="block px-4 py-2 hover:bg-[var(--button-hover-bg)] hover:text-[var(--button-text)]"
               onClick={() => setMenuOpen(false)}
             >
               Contact me
