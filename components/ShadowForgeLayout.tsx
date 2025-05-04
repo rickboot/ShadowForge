@@ -46,14 +46,13 @@ export default function ShadowForgeLayout({
 
   return (
     <div
-      className="min-h-screen font-sans z-10"
+      className="font-sans z-10"
       style={{
         backgroundColor: 'var(--background)',
         color: 'var(--foreground)',
-        // position: 'relative'
       }}
     >
-      <main className="flex flex-col gap-6 px-6 py-4 md:px-12 md:py-8 md:flex-row ">
+      <main className="flex flex-col gap-6 px-12 py-8 md:flex-row">
         {/* ============ INPUT ============ */}
         <section className="flex-1 space-y-4 z-10">
           <h2 className="text-2xl font-medium">Input</h2>

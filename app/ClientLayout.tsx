@@ -40,7 +40,7 @@ export default function ClientLayout({
     <div>
       <NavBar theme={theme} toggleTheme={toggleTheme} />
       
-      <main className="min-h-screen md:px-12 md:py-8">
+      <main>
         {children}
       </main>
 
