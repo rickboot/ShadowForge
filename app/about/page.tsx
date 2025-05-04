@@ -1,6 +1,8 @@
 import ReactMarkdown from 'react-markdown';
 
 const aboutContent = `
+## About ShadowForge
+
 ShadowForge is an AI-powered, web app designed to help tabletop RPG game masters (GMs) convert Dungeons & Dragons (D&D) content into the gritty, old-school format of the [Shadowdark](https://www.thearcanelibrary.com/pages/shadowdark) RPG (role-playing game) rules. It assists with transforming monster stats, treasure parcels, room descriptions, and rule mechanics (like skill checks) into formats suitable for direct use in Shadowdark games.
 
 This tool addresses a common challenge faced by GMs wanting to use 5e adventures in Shadowdark: the conversion process is often slow, manual, and tedious, requiring constant referencing of multiple rulebooks. ShadowForge aims to make this process faster and easier, while ensuring the final creative decisions remain firmly in the hands of the GM.
