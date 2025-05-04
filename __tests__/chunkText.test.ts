@@ -13,7 +13,7 @@ describe('chunkText', () => {
 
     chunks.forEach((chunk) => {
       const estTokens = estimateTokenCount(chunk);
-      expect(estTokens).toBeLessThan(MAX_TOKENS);
+      expect(estTokens).toBeLessThanOrEqual(MAX_TOKENS);
     });
   });
 
@@ -28,7 +28,7 @@ describe('chunkText', () => {
 
     chunks.forEach((chunk) => {
       const estTokens = estimateTokenCount(chunk);
-      expect(estTokens).toBeLessThan(MAX_TOKENS);
+      expect(estTokens).toBeLessThanOrEqual(MAX_TOKENS);
     });
   });
 
@@ -40,22 +40,23 @@ describe('chunkText', () => {
 
     const chunks = chunkText(hugeText, MAX_TOKENS);
 
-    chunks.forEach((chunk) => {
+    chunks.forEach((chunk, i) => {
       const estTokens = estimateTokenCount(chunk);
-
-      expect(estTokens).toBeLessThan(MAX_TOKENS);
-      expect(estTokens).toBeGreaterThanOrEqual(MAX_TOKENS * SAFETY_MARGIN);
+      expect(estTokens).toBeLessThanOrEqual(MAX_TOKENS);
+      if (i < chunks.length-1) {
+        expect(estTokens).toBeGreaterThanOrEqual(MAX_TOKENS * SAFETY_MARGIN);
+      }
     });
+  }); 
+
+  test('original text is preserved and in order', () => {
+    let originalText = '';
+    for (let i = 1; i <= 1000; i++) {
+      originalText += `This is sentence ${i}. `;
+    }
+    originalText = originalText.trim();
+
+    const chunkedText = chunkText(originalText, 100).join(' ');
+    expect(chunkedText).toEqual(originalText);
   });
-
-  // test('original text is preserved and in order', () => {
-  //   let originalText = '';
-  //   for (let i = 1; i <= 1000; i++) {
-  //     originalText += `This is sentence ${i}. `;
-  //   }
-  //   originalText = originalText.trim();
-
-  //   const chunkedText = chunkText(originalText, 100).join(' ');
-  //   expect(chunkedText).toEqual(originalText);
-  // });
 });

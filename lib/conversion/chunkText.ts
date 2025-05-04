@@ -1,15 +1,27 @@
-export function chunkText(input: string, maxTokens: number) {
-  console.log('CHUNKING!');
+import { estimateTokenCount } from "../utils/tokenUtils";
 
-  const TOKEN_MULTIPLIER = 1.5; // ~1.3 + 0.2 buffer
+export function chunkText(input: string, maxTokens: number) {
+  console.log('==========CHUNKING==========');
+
+  // const TOKEN_MULTIPLIER = 1.5; 
   const rawParagraphs = input.split(/\n\s*\n/); // split on vertical blank lines
 
+  //! TEST
+  const estTokens = estimateTokenCount(input);
+  const estTokensPerWord = estTokens / input.split(/\s+/).length
+  const maxWords = Math.floor(maxTokens / estTokensPerWord)
+    
+  console.log('MAX TOKENS', maxTokens);
+  console.log('EST TOKENS', estTokens);
+  console.log('EST TOKENS PER WORD', estTokensPerWord);
+  console.log('EST WORDS', input.split(/\s+/).length);
+  console.log('MAX WORDS', maxWords);
+  console.log('EST CHUNKS', Math.ceil(estTokens / maxTokens));
+  
   // chunk oversize paragraphs into smaller paragraphs
   const paragraphs: string[] = [];
-
   rawParagraphs.forEach((para) => {
     const words = para.split(/\s+/);
-    const maxWords = maxTokens / TOKEN_MULTIPLIER;
 
     if (words.length >= maxWords) {
       while (words.length > 0) {
@@ -28,7 +40,8 @@ export function chunkText(input: string, maxTokens: number) {
   let currentChunk = '';
   for (const para of paragraphs) {
     const wordCount = (currentChunk + para).split(/\s+/).length;
-    const tokenEstimate = wordCount * TOKEN_MULTIPLIER;
+    // const tokenEstimate = wordCount * TOKEN_MULTIPLIER;
+    const tokenEstimate = wordCount * estTokensPerWord;
 
     if (tokenEstimate > maxTokens) {
       chunks.push(currentChunk.trim());
