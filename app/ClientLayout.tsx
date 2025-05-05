@@ -38,11 +38,11 @@ export default function ClientLayout({
 
   return (
     <div>
-      <NavBar theme={theme} toggleTheme={toggleTheme} />
-      
-      <main>
-        {children}
-      </main>
+      <header>
+        <NavBar theme={theme} toggleTheme={toggleTheme} />
+      </header>
+
+      <main>{children}</main>
 
       <footer
         className="border-t py-4 text-center text-sm"
