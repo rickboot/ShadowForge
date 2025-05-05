@@ -15,11 +15,17 @@ export default function ClientLayout({
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   // Load theme preference after mount
+  // useEffect(() => {
+  //   const savedTheme = localStorage.getItem('theme') as 'dark' | 'light';
+  //   if (savedTheme) {
+  //     setTheme(savedTheme);
+  //   }
+  // }, []);
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as 'dark' | 'light';
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
+    const system = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const darkMode = savedTheme === 'dark' || (!savedTheme && system);
+    document.documentElement.classList.toggle('dark', darkMode);
   }, []);
 
   useEffect(() => {
