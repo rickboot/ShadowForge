@@ -8,9 +8,10 @@
   --foreground: #181817;
   --surface: #dfd8cf;
   --surface-contrast: #7c7873;
-  --button-bg: #02816F;
+  --surface-text: #000000;
+  --button-bg: #02816f;
   --button-text: #ffffff;
-  --button-hover-bg: #026F5F;
+  --button-hover-bg: #026f5f;
   --border: #c6c0b8;
 }
 
@@ -19,9 +20,10 @@ html.dark {
   --foreground: #e6e0d6;
   --surface: #1e1d1c;
   --surface-contrast: #6c6862;
-  --button-bg: #02816F;
+  --surface-text: #ffffff;
+  --button-bg: #02816f;
   --button-text: #ffffff;
-  --button-hover-bg: #026F5F;
+  --button-hover-bg: #026f5f;
   --border: #3a3938;
 }
 
@@ -34,7 +36,9 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.prose {
+.prose,
+.prose * {
+  color: var(--surface-text) !important;
   font-size: 1rem;
   line-height: 1.5;
 }

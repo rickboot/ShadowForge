@@ -46,7 +46,7 @@ export default function ShadowForgeLayout({
 
   return (
     <div
-      className="font-sans z-10"
+      className="z-10 font-sans"
       style={{
         backgroundColor: 'var(--background)',
         color: 'var(--foreground)',
@@ -54,15 +54,12 @@ export default function ShadowForgeLayout({
     >
       <main className="flex flex-col gap-6 px-12 py-8 md:flex-row">
         {/* ============ INPUT ============ */}
-        <section className="flex-1 space-y-4 z-10">
+        <section className="z-10 flex-1 space-y-4">
           <h2 className="text-2xl font-medium">Input</h2>
           <textarea
-            className="h-150 w-full resize-none rounded border p-4 font-mono text-sm 
-              bg-surface/10 hover:bg-surface/20 
-              transition-colors duration-300
-              focus:outline-none focus:ring-2 focus:ring-[var(--convert-button-bg)]/50"
+            className="bg-surface/10 hover:bg-surface/20 h-150 w-full resize-none rounded border p-4 font-mono text-sm transition-colors duration-300 focus:ring-2 focus:ring-[var(--convert-button-bg)]/50 focus:outline-none"
             style={{
-              color: 'var(--foreground)',
+              color: 'var(--surface-text)',
               borderColor: 'var(--surface-contrast)',
             }}
             placeholder={
@@ -77,12 +74,7 @@ export default function ShadowForgeLayout({
             <button
               onClick={handleConvert}
               disabled={loading || !input.trim()}
-              className="w-30 px-2 py-1 rounded-md 
-                bg-[var(--button-bg)] text-[var(--button-text)]
-                hover:bg-[var(--button-hover-bg)]
-                disabled:opacity-50 
-                transition-colors duration-300 
-                focus:outline-none focus:ring-2 focus:ring-accent/50"
+              className="focus:ring-accent/50 w-30 rounded-md bg-[var(--button-bg)] px-2 py-1 text-[var(--button-text)] transition-colors duration-300 hover:bg-[var(--button-hover-bg)] focus:ring-2 focus:outline-none disabled:opacity-50"
             >
               {loading ? 'Converting...' : 'Convert'}
             </button>
@@ -95,10 +87,9 @@ export default function ShadowForgeLayout({
                 type="checkbox"
                 checked={normalize}
                 onChange={(e) => setNormalize(e.target.checked)}
-                className="form-checkbox rounded-sm h-4 w-4
-                  border-surface-contrast"
+                className="form-checkbox border-surface-contrast h-4 w-4 rounded-sm"
                 style={{
-                  accentColor: 'var(--button-bg)'
+                  accentColor: 'var(--button-bg)',
                 }}
               />
             </label>
@@ -106,23 +97,21 @@ export default function ShadowForgeLayout({
         </section>
 
         {/* ============ OUTPUT ============ */}
-        <section className="flex-1 space-y-4 z-10">
+        <section className="z-10 flex-1 space-y-4">
           <h2 className="text-2xl font-medium">Output</h2>
           <div
-            className="h-150 w-full overflow-auto rounded border p-4 
-              bg-surface/10 hover:bg-surface/20 
-              transition-colors duration-300"
+            className="bg-surface/10 hover:bg-surface/20 h-150 w-full overflow-auto rounded border p-4 transition-colors duration-300"
             style={{
-              color: 'var(--foreground)',
+              color: 'var(--surface-text)',
               borderColor: 'var(--surface-contrast)',
             }}
           >
             {previewMode ? (
-              <div className="prose prose-sm dark:prose-invert max-w-none text-foreground/90">
+              <div className="prose prose-sm dark:prose-invert max-w-none">
                 <ReactMarkdown>{output}</ReactMarkdown>
               </div>
             ) : (
-              <pre className="text-sm font-mono whitespace-pre-wrap text-foreground/90 overflow-x-auto">
+              <pre className="overflow-x-auto text-sm whitespace-pre-wrap">
                 {output}
               </pre>
             )}
@@ -137,10 +126,9 @@ export default function ShadowForgeLayout({
                 type="checkbox"
                 checked={previewMode}
                 onChange={() => setPreviewMode(!previewMode)}
-                className="form-checkbox rounded-sm h-4 w-4
-                  border-surface-contrast"
+                className="form-checkbox border-surface-contrast h-4 w-4 rounded-sm"
                 style={{
-                  accentColor: 'var(--button-bg)'
+                  accentColor: 'var(--button-bg)',
                 }}
               />
             </div>
