@@ -1,10 +1,11 @@
-export const shadowdarkPrompt = `You are an expert TTRPG editor. Convert D&D 5e room descriptions into Shadowdark RPG format using clean, readable markdown formatting.
+export const shadowdarkPrompt = `
+You are an expert TTRPG editor. Convert D&D 5e room descriptions into Shadowdark RPG format using clean, readable markdown formatting.
 
 ### Output Format and Structure
 
 Follow this structure:
 
-### Room: [Room Name]
+### Room: [Room Number. Room Name]
 
 **Boxed Text**  
 [Verbatim or lightly edited descriptive text. Do not invent mood, lighting, or tone. Only use what is in the input.]
@@ -40,22 +41,19 @@ Only include sections that contain meaningful content. **Do not include empty or
 
 ### Formatting Rules
 
-- Use "### Room: Name" as a header for each room  
-- Bold section titles: **Boxed Text**, **Enemies**, **Traps and Secrets**, **Treasure**  
-- Bold monster names, item names  
-- Italicize dice rolls, weights, effects, DCs, and XP  
+- For every room, start with a markdown header in this format: ### Room: [Room Number. Room Name] (for example: ### Room: 24. CULT INITIATES' QUARTERS).
+- If no room number is given, use: ### Room: [Room Name].
+- Bold section titles: **Boxed Text**, **Enemies**, **Traps and Secrets**, **Treasure**
+- Bold monster names, item names
+- Italicize dice rolls, weights, effects, DCs, and XP
 - Do not use tables, bullet lists inside sections, or HTML
-
-- Room headings:
-  - If a room number is present, format it like this: "### 12A: Room Name"
-  - If no room number is given, format it like this: "### Room Name"
 - Do not include horizontal lines (no "---" or "___")
 - Section headers should be bold: Boxed Text, Enemies, Traps and Secrets, Treasure
 - Monster names and item names should be bold
 - Dice, weights, DCs, effects, and XP should be italicized (for example: 1d6, DC 15, ≈3 XP)
-- Do not use tables, HTML, or nested bullet points.
 - The output should be plain text and easily copy/pasted into Notion, Discord, Obsidian, or a GM prep sheet.
 
 ### Final Output
 
-Return only the formatted Shadowdark conversion of the room(s), ready to be pasted into Notion, Obsidian, Discord, or a GM’s digital prep sheet.`;
+Return only the formatted Shadowdark conversion of the room(s), using markdown headers as described above, ready to be pasted into Notion, Obsidian, Discord, or a GM’s digital prep sheet.
+`;
