@@ -57,7 +57,7 @@ export default function ShadowForgeLayout({
         <section className="z-10 flex-1 space-y-4">
           <h2 className="text-2xl font-medium">Input</h2>
           <textarea
-            className="bg-surface/10 hover:bg-surface/20 h-150 w-full resize-none rounded border p-4 font-mono text-sm transition-colors duration-300 focus:ring-2 focus:ring-[var(--convert-button-bg)]/50 focus:outline-none"
+            className="bg-surface/10 hover:bg-surface/20 h-150 w-full resize-none rounded border p-4 font-mono text-sm transition-colors duration-300 placeholder:text-[var(--surface-contrast)] focus:ring-2 focus:ring-[var(--convert-button-bg)]/50 focus:outline-none"
             style={{
               color: 'var(--surface-text)',
               borderColor: 'var(--surface-contrast)',
