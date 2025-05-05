@@ -1,6 +1,6 @@
 export interface LLMConfig {
   model: string;
-  provider: 'openai' | 'deepseek' | 'gemini' | 'mistral' | 'anthropic';
+  provider: 'openai' | 'deepseek' | 'gemini' | 'mistral' | 'anthropic' | 'groq';
   contextWindow: number;
   description?: string;
 }
@@ -46,6 +46,35 @@ export const llmConfig: Record<string, LLMConfig> = {
     provider: 'gemini',
     contextWindow: 1000000,
     description: 'Google Gemini 1.5 Pro (enormous context, beta access)',
+  },
+
+  // --- Groq ---
+  'groq-llama3-70b-8192': {
+    model: 'llama3-70b-8192',
+    provider: 'groq',
+    contextWindow: 8192,
+    description: 'Meta LLaMA3 70B via Groq. Fast, strong general reasoning.',
+  },
+  'groq-llama3-8b-8192': {
+    model: 'llama3-8b-8192',
+    provider: 'groq',
+    contextWindow: 8192,
+    description:
+      'Meta LLaMA3 8B via Groq. Very fast, lower cost, solid quality.',
+  },
+  'groq-mixtral-8x7b-32768': {
+    model: 'mixtral-8x7b-32768',
+    provider: 'groq',
+    contextWindow: 32768,
+    description:
+      'Mixtral MoE 8x7B via Groq. Sparse activation, fast inference.',
+  },
+  'groq-gemma-7b-it': {
+    model: 'gemma-7b-it',
+    provider: 'groq',
+    contextWindow: 8192,
+    description:
+      'Gemma 7B Instruct by Google, via Groq. Lightweight and efficient.',
   },
 
   // --- Mistral ---

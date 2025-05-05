@@ -2,6 +2,7 @@ import { ModelProvider } from '@/lib/types/llm';
 import { deepseekProvider } from '@/lib/llm/providers/deepseekProvider';
 import { openAIProvider } from '@/lib/llm/providers/openAiProvider';
 import { getLLMConfig } from '@/lib/llm/llmConfig';
+import { groqProvider } from './providers/groqProvider';
 
 interface CallLLMOptions {
   systemPrompt: string;
@@ -25,6 +26,9 @@ export async function callLLMAPI({
       break;
     case 'deepseek':
       provider = deepseekProvider;
+      break;
+    case 'groq':
+      provider = groqProvider;
       break;
     default:
       throw new Error(`Unsupported LLM provider: ${llm.provider}`);
