@@ -15,7 +15,7 @@ Nerdy types can view the code on the [Shadowforge Github repo](https://github.co
 
 **Features**
 
-- **AI-Powered Conversion:** Uses multistage LLMs (via LangChain + OpenAI API) to generate Shadowdark equivalents of D&D adventure content.
+- **AI-Powered Conversion:** Uses multistage LLMs (OpenAI compatibleAPIs) to generate Shadowdark equivalents of D&D adventure content.
 - **Flexible Input:** Accepts direct text pasting or file uploads (PDF/txt).
 - **Targeted Conversion:** Options to convert specific elements like **Monster Stats**, **Treasure Blocks** (adjusting for **Shadowdark economy/GP=XP**), **Encounters/Rooms** (including rule mechanics like **skill check DCs**), or generic text blocks.
 - **Structured Prompts:** Leverages LangChain to route input to task-specific prompt templates that inject core Shadowdark design principles and rules for more accurate conversion.
