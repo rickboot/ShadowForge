@@ -1,6 +1,6 @@
 export const DAILY_TOKEN_LIMIT = 10000;
 
-export const DEFAULT_INPUT_TEXT = `Maze of Twisty Little Passages (All Alike)
+export const DEFAULT_INPUT_TEXT = `1. Maze of Twisty Little Passages (All Alike)
 The narrow tunnels twist and turn in an impossible pattern.
 Walls of rough-hewn stone close in from all sides. Every direction looks exactly the same, and the air carries a faint scent of mildew, wax, and despair.
 Any attempt to map this area without magical aid results in confusion. A creature must succeed on a DC 13 Wisdom (Survival) check to track its progress; failure results in becoming lost for 1d4 hours.
