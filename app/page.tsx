@@ -17,6 +17,7 @@ export default function Home() {
 
   const handleConvert = async () => {
     setLoading(true);
+    setOutput('Strange runes flicker as ancient syntax is transmuted...');
 
     try {
       const result = await callConversionAPI(input);
