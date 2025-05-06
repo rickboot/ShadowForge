@@ -7,7 +7,7 @@ export async function convertToShadowdark(input: string): Promise<string> {
   const result = await callLLMAPI({
     systemPrompt: shadowdarkPrompt,
     userPrompt,
-    temperature: 0.3,
+    temperature: 0,
   });
 
   return result || 'Conversion failed.';
