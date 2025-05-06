@@ -19,6 +19,7 @@ export const metadata: Metadata = {
   description: 'Convert DnD 5e content to Shadowdark',
 };
 
+// Initialize theme on client side BEFORE React mounts
 const themeInitScript = `
 (function() {
   try {

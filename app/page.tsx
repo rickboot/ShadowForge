@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { callConversionAPI } from '@/lib/conversion/callConversionAPI';
 import dynamic from 'next/dynamic'; // skip SSR. pdfjs-dist needs DOM during build
 import ThreeJsBackground from '@/components/ThreeJsBackground';
+import { DEFAULT_INPUT_TEXT } from '@/lib/utils/constants';
 
 const ShadowForgeLayout = dynamic(
   () => import('@/components/ShadowForgeLayout'),
@@ -10,7 +11,7 @@ const ShadowForgeLayout = dynamic(
 );
 
 export default function Home() {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(DEFAULT_INPUT_TEXT);
   const [output, setOutput] = useState('');
   const [loading, setLoading] = useState(false);
   const [normalize, setNormalize] = useState(true);

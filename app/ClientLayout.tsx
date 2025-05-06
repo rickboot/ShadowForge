@@ -3,7 +3,6 @@
   but Nextjs requires Metadata to be SSR. Hence layout.tsx > ClientLayout.tsx
 */
 'use client';
-// import { ToggleThemeButton } from '@/components/ui/ToggleThemeButton';
 import { useEffect, useState } from 'react';
 import NavBar from './NavBar';
 
@@ -14,13 +13,6 @@ export default function ClientLayout({
 }>) {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
-  // Load theme preference after mount
-  // useEffect(() => {
-  //   const savedTheme = localStorage.getItem('theme') as 'dark' | 'light';
-  //   if (savedTheme) {
-  //     setTheme(savedTheme);
-  //   }
-  // }, []);
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as 'dark' | 'light';
     const system = window.matchMedia('(prefers-color-scheme: dark)').matches;
