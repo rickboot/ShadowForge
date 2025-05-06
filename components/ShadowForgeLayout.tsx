@@ -107,7 +107,7 @@ export default function ShadowForgeLayout({
             }}
           >
             {previewMode ? (
-              <div className="prose prose-sm dark:prose-invert max-w-none">
+              <div className="prose prose-sm dark:prose-invert markdown-body max-w-none">
                 <ReactMarkdown>{output}</ReactMarkdown>
               </div>
             ) : (
