@@ -1,11 +1,10 @@
+import { classifyText } from '../utils/prototypeChunkClassifier';
 import { sanitizeText } from './sanitizeText';
 
 export function normalizeText(text: string | null | undefined): string {
   if (!text || typeof text !== 'string') return '';
 
   text = sanitizeText(text);
-  // remove Unicode Replacement Character
-  text = text.replace(/\uFFFD/g, '');
 
   // Normalize line endings to '\n' and split into lines
   const lines = text.replace(/\r\n/g, '\n').trim().split('\n');
@@ -13,12 +12,9 @@ export function normalizeText(text: string | null | undefined): string {
   const paragraphs: string[] = [];
   let currentParagraph = '';
 
-  // Detect if line ends with common ending punctuation to help identify paragraph breaks
   const endsWithPunctuation = (line: string): boolean =>
     /[.?!]["')\]]?\s*$/.test(line);
 
-  // Detect numbered headings ("1. Room", "A) Area")
-  // const isNumberedHeader = /^\s*\d+\s*[.)]\s+/;
   const isNumberedHeader = (line: string): boolean =>
     /^\s*[\dA-Za-z]+[.)]\s+/.test(line) &&
     line.length <= 40 &&
@@ -34,9 +30,7 @@ export function normalizeText(text: string | null | undefined): string {
 
   const numberOfLines = lines.length;
 
-  // MAIN LOOP
   for (let i = 0; i < numberOfLines; i++) {
-    // trim leading/trailing whitespace, normalize inner whitespace to ' '
     const line = lines[i].trim().replace(/\s+/g, ' ');
 
     if (isBlank(line)) {
@@ -75,7 +69,16 @@ export function normalizeText(text: string | null | undefined): string {
     paragraphs.push(currentParagraph);
   }
 
-  // Join paragraphs with double newlines and clean up excessive newlines/trim final result
+  console.log(
+    '==========================paragraphs==========================',
+    paragraphs,
+  );
+
+  // ------------------
+  const classifiedText = classifyText(text);
+  console.log('============classifiedText===========', classifiedText);
+  // ------------------
+
   return paragraphs
     .join('\n\n')
     .replace(/\n{3,}/g, '\n\n')

@@ -3,6 +3,7 @@ import { convertToShadowdark } from '@/lib/conversion/convertToShadowdark';
 import { logTokenUsage } from '@/lib/utils/tokenUtils';
 import { normalizeText } from '@/lib/conversion/normalizeText';
 import { getLLMConfig } from '../llm/llmConfig';
+import { classifyText } from '../utils/prototypeChunkClassifier';
 
 interface runConversionPipelineProps {
   text: string;
@@ -11,18 +12,14 @@ interface runConversionPipelineProps {
 
 export async function runConversionPipeline({
   text,
-  normalize,
 }: runConversionPipelineProps) {
-  if (normalize) {
-    text = normalizeText(text);
-  }
-  const maxTokens = getLLMConfig().contextWindow;
+  text = normalizeText(text);
 
+  const maxTokens = getLLMConfig().contextWindow;
   const chunks = chunkText(text, maxTokens);
 
   const convertedChunks: string[] = [];
   let tokenUsage = 0;
-
   for (const [i, chunk] of chunks.entries()) {
     const converted = await convertToShadowdark(chunk);
     convertedChunks.push(converted);
