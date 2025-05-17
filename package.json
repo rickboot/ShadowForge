@@ -31,7 +31,8 @@
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
     "three": "^0.176.0",
-    "ts-jest": "^29.3.2"
+    "ts-jest": "^29.3.2",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

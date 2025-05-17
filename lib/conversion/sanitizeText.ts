@@ -9,7 +9,7 @@ export function sanitizeText(text: string): string {
 
   if (invalidCount > 0)
     console.log(
-      `⚠️ sanitizeText: Replaced ${invalidCount} invalid Unicode character(s) with [INVALID]`,
+      `sanitizeText: Replaced ${invalidCount} invalid Unicode character(s) with [INVALID]`,
     );
 
   // remove misc unicode characters

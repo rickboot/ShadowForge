@@ -4,6 +4,7 @@ import { logTokenUsage } from '@/lib/utils/tokenUtils';
 import { normalizeText } from '@/lib/conversion/normalizeText';
 import { getLLMConfig } from '../llm/llmConfig';
 import { classifyText } from '../utils/prototypeChunkClassifier';
+import { chunkTextToBlocks } from './convertToBlocks';
 
 interface runConversionPipelineProps {
   text: string;
@@ -13,7 +14,10 @@ interface runConversionPipelineProps {
 export async function runConversionPipeline({
   text,
 }: runConversionPipelineProps) {
-  text = normalizeText(text);
+  // text = normalizeText(text);
+
+  const blocks = chunkTextToBlocks(text);
+  console.log('==========BLOCKS==========', blocks);
 
   const maxTokens = getLLMConfig().contextWindow;
   const chunks = chunkText(text, maxTokens);

@@ -186,3 +186,16 @@ export function classifyText(text: string): ClassifiedContent[] {
   const chunks = chunkContent(text);
   return classifyChunks(chunks);
 }
+
+const temp = {
+  heading: 'The Shadow of the Tomb Raider',
+  text: 'Paragraph 1',
+};
+
+type RawBlock = {
+  id: string; // UUID or slug
+  heading: string;
+  body: string;
+  lineStart: number;
+  lineEnd: number;
+};

@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["deepseek", "LLMAPI", "subheaders"],
+  "cSpell.words": ["deepseek", "LLMAPI", "Shadowdark", "subheaders", "uuidv"],
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript]": {
