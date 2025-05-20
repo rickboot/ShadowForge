@@ -41,38 +41,6 @@ function isHeader(line: string): boolean {
   if (isDramaticHeader) return true;
   return false;
 }
-// function isHeader(line: string): boolean {
-//   const trimmed = line.trim();
-//   if (trimmed.length === 0) return false;
-//   if (trimmed.length > 60) return false;
-
-//   const isPlainHeaderText = /^[A-Za-z0-9'"’“”\-–—:(),! ]+$/.test(trimmed);
-//   const isNumbered = /^[A-Z\d]+[.)]\s+/.test(trimmed);
-//   const wordCount = trimmed.split(/\s+/).length;
-
-//   // Title Case detection: at least 80% of words start with uppercase
-//   const words = trimmed.split(/\s+/);
-//   const titleCaseCount = words.filter(w => /^[A-Z]/.test(w)).length;
-//   const isTitleCase = wordCount > 2 && (titleCaseCount / wordCount) >= 0.8;
-
-//   if (isNumbered && wordCount <= 12) return true;
-//   if (isPlainHeaderText && wordCount <= 6) return true;
-//   if (isPlainHeaderText && isTitleCase && wordCount <= 12) return true; // Allow longer title-case headers
-
-//   return false;
-// }
-// function isHeader(line: string): boolean {
-//   const trimmed = line.trim();
-//   if (trimmed.length === 0) return false;
-//   if (trimmed.length > 60) return false;
-
-//   const isPlainHeaderText = /^[A-Za-z0-9'"’“”\-–—:(),! ]+$/.test(trimmed);
-//   const isNumbered = /^[A-Z\d]+[.)]\s+/.test(trimmed);
-//   const wordCount = trimmed.split(/\s+/).length;
-//   const hasFewWords = wordCount <= 6;
-
-//   return hasFewWords && (isNumbered || isPlainHeaderText);
-// }
 
 export function chunkTextToBlocks(
   adventureId: string,
@@ -94,19 +62,21 @@ export function chunkTextToBlocks(
   const blocks: Block[] = [];
 
   let sequence = 1;
-  let header = '';
+  let prevHeader = '';
   let lineStart = 1;
   let paragraphs: string[] = [];
 
   lines.forEach((line, lineIndex) => {
+
     if (isHeader(line)) {
-      if (paragraphs.length > 0) {
+
+      if (paragraphs.length > 0 || prevHeader) {
         // flush previous block
         blocks.push({
           id: uuidv4(),
           adventureId,
           sequence,
-          header,
+          header: prevHeader,
           paragraphs,
           lineStart,
           lineEnd: lineIndex,
@@ -114,21 +84,23 @@ export function chunkTextToBlocks(
         sequence++;
         paragraphs = [];
       }
+
       // new block
-      header = line;
+      prevHeader = line;
       lineStart = lineIndex + 1;
+
     } else {
       paragraphs.push(line);
     }
   });
 
   // final block
-  if (paragraphs.length > 0) {
+  if (paragraphs.length > 0 || prevHeader) {
     blocks.push({
       id: uuidv4(),
       adventureId,
       sequence,
-      header,
+      header: prevHeader,
       paragraphs,
       lineStart,
       lineEnd: lines.length,
