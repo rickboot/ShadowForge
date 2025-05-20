@@ -1,23 +1,28 @@
 import { chunkText } from '@/lib/conversion/chunkText';
 import { convertToShadowdark } from '@/lib/conversion/convertToShadowdark';
 import { logTokenUsage } from '@/lib/utils/tokenUtils';
-import { normalizeText } from '@/lib/conversion/normalizeText';
 import { getLLMConfig } from '../llm/llmConfig';
-import { classifyText } from '../utils/prototypeChunkClassifier';
 import { chunkTextToBlocks } from './convertToBlocks';
+import { classifyBlocks } from '../utils/chunkClassifier';
 
 interface runConversionPipelineProps {
   text: string;
   normalize: boolean;
 }
 
+// TODO: Replace with actual adventure ID
+const DUMMY_ADVENTURE_ID = 'adventure-1';
+
 export async function runConversionPipeline({
   text,
 }: runConversionPipelineProps) {
-  // text = normalizeText(text);
+  // console.log('Input text:', text);
 
-  const blocks = chunkTextToBlocks(text);
-  console.log('==========BLOCKS==========', blocks);
+  const contentBlocks = chunkTextToBlocks(DUMMY_ADVENTURE_ID, text);
+  // console.log('Content blocks:', contentBlocks);
+
+  const classifiedContent = classifyBlocks(contentBlocks);
+  console.log('Classified content:', classifiedContent);
 
   const maxTokens = getLLMConfig().contextWindow;
   const chunks = chunkText(text, maxTokens);
@@ -35,6 +40,7 @@ export async function runConversionPipeline({
   console.log(
     `\x1b[36m[Token Debug]\x1b[0m \x1b[33mTotal input usage: ${tokenUsage}\x1b[0m`,
   );
+
   logTokenUsage('Converted output:', convertedText);
 
   return { convertedText, tokenUsage };

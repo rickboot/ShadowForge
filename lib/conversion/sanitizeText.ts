@@ -13,7 +13,7 @@ export function sanitizeText(text: string): string {
     );
 
   // remove misc unicode characters
-  text
+  text = text
     .replace(/\uFFFD/g, '')
     .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
     .replace(/[\u200B-\u200F\u2028-\u202F\u00AD]/g, '');
