@@ -19,7 +19,6 @@ export const openAIProvider: ModelProvider = {
         temperature,
         messages,
       });
-      console.log(`CALLING ${model}`);
       return completion.choices[0]?.message?.content?.trim() || '';
     } catch (error) {
       console.error('[OpenAIProvider] Error:', error);

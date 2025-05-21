@@ -42,7 +42,7 @@ function isHeader(line: string): boolean {
   return false;
 }
 
-export function chunkTextToBlocks(
+export function convertToBlocks(
   adventureId: string,
   text: string | null | undefined,
 ): Block[] {

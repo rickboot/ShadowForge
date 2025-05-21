@@ -7,11 +7,6 @@ export function sanitizeText(text: string): string {
     return '[INVALID]';
   });
 
-  if (invalidCount > 0)
-    console.log(
-      `sanitizeText: Replaced ${invalidCount} invalid Unicode character(s) with [INVALID]`,
-    );
-
   // remove misc unicode characters
   text = text
     .replace(/\uFFFD/g, '')
