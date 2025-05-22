@@ -1,8 +1,8 @@
-import { classifyBlocks } from '../lib/conversion/classifyBlocks';
+import { classifyWithKeywords } from '../lib/conversion/classifyWithKeywords';
 import { Block } from '../lib/conversion/convertToBlocks';
-import { ContentType } from '../lib/conversion/classifyBlocks';
+import { ContentType } from '../lib/conversion/classifyWithKeywords';
 
-describe('classifyBlocks', () => {
+describe('classifyWithKeywords', () => {
     const baseBlock = (header: string, paragraphs: string[] = []): Block => ({
         id: `id-${header}`,
         sequence: 1,
@@ -32,7 +32,7 @@ describe('classifyBlocks', () => {
 
     test.each(testCases)('should classify header "%s" as %s', (header, expectedType) => {
         const blocks = [baseBlock(header)];
-        const result = classifyBlocks(blocks);
+        const result = classifyWithKeywords(blocks);
         expect(result[0].contentType).toBe(expectedType);
         expect(result[0].confidence).toBeGreaterThanOrEqual(2);
         expect(result[0].source).toBe('Header');
@@ -40,7 +40,7 @@ describe('classifyBlocks', () => {
 
     test('should fallback to unknown when header and body don’t match', () => {
         const blocks = [baseBlock('Mysterious Blobular Entity', ['This text is nonsense.'])];
-        const result = classifyBlocks(blocks);
+        const result = classifyWithKeywords(blocks);
         expect(result[0].contentType).toBe('Unknown');
         expect(result[0].confidence).toBe(1);
         expect(result[0].source).toBe('Unknown');
@@ -48,7 +48,7 @@ describe('classifyBlocks', () => {
 
     test('should handle plural forms like "Caves" or "Crypts"', () => {
         const blocks = [baseBlock('Crypts of Despair')];
-        const result = classifyBlocks(blocks);
+        const result = classifyWithKeywords(blocks);
         expect(result[0].contentType).toBe('Room');
         expect(result[0].confidence).toBeGreaterThanOrEqual(2);
     });

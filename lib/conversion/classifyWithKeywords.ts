@@ -1,30 +1,35 @@
 // note: classification is done in order so higher hierarchy types come first
 // todo: review the rules and order
-export type ContentType =
-  | 'Adventure'
-  | 'Region'
-  | 'City'
-  | 'Site'
-  | 'Encounter'
-  | 'Dungeon'
-  | 'Room'
-  | 'PointOfInterest'
-  | 'Monster'
-  | 'Treasure'
-  | 'Character'
-  | 'NPC'
-  | 'MagicItem'
-  | 'Intro'
-  | 'Lore'
-  | 'Quest'
-  | 'CharacterBio'
-  | 'TOC'
-  | 'Credits'
-  | 'Appendix'
-  | 'Glossary'
-  | 'Index'
-  | 'Unknown';
+export const CONTENT_TYPES = [
+  'Adventure',
+  'Region',
+  'City',
+  'Site',
+  'Encounter',
+  'Dungeon',
+  'Room',
+  'PointOfInterest',
+  'Monster',
+  'Treasure',
+  'Character',
+  'NPC',
+  'MagicItem',
+  'Intro',
+  'Lore',
+  'Quest',
+  'CharacterBio',
+  'GMGuidance',
+  'TOC',
+  'Credits',
+  'Appendix',
+  'Glossary',
+  'Index',
+  'Unknown',
+] as const;
 
+export const ContentTypeValues = CONTENT_TYPES;
+
+export type ContentType = typeof ContentTypeValues[number];
 
 type ClassificationSource = 'Header' | 'Body' | 'Human' | 'LLM' | 'Unknown';
 
@@ -42,7 +47,7 @@ export type ClassifiedContent = {
   id: string;
   sequence: number;
   adventureId: string;
-  header?: string;
+  header: string;
   contentType: ContentType;
   paragraphs: string[];
   explanation: string;
@@ -53,20 +58,21 @@ export type ClassifiedContent = {
 
 export const headerKeywordMap: Record<string, ContentType> = {
   // Room
-  altar: 'Room', altars: 'Room', attic: 'Room', ballrooms: 'Room', ballroom: 'Room',
-  barracks: 'Room', bath: 'Room', baths: 'Room', bedchamber: 'Room', bedroom: 'Room',
-  chamber: 'Room', chambers: 'Room', closet: 'Room', closets: 'Room', court: 'Room',
+  altar: 'Room', altars: 'Room', attic: 'Room', balcony: 'Room', ballrooms: 'Room', ballroom: 'Room',
+  barracks: 'Room', bath: 'Room', baths: 'Room', bathroom: 'Room', bedchamber: 'Room', bedroom: 'Room',
+  chamber: 'Room', chambers: 'Room', closet: 'Room', closets: 'Room', conservatory: 'Room',
   crypt: 'Room', crypts: 'Room', dining: 'Room', door: 'Room', doors: 'Room',
-  elevator: 'Room', entryway: 'Room', foyer: 'Room', gallery: 'Room', galleries: 'Room',
+  dumbwaiter: 'Room',
+  elevator: 'Room', entrance: 'Room', entryway: 'Room', foyer: 'Room', gallery: 'Room', galleries: 'Room',
   hall: 'Room', halls: 'Room', jail: 'Room', kitchen: 'Room', kitchens: 'Room',
-  lair: 'Room', landing: 'Room', library: 'Room', libraries: 'Room', lounge: 'Room',
+  lair: 'Room', landing: 'Room', larder: 'Room', library: 'Room', libraries: 'Room', lounge: 'Room',
   maze: 'Room', morgue: 'Room', nursery: 'Room', observatory: 'Room', office: 'Room',
   offices: 'Room', pantry: 'Room', pantries: 'Room', parlor: 'Room', passage: 'Room',
   passages: 'Room', pit: 'Room', pits: 'Room', portal: 'Room', portals: 'Room', prison: 'Room', prisons: 'Room',
   quarters: 'Room', restroom: 'Room', room: 'Room', rooms: 'Room', shrine: 'Room', shrines: 'Room',
   spire: 'Room', stables: 'Room', stable: 'Room', stairs: 'Room', stairwell: 'Room',
   stairwells: 'Room', staircase: 'Room', staircases: 'Room', storage: 'Room', storages: 'Room', study: 'Room', suite: 'Room',
-  suites: 'Room', theater: 'Room', toilet: 'Room', trap: 'Room', traps: 'Room',
+  suites: 'Room', theater: 'Room', toilet: 'Room', trap: 'Room', traps: 'Room', trapdoor: 'Room',
   turret: 'Room', vault: 'Room', vaults: 'Room', vestibule: 'Room', well: 'Room',
   wells: 'Room', workshop: 'Room', workshops: 'Room', tomb: 'Room', tombs: 'Room',
   area: 'Room', areas: 'Room', gateway: 'Room', gateways: 'Room', gate: 'Room',
@@ -77,7 +83,7 @@ export const headerKeywordMap: Record<string, ContentType> = {
   pens: 'Room', armory: 'Room', armories: 'Room', crevasse: 'Room', crevasses: 'Room',
   castle: 'Room', castles: 'Room', camp: 'Room', camps: 'Room', post: 'Room', posts: 'Room',
   storeroom: 'Room', storerooms: 'Room', treasury: 'Room', treasuries: 'Room', arena: 'Room', arenas: 'Room',
-  cemetery: 'Room', cemeteries: 'Room',
+  cemetery: 'Room', cemeteries: 'Room', reliquary: 'Room',
 
   // Point of Interest
   statue: 'PointOfInterest', statues: 'PointOfInterest', alcove: 'PointOfInterest',
@@ -122,7 +128,7 @@ export const headerKeywordMap: Record<string, ContentType> = {
   garden: 'Region', gardens: 'Region', glade: 'Region', glades: 'Region', gorge: 'Region',
   gorges: 'Region', graveyard: 'Region', graveyards: 'Region', grove: 'Region',
   groves: 'Region', hill: 'Region', hills: 'Region', island: 'Region', islands: 'Region',
-  jungle: 'Region', jungles: 'Region', lake: 'Region', lakes: 'Region', land: 'Region',
+  jungle: 'Region', jungles: 'Region', lake: 'Region', lakes: 'Region', land: 'Region', mists: 'Region',
   lands: 'Region', meadow: 'Region', meadows: 'Region', memorial: 'Region', memorials: 'Region',
   moor: 'Region', moors: 'Region', mount: 'Region', mountain: 'Region', mountains: 'Region',
   ocean: 'Region', oceans: 'Region', overlook: 'Region', overlooks: 'Region', pass: 'Region',
@@ -136,7 +142,8 @@ export const headerKeywordMap: Record<string, ContentType> = {
   // Treasure, Monster, Encounter, Character, NPC, MagicItem, etc.
   chest: 'Treasure', chests: 'Treasure', hoard: 'Treasure', hoards: 'Treasure', stash: 'Treasure', stashes: 'Treasure',
   loot: 'Treasure', loots: 'Treasure', cache: 'Treasure', caches: 'Treasure',
-  treasure: 'Treasure', treasures: 'Treasure',
+  treasure: 'Treasure', treasures: 'Treasure', coffer: 'Treasure', coffers: 'Treasure',
+  footlocker: 'Treasure', footlockers: 'Treasure',
 
   beast: 'Monster', beasts: 'Monster', horror: 'Monster', horrors: 'Monster',
   creature: 'Monster', creatures: 'Monster', aberration: 'Monster', aberrations: 'Monster',
@@ -155,19 +162,28 @@ export const headerKeywordMap: Record<string, ContentType> = {
   barkeep: 'NPC', merchant: 'NPC', mayor: 'NPC', guard: 'NPC',
 
   // Misc: Adventure, Encounter, Appendix, Intro, Quest and more
-  'adventure start': 'Adventure',
+  adventure: 'Adventure',
+  advancement: 'GMGuidance',
   encounter: 'Encounter', encounters: 'Encounter',
   appendix: 'Appendix', glossary: 'Appendix', credits: 'Appendix',
+  history: 'Lore',
   prologue: 'Intro', foreword: 'Intro', preface: 'Intro', introduction: 'Intro',
   start: 'Intro',
-
   quest: 'Quest', quests: 'Quest', objective: 'Quest', mission: 'Quest', goal: 'Quest',
-
 };
 
-export function classifyBlock(block: Block): ClassifiedContent {
-  const headerWords = block.header.toLowerCase().split(/\s+/);
+function cleanHeader(raw: string): string {
+  return raw
+    .replace(/^\s*[\dA-Za-z]+[.)]\s+/, '') // Remove leading numbered/lettered labels like "1.", "B)", "III)"
+    .replace(/[()[\]]/g, '') // Remove all parentheses and brackets
+    .replace(/^["“”']+|["“”'!]+$/g, '') // Remove surrounding quotes and trailing punctuation
+    .replace(/:$/, '') // Remove trailing colon
+    .trim();
+}
 
+export function classifyBlock(block: Block): ClassifiedContent {
+  const headerWords = cleanHeader(block.header).toLowerCase().split(/\s+/);
+  const bodyText = block.paragraphs.join(' ').toLowerCase();
 
   for (const word of headerWords) {
     const contentType = headerKeywordMap[word];
@@ -187,23 +203,26 @@ export function classifyBlock(block: Block): ClassifiedContent {
     }
   }
 
-  // TODO: consider classifying body text for unknown content types
-  // for (const rule of rules) {
-  //   if (rule.test(fullText)) {
+  // TODO: Re-enable when we have a better text cleaning strategy
+  // Fallback: Search body text for any keyword match
+  // for (const [keyword, contentType] of Object.entries(headerKeywordMap)) {
+  //   const keywordPattern = new RegExp(`\\b${keyword}\\b`, 'i'); // Match whole words only - 'crypt' not 'encrypted
+  //   if (keywordPattern.test(bodyText)) {
   //     return {
   //       id: block.id,
   //       sequence: block.sequence,
   //       adventureId: block.adventureId,
   //       header: block.header,
   //       paragraphs: block.paragraphs,
-  //       contentType: rule.type,
-  //       explanation: rule.rationale,
-  //       confidence: 2,
-  //       rulesMatched: [`rules-engine-v1:${rule.type}`],
-  //       source: 'header'
+  //       contentType,
+  //       explanation: `Body contains keyword: ${keyword}`,
+  //       confidence: 1,
+  //       source: 'Body',
+  //       rulesMatched: [`body-match: ${contentType}`],
   //     };
   //   }
   // }
+
 
   return {
     id: block.id,
@@ -219,10 +238,13 @@ export function classifyBlock(block: Block): ClassifiedContent {
   };
 }
 
-export function classifyBlocks(blocks: Block[]): ClassifiedContent[] {
+export function classifyWithKeywords(blocks: Block[]): ClassifiedContent[] {
   const classifiedBlocks = blocks.map(classifyBlock);
 
+  // console.log('\n\nAll blocks: ', classifiedBlocks, '\n\n');
+  // console.log('\n\nBody blocks: ', classifiedBlocks.filter((b) => b.source === 'Body'), '\n\n');
   // console.log('\n\nUnknown blocks: ', classifiedBlocks.filter((b) => b.contentType === 'Unknown'), '\n\n');
+  // console.log('\n\nUnknown blocks: ', classifiedBlocks.filter((b) => b.contentType === 'Unknown').map((b) => b.header), '\n\n');
 
   return classifiedBlocks;
 }

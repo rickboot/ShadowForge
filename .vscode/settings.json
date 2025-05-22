@@ -1,5 +1,12 @@
 {
-  "cSpell.words": ["deepseek", "LLMAPI", "Shadowdark", "subheaders", "uuidv"],
+  "cSpell.words": [
+    "deepseek",
+    "LLMAPI",
+    "Shadowdark",
+    "subheaders",
+    "TTRPG",
+    "uuidv"
+  ],
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript]": {
