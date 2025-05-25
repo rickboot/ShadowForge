@@ -13,5 +13,6 @@ export function sanitizeText(text: string): string {
     // remove extra spaces before newlines
     .replace(/[ \t]+\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n')
+    //TODO: filter malicious attempts - LLM prompt and script injection, size limits, etc
     .trim()
 }
