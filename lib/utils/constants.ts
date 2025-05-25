@@ -1,3 +1,5 @@
+export const MAX_HEADER_CHARS = 120;
+
 export const DAILY_TOKEN_LIMIT = 10000;
 
 export const DEFAULT_INPUT_TEXT = `1. Maze of Twisty Little Passages (All Alike)
