@@ -37,7 +37,6 @@ export default function ShadowForgeLayout({
     let text = '';
     if (file.type === 'application/pdf') {
       text = await extractTextFromPDF(file);
-      setInput(text);
     } else {
       text = await file.text();
     }
@@ -52,12 +51,12 @@ export default function ShadowForgeLayout({
         color: 'var(--foreground)',
       }}
     >
-      <main className="flex flex-col gap-6 px-12 py-8 md:flex-row">
+      <main className="flex h-[660px] flex-col gap-6 px-12 py-8 md:flex-row">
         {/* ============ INPUT ============ */}
-        <section className="z-10 flex-1 space-y-4">
+        <section className="z-10 flex flex-1 flex-col space-y-4">
           <h2 className="text-2xl font-medium">Paste 5e Content Here</h2>
           <textarea
-            className="bg-surface/10 hover:bg-surface/20 h-150 w-full resize-none rounded border p-4 font-mono text-sm transition-colors duration-300 placeholder:text-[var(--surface-contrast)] focus:ring-2 focus:ring-[var(--convert-button-bg)]/50 focus:outline-none"
+            className="bg-surface/10 hover:bg-surface/20 w-full flex-1 resize-none rounded border p-4 font-mono text-sm transition-colors duration-300 placeholder:text-[var(--surface-contrast)] focus:ring-2 focus:ring-[var(--convert-button-bg)]/50 focus:outline-none"
             style={{
               color: 'var(--surface-text)',
               borderColor: 'var(--surface-contrast)',
@@ -97,10 +96,10 @@ export default function ShadowForgeLayout({
         </section>
 
         {/* ============ OUTPUT ============ */}
-        <section className="z-10 flex-1 space-y-4">
+        <section className="z-10 flex flex-1 flex-col space-y-4">
           <h2 className="text-2xl font-medium">Shadowdark Content</h2>
           <div
-            className="bg-surface/10 hover:bg-surface/20 h-150 w-full overflow-auto rounded border p-4 transition-colors duration-300"
+            className="bg-surface/10 hover:bg-surface/20 w-full flex-1 overflow-auto rounded border p-4 transition-colors duration-300"
             style={{
               color: 'var(--surface-text)',
               borderColor: 'var(--surface-contrast)',
