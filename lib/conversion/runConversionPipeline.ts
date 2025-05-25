@@ -1,51 +1,32 @@
-// import { chunkText } from '@/lib/conversion/chunkText';
-// import { convertToShadowdark } from '@/lib/conversion/convertToShadowdark';
-// import { logTokenUsage } from '@/lib/utils/tokenUtils';
-// import { getLLMConfig } from '../llm/llmConfig';
 import { convertToBlocks } from './convertToBlocks'
 import { classifyWithKeywords } from './classifyWithKeywords'
 import { classifyWithLLM } from './classifyWithLLM';
+import { DEFAULT_ADVENTURE_ID } from '@/lib/constants/app';
 
-// TODO: Replace with actual adventure ID
-const DUMMY_ADVENTURE_ID = 'adventure-1';
-
-export type ContentBlock = {
-  id: string;
-  sequence: number;
-  adventureId: string;
-  header: string;
-  paragraphs: string[];
-};
 interface runConversionPipelineProps {
   text: string;
-  normalize: boolean;
+  adventureId?: string;
 }
 
 export async function runConversionPipeline({
   text,
+  adventureId,
 }: runConversionPipelineProps) {
 
-  const blocksRaw = convertToBlocks(DUMMY_ADVENTURE_ID, text);
+  const blocksRaw = convertToBlocks(adventureId ?? DEFAULT_ADVENTURE_ID, text);
 
-  const blocksAllKeywordClassified = classifyWithKeywords(blocksRaw);
+  const keywordClassified = classifyWithKeywords(blocksRaw);
 
-  const blocksUnknown = blocksAllKeywordClassified.filter((block) => block.contentType === 'Unknown');
+  const unknownBlocks = keywordClassified.filter((block) => block.contentType === 'Unknown');
+  const llmClassified = await classifyWithLLM(unknownBlocks);
 
-  const blocksToClassify: ContentBlock[] = blocksUnknown.map((block) => ({
-    id: block.id,
-    sequence: block.sequence,
-    adventureId: block.adventureId,
-    header: block.header,
-    paragraphs: block.paragraphs,
-  }));
+  const allClassified = [...keywordClassified.filter((block) => block.contentType !== 'Unknown'), ...llmClassified];
 
-  const blocksLLMClassified = await classifyWithLLM(blocksToClassify);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('########## Classified Blocks ##########');
+    console.log(allClassified.sort((a, b) => a.sequence - b.sequence));
+  }
 
-  const blocksKnown = blocksAllKeywordClassified.filter((block) => block.contentType !== 'Unknown');
-  const blocksAllClassified = [...blocksKnown, ...blocksLLMClassified];
-
-  console.log('########## Classified Blocks ##########');
-  console.log(blocksAllClassified.sort((a, b) => a.sequence - b.sequence));
 
   //! Old conversion - may need for alternate conversion
   // const convertedChunks: string[] = [];

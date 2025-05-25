@@ -1,4 +1,4 @@
-export const shadowdarkPrompt = `
+export const SHADOWDARK_SYSTEM_PROMPT = `
 You are an expert TTRPG editor. Convert D&D 5e room descriptions into Shadowdark RPG format using clean, readable markdown formatting.
 
 ### Output Format and Structure
@@ -57,3 +57,7 @@ Only include sections that contain meaningful content. **Do not include empty or
 
 Return only the formatted Shadowdark conversion of the room(s), using markdown headers as described above, ready to be pasted into Notion, Obsidian, Discord, or a GM’s digital prep sheet.
 `;
+
+export function buildShadowdarkConversionPrompt(input: string): string {
+  return `Convert the following DnD 5e content block to Shadowdark RPG format:\n\n${input}`;
+}

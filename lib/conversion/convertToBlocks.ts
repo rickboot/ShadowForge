@@ -1,33 +1,23 @@
 import { sanitizeText } from './sanitizeText';
 import { v4 as uuidv4 } from 'uuid';
-
-export type Block = {
-  id: string;
-  adventureId: string;
-  sequence: number;
-  header: string;
-  paragraphs: string[];
-  lineStart: number;
-  lineEnd: number;
-};
+import { MINOR_TITLE_WORDS, MAX_LONG_HEADER_WORDS, MAX_SHORT_HEADER_WORDS, MAX_HEADER_CHARS } from '@/lib/constants/conversion';
+import { ContentBlock } from '@/lib/constants/content';
 
 function isHeader(line: string): boolean {
   const trimmed = line.trim();
   if (trimmed.length === 0) return false;
-  if (trimmed.length > 60) return false;
+  if (trimmed.length > MAX_HEADER_CHARS) return false;
 
   const hasHeaderAllowedCharacters = /^[A-Za-z0-9'"’“”\-–—:(),! ]+$/.test(trimmed);
   const isNumbered = /^[A-Z\d]+[.)]\s+/.test(trimmed);
   const wordCount = trimmed.split(/\s+/).length;
 
-  const minorWords = new Set([
-    'a', 'an', 'and', 'as', 'at', 'but', 'by', 'down', 'for', 'from', 'if', 'in', 'into', 'like', 'near', 'nor', 'of', 'off', 'on', 'once', 'onto', 'or', 'over', 'past', 'so', 'than', 'that', 'to', 'upon', 'when', 'with', 'yet'
-  ]);
+
 
   const words = trimmed.split(/\s+/);
   const isFirstWordCapitalized = words.length > 0 && /^[A-Z]/.test(words[0]);
   const areOtherWordsTitleCase = words.slice(1).every(word =>
-    minorWords.has(word.toLowerCase()) || /^[A-Z]/.test(word)
+    MINOR_TITLE_WORDS.has(word.toLowerCase()) || /^[A-Z]/.test(word)
   );
   const isTitleCase = isFirstWordCapitalized && areOtherWordsTitleCase && wordCount > 2;
 
@@ -35,9 +25,9 @@ function isHeader(line: string): boolean {
 
   const isDramaticHeader = /^(["“”'])?.+[!?](["”’'])?$/.test(trimmed) && wordCount <= 8;
 
-  if (isNumbered && wordCount <= 12) return true;
-  if (hasHeaderAllowedCharacters && wordCount <= 5 && hasNoEndingPunctuation) return true;
-  if (hasHeaderAllowedCharacters && isTitleCase && wordCount <= 12 && hasNoEndingPunctuation) return true;
+  if (isNumbered && wordCount <= MAX_LONG_HEADER_WORDS) return true;
+  if (hasHeaderAllowedCharacters && wordCount <= MAX_SHORT_HEADER_WORDS && hasNoEndingPunctuation) return true;
+  if (hasHeaderAllowedCharacters && isTitleCase && wordCount <= MAX_LONG_HEADER_WORDS && hasNoEndingPunctuation) return true;
   if (isDramaticHeader) return true;
   return false;
 }
@@ -45,7 +35,7 @@ function isHeader(line: string): boolean {
 export function convertToBlocks(
   adventureId: string,
   text: string | null | undefined,
-): Block[] {
+): ContentBlock[] {
   if (!text || typeof text !== 'string') return [];
 
   // sanitize and normalize text
@@ -59,7 +49,7 @@ export function convertToBlocks(
     .trim()
     .split('\n');
 
-  const blocks: Block[] = [];
+  const blocks: ContentBlock[] = [];
 
   let sequence = 1;
   let prevHeader = '';

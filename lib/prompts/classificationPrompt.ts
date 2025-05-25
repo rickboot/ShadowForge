@@ -1,6 +1,12 @@
-import { CONTENT_TYPES } from "../conversion/classifyWithKeywords";
+import { CONTENT_TYPES } from '@/lib/constants/conversion';
+import { ContentBlock } from '../conversion/runConversionPipeline';
 
-export const CLASSIFICATION_PROMPT = `
+
+export function buildClassificationUserPrompt(blocks: ContentBlock[]): string {
+    return `Classify the following DnD 5e blocks:\n\n${JSON.stringify(blocks)}`;
+}
+
+export const CLASSIFICATION_SYSTEM_PROMPT = `
 You are an expert TTRPG game master and software engineer.
 
 You have been given a JSON array of object blocks.  

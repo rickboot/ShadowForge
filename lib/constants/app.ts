@@ -1,0 +1,1 @@
+export const DEFAULT_ADVENTURE_ID = 'adventure-1';
