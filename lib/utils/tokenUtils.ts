@@ -1,5 +1,5 @@
 import { getEncoding } from 'js-tiktoken';
-import { DAILY_TOKEN_LIMIT } from './constants';
+import { DAILY_TOKEN_LIMIT } from '../constants/limits';
 
 export function getTokenUsage() {
   const data = localStorage.getItem('shadowforgeTokenUsage');
