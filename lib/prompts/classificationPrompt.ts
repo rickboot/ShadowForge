@@ -1,8 +1,8 @@
 import { CONTENT_TYPES } from '@/lib/constants/conversion';
-import { ContentBlock } from '../conversion/runConversionPipeline';
+import { ClassifiedContent } from '@/lib/constants/content';
 
 
-export function buildClassificationUserPrompt(blocks: ContentBlock[]): string {
+export function buildClassificationUserPrompt(blocks: ClassifiedContent[]): string {
     return `Classify the following DnD 5e blocks:\n\n${JSON.stringify(blocks)}`;
 }
 

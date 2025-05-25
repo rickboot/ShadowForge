@@ -2,6 +2,8 @@ import { convertToBlocks } from './convertToBlocks'
 import { classifyWithKeywords } from './classifyWithKeywords'
 import { classifyWithLLM } from './classifyWithLLM';
 import { DEFAULT_ADVENTURE_ID } from '@/lib/constants/app';
+import { convertToShadowdark } from './convertToShadowdark';
+import { logTokenUsage } from '../utils/tokenUtils';
 
 interface runConversionPipelineProps {
   text: string;
@@ -27,21 +29,52 @@ export async function runConversionPipeline({
     console.log(allClassified.sort((a, b) => a.sequence - b.sequence));
   }
 
+  const CONTENT_TYPES_TO_CONVERT = ['Room', 'Encounter', 'Dungeon', 'Site', 'PointOfInterest', 'Treasure', 'Monster', 'NPC'];
 
-  //! Old conversion - may need for alternate conversion
-  // const convertedChunks: string[] = [];
+  const blocksToConvert = allClassified.filter((block) => CONTENT_TYPES_TO_CONVERT.includes(block.contentType));
   let tokenUsage = 0;
-  // for (const [i, chunk] of chunks.entries()) {
-  //   const converted = await convertToShadowdark(chunk);
-  //   convertedChunks.push(converted);
-  //   tokenUsage += logTokenUsage(`Input chunk ${i + 1}:`, chunk);
-  // }
+  const convertedChunks: string[] = [];
 
-  // const convertedText = convertedChunks.join('\n\n');
-  // logTokenUsage('Converted output:', convertedText);
+  for (const block of blocksToConvert) {
+    const inputText = block.header + '\n\n' + block.paragraphs.join('\n');
+    const convertedText = await convertToShadowdark(inputText);
+    convertedChunks.push(convertedText);
 
-  const convertedText = 'LLM DISABLED';
+    tokenUsage += logTokenUsage(`Input chunk ${block.sequence}:`, inputText);
+    tokenUsage += logTokenUsage(`Converted chunk ${block.sequence}:`, convertedText);
+  }
+
+  const convertedText = convertedChunks.join('\n\n');
+  if (convertedText.trim() === '') {
+    return { convertedText: 'Conversion failed.', tokenUsage };
+  }
 
   return { convertedText, tokenUsage };
 }
 
+
+
+// 'Adventure',
+// 'Region',
+// 'City',
+// 'Site',
+// 'Encounter',
+// 'Dungeon',
+// 'Room',
+// 'PointOfInterest',
+// 'Monster',
+// 'Treasure',
+// 'Character',
+// 'NPC',
+// 'MagicItem',
+// 'Intro',
+// 'Lore',
+// 'Quest',
+// 'CharacterBio',
+// 'GMGuidance',
+// 'TOC',
+// 'Credits',
+// 'Appendix',
+// 'Glossary',
+// 'Index',
+// 'Unknown',
