@@ -10,16 +10,8 @@ export function convertToBlocks(
 ): ContentBlock[] {
   if (!text || typeof text !== 'string') return [];
 
-  // sanitize and normalize text
-  // TODO: Re-enable when we have a better text cleaning strategy
   text = sanitizeText(text);
-
-  // convert \r\n or \r to \n, trim leading/trailing whitespace, remove extra newlines
-  const lines = text
-    .replace(/\r\n|\r/g, '\n')
-    .replace(/\s*\n\s*/g, '\n')
-    .trim()
-    .split('\n');
+  const lines = text.split('\n');
 
   const blocks: ContentBlock[] = [];
 
