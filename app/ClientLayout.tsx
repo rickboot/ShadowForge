@@ -11,22 +11,22 @@ export default function ClientLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light';
-    const system = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const darkMode = savedTheme === 'dark' || (!savedTheme && system);
-    document.documentElement.classList.toggle('dark', darkMode);
-  }, []);
-
-  useEffect(() => {
-    const htmlTag = document.documentElement;
-    if (theme === 'dark') {
-      htmlTag.classList.add('dark');
-    } else {
-      htmlTag.classList.remove('dark');
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme') as
+        | 'dark'
+        | 'light'
+        | null;
+      const prefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)',
+      ).matches;
+      return savedTheme || (prefersDark ? 'dark' : 'light');
     }
+    return 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('theme', theme);
   }, [theme]);
 

@@ -20,6 +20,17 @@ export const metadata: Metadata = {
 };
 
 // Initialize theme on client side BEFORE React mounts
+// const themeInitScript = `
+// (function() {
+//   try {
+//     const theme = localStorage.getItem('theme');
+//     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+//     if (theme === 'dark' || (!theme && prefersDark)) {
+//       document.documentElement.classList.add('dark');
+//     }
+//   } catch (_) {}
+// })();
+// `;
 const themeInitScript = `
 (function() {
   try {
@@ -27,6 +38,8 @@ const themeInitScript = `
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     if (theme === 'dark' || (!theme && prefersDark)) {
       document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
   } catch (_) {}
 })();
@@ -38,7 +51,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
