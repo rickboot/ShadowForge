@@ -14,14 +14,14 @@ export default function Home() {
   const [input, setInput] = useState(DEFAULT_INPUT_TEXT);
   const [output, setOutput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [normalize, setNormalize] = useState(true);
+  const [blockBasedConversion, setblockBasedConversion] = useState(true);
 
   const handleConvert = async () => {
     setLoading(true);
     setOutput('Strange runes flicker as ancient syntax is transmuted...');
 
     try {
-      const result = await callConversionAPI(input);
+      const result = await callConversionAPI(input, blockBasedConversion);
       setOutput(result);
     } catch (error) {
       if (error instanceof Error) {
@@ -43,8 +43,8 @@ export default function Home() {
         input={input}
         output={output}
         loading={loading}
-        normalize={normalize}
-        setNormalize={setNormalize}
+        blockBasedConversion={blockBasedConversion}
+        setblockBasedConversion={setblockBasedConversion}
         setInput={setInput}
         handleConvert={handleConvert}
       />

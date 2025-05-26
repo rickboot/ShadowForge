@@ -11,8 +11,8 @@ interface ShadowForgeLayoutProps {
   input: string;
   output: string;
   loading: boolean;
-  normalize: boolean;
-  setNormalize: (val: boolean) => void;
+  blockBasedConversion: boolean;
+  setblockBasedConversion: (val: boolean) => void;
   setInput: (val: string) => void;
   handleConvert: () => void;
 }
@@ -21,9 +21,9 @@ export default function ShadowForgeLayout({
   input,
   output,
   loading,
-  normalize,
+  blockBasedConversion,
+  setblockBasedConversion,
   setInput,
-  setNormalize,
   handleConvert,
 }: ShadowForgeLayoutProps) {
   const [previewMode, setPreviewMode] = useState(true);
@@ -81,11 +81,14 @@ export default function ShadowForgeLayout({
             <UploadButton onLoad={setInput} />
 
             <label className="flex items-center justify-center gap-2 text-sm">
-              <span>Normalize</span>
+              <span>Block-based Conversion</span>
               <input
                 type="checkbox"
-                checked={normalize}
-                onChange={(e) => setNormalize(e.target.checked)}
+                checked={blockBasedConversion}
+                onChange={(e) => {
+                  setblockBasedConversion(e.target.checked);
+                  console.log('Block-based Conversion:', e.target.checked);
+                }}
                 className="form-checkbox border-surface-contrast h-4 w-4 rounded-sm"
                 style={{
                   accentColor: 'var(--button-bg)',
