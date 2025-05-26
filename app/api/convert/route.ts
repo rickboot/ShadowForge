@@ -10,11 +10,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
   }
 
-  const { convertedText, tokenUsage } = await runConversionPipeline({
+  const result = await runConversionPipeline({
     text,
     blockBasedConversion,
   });
 
+  if (!result) {
+    return NextResponse.json({ error: 'Conversion failed' }, { status: 500 });
+  }
+
+  const { convertedText, tokenUsage } = result;
   return new NextResponse(JSON.stringify({ convertedText, tokenUsage }), {
     status: 200,
   });

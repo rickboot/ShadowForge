@@ -1,5 +1,5 @@
 import ReactMarkdown from 'react-markdown';
-import { ABOUT_TEXT } from '@/lib/utils/constants';
+import { ABOUT_TEXT } from '@/lib/constants/text';
 
 export default function AboutPage() {
   return (

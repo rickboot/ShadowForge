@@ -1,7 +1,7 @@
 import { callLLMAPI } from '../llm/callLLMAPI';
 import { buildClassificationUserPrompt, CLASSIFICATION_SYSTEM_PROMPT } from '../prompts/classificationPrompt';
-import { ClassifiedContent } from './classifyWithKeywords';
-import { ContentBlock } from './runConversionPipeline';
+import { ClassifiedContent } from '../constants/content';
+import { ContentBlock } from '../constants/content';
 
 export async function classifyWithLLM(blocks: ContentBlock[]): Promise<ClassifiedContent[]> {
   const userPrompt = buildClassificationUserPrompt(blocks);
