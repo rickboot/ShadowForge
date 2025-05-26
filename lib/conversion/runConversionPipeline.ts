@@ -1,4 +1,4 @@
-import { runBlockBasedPipeline } from './runBlockBasedPipeline';
+import { runBlocksPipeline } from './runBlocksPipeline';
 import { runSimplePipeline } from './runSimplePipeline';
 
 interface runConversionPipelineProps {
@@ -14,7 +14,7 @@ export async function runConversionPipeline({
 }: runConversionPipelineProps) {
   try {
     if (blockBasedConversion) {
-      return await runBlockBasedPipeline(text, adventureId);
+      return await runBlocksPipeline(text, adventureId);
     } else {
       return await runSimplePipeline(text);
     }

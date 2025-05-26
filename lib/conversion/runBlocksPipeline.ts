@@ -5,7 +5,7 @@ import { DEFAULT_ADVENTURE_ID } from '@/lib/constants/app';
 import { convertToShadowdark } from './convertToShadowdark';
 import { logTokenUsage } from '../utils/tokenUtils';
 
-export async function runBlockBasedPipeline(
+export async function runBlocksPipeline(
     text: string,
     adventureId?: string,
 ) {
