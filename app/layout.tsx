@@ -27,8 +27,6 @@ const themeInitScript = `
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     if (theme === 'dark' || (!theme && prefersDark)) {
       document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
     }
   } catch (_) {}
 })();
@@ -40,8 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    //TODO: suppressHydrationWarning is a hack to prevent hydration mismatch. Fix it
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark">
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
