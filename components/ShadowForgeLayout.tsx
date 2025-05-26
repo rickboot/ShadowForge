@@ -53,7 +53,7 @@ export default function ShadowForgeLayout({
       <section className="z-10 flex min-h-0 flex-1 flex-col space-y-4 overflow-hidden">
         <h2 className="text-2xl font-medium">Paste 5e Content Here</h2>
         <textarea
-          className="bg-surface/10 hover:bg-surface/20 min-h-[500px] w-full flex-1 resize-none overflow-auto rounded border p-4 font-mono text-sm transition-colors duration-300 placeholder:text-[var(--surface-contrast)] focus:ring-2 focus:ring-[var(--convert-button-bg)]/50 focus:outline-none"
+          className="bg-surface/10 hover:bg-surface/20 h-[500px] w-full resize-none overflow-auto rounded border p-4 font-mono text-sm transition-colors duration-300 placeholder:text-[var(--surface-contrast)] focus:ring-2 focus:ring-[var(--convert-button-bg)]/50 focus:outline-none"
           style={{
             color: 'var(--surface-text)',
             borderColor: 'var(--surface-contrast)',
@@ -92,7 +92,7 @@ export default function ShadowForgeLayout({
       <section className="z-10 flex min-h-0 flex-1 flex-col space-y-4 overflow-hidden">
         <h2 className="text-2xl font-medium">Shadowdark Content</h2>
         <div
-          className="bg-surface/10 hover:bg-surface/20 min-h-[500px] w-full flex-1 overflow-auto rounded border p-4 transition-colors duration-300"
+          className="bg-surface/10 hover:bg-surface/20 h-[500px] w-full overflow-auto rounded border p-4 transition-colors duration-300"
           style={{
             color: 'var(--surface-text)',
             borderColor: 'var(--surface-contrast)',
