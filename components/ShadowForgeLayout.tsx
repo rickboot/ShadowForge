@@ -12,7 +12,7 @@ interface ShadowForgeLayoutProps {
   output: string;
   loading: boolean;
   blockBasedConversion: boolean;
-  setblockBasedConversion: (val: boolean) => void;
+  setBlockBasedConversion: (val: boolean) => void;
   setInput: (val: string) => void;
   handleConvert: () => void;
 }
@@ -22,7 +22,7 @@ export default function ShadowForgeLayout({
   output,
   loading,
   blockBasedConversion,
-  setblockBasedConversion,
+  setBlockBasedConversion,
   setInput,
   handleConvert,
 }: ShadowForgeLayoutProps) {
@@ -86,7 +86,7 @@ export default function ShadowForgeLayout({
                 type="checkbox"
                 checked={blockBasedConversion}
                 onChange={(e) => {
-                  setblockBasedConversion(e.target.checked);
+                  setBlockBasedConversion(e.target.checked);
                   console.log('Block-based Conversion:', e.target.checked);
                 }}
                 className="form-checkbox border-surface-contrast h-4 w-4 rounded-sm"
