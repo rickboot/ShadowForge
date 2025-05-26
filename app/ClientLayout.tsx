@@ -41,16 +41,14 @@ export default function ClientLayout({
   }
 
   return (
-    <div>
+    <div className="flex min-h-screen flex-col">
       <header>
         <NavBar theme={theme} toggleTheme={toggleTheme} />
       </header>
-      <main>{children}</main>
+      <main className="min-h-0 flex-1">{children}</main>
       <footer
         className="border-t py-4 text-center text-sm"
-        style={{
-          borderColor: 'var(--border)',
-        }}
+        style={{ borderColor: 'var(--border)' }}
       >
         &copy; 2025 Rick Allen. Convert responsibly.
       </footer>
