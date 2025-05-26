@@ -2,15 +2,15 @@ import OpenAI from 'openai';
 import { ModelProvider } from '../../types/llm';
 import { ChatCompletionMessageParam } from 'openai/resources';
 
-const openai = new OpenAI({
-  baseURL: 'https://api.deepseek.com/v1', // No trailing slash
-  apiKey: process.env.DEEPSEEK_API_KEY,
-});
-
 export const deepseekProvider: ModelProvider = {
   name: 'deepseek',
 
   async call({ systemPrompt, userPrompt, model, temperature = 0.3 }) {
+    const openai = new OpenAI({
+      baseURL: 'https://api.deepseek.com/v1', // No trailing slash
+      apiKey: process.env.DEEPSEEK_API_KEY,
+      dangerouslyAllowBrowser: process.env.NODE_ENV !== 'production',
+    });
     const messages: ChatCompletionMessageParam[] = [
       { role: 'system', content: systemPrompt },
       { role: 'user', content: userPrompt },

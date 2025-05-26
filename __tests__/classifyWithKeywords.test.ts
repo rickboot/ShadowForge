@@ -1,9 +1,9 @@
 import { classifyWithKeywords } from '../lib/conversion/classifyWithKeywords';
-import { Block } from '../lib/conversion/convertToBlocks';
-import { ContentType } from '../lib/conversion/classifyWithKeywords';
+import { ContentBlock } from '../lib/constants/content';
+import { ContentType } from '../lib/constants/conversion';
 
 describe('classifyWithKeywords', () => {
-    const baseBlock = (header: string, paragraphs: string[] = []): Block => ({
+    const baseBlock = (header: string, paragraphs: string[] = []): ContentBlock => ({
         id: `id-${header}`,
         sequence: 1,
         adventureId: 'test-adventure',

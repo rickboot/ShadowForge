@@ -2,15 +2,15 @@ import OpenAI from 'openai';
 import { ModelProvider } from '../../types/llm';
 import { ChatCompletionMessageParam } from 'openai/resources';
 
-const openai = new OpenAI({
-  baseURL: 'https://api.groq.com/openai/v1',
-  apiKey: process.env.GROQ_API_KEY,
-});
-
 export const groqProvider: ModelProvider = {
   name: 'groq',
 
   async call({ systemPrompt, userPrompt, model, temperature = 0.3 }) {
+    const openai = new OpenAI({
+      baseURL: 'https://api.groq.com/openai/v1',
+      apiKey: process.env.GROQ_API_KEY,
+      dangerouslyAllowBrowser: process.env.NODE_ENV !== 'production',
+    });
     const messages: ChatCompletionMessageParam[] = [
       { role: 'system', content: systemPrompt },
       { role: 'user', content: userPrompt },
@@ -31,4 +31,3 @@ export const groqProvider: ModelProvider = {
     }
   },
 };
-

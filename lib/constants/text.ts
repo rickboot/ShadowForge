@@ -8,7 +8,7 @@ A Grue stalks these tunnels, feeding on lost adventurers.
 It lurks just beyond the edge of the party's light, moving silently through the maze. It prefers to strike when only one character is isolated.
 Treasure
 The following items are scattered throughout the maze in dusty nooks, discarded packs, and forgotten corpses:
-- A jewel-encrusted egg, filled with stale wax and smelling faintly of cinnamon. Worth 50 gp to the right kind of collector (i.e., a`;
+- A jewel-encrusted egg, filled with stale wax and smelling faintly of cinnamon. Worth 50 gp to the right kind of collector.`;
 
 export const ABOUT_TEXT = `
 ## About ShadowForge
