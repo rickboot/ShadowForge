@@ -14,7 +14,7 @@ export default function Home() {
   const [input, setInput] = useState(DEFAULT_INPUT_TEXT);
   const [output, setOutput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [blockBasedConversion, setblockBasedConversion] = useState(true);
+  const [blockBasedConversion, setBlockBasedConversion] = useState(true);
 
   const handleConvert = async () => {
     setLoading(true);
@@ -44,7 +44,7 @@ export default function Home() {
         output={output}
         loading={loading}
         blockBasedConversion={blockBasedConversion}
-        setblockBasedConversion={setblockBasedConversion}
+        setBlockBasedConversion={setBlockBasedConversion}
         setInput={setInput}
         handleConvert={handleConvert}
       />
