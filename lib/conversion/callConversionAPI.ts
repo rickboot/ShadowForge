@@ -5,7 +5,7 @@ import {
 } from '@/lib/utils/tokenUtils';
 import { ConversionAPIResponse } from '../types/api';
 
-export async function callConversionAPI(inputText: string) {
+export async function callConversionAPI(inputText: string, blockBasedConversion: boolean) {
   const estTokens = estimateTokenCount(inputText);
 
   if (
@@ -20,7 +20,7 @@ export async function callConversionAPI(inputText: string) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ text: inputText }),
+    body: JSON.stringify({ text: inputText, blockBasedConversion }),
   });
 
   if (!response.ok) {

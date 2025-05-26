@@ -8,12 +8,12 @@ const raw = fs.readFileSync(inputPath, 'utf-8');
 
 const chunks = chunkText(raw, 2000);
 
-console.log(`Chunks: ${chunks.length}`);
+// console.log(`Chunks: ${chunks.length}`);
 
-chunks.forEach((chunk, i) => {
-  console.log(
-    `\nChunk: ${i} ---------------------------------------------------------------------------------------\n`,
-  );
-  console.log(chunk);
-  console.log('\n');
-});
+// chunks.forEach((chunk, i) => {
+//   console.log(
+//     `\nChunk: ${i} ---------------------------------------------------------------------------------------\n`,
+//   );
+//   console.log(chunk);
+//   console.log('\n');
+// });

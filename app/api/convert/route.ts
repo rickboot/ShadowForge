@@ -4,7 +4,7 @@ import { runConversionPipeline } from '@/lib/conversion/runConversionPipeline';
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const text = body.text;
-  const normalize = body.normalize === true;
+  const blockBasedConversion = body.blockBasedConversion === true;
 
   if (!text || typeof text !== 'string') {
     return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 
   const { convertedText, tokenUsage } = await runConversionPipeline({
     text,
-    normalize,
+    blockBasedConversion,
   });
 
   return new NextResponse(JSON.stringify({ convertedText, tokenUsage }), {

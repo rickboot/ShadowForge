@@ -1,11 +1,11 @@
 import { callLLMAPI } from '@/lib/llm/callLLMAPI';
-import { shadowdarkPrompt } from '@/lib/prompts/shadowdarkPrompt';
+import { buildShadowdarkConversionPrompt, SHADOWDARK_SYSTEM_PROMPT } from '@/lib/prompts/shadowdarkPrompt';
 
 export async function convertToShadowdark(input: string): Promise<string> {
-  const userPrompt = `Convert this DnD 5e room to Shadowdark format:\n\n${input}`;
+  const userPrompt = buildShadowdarkConversionPrompt(input);
 
   const result = await callLLMAPI({
-    systemPrompt: shadowdarkPrompt,
+    systemPrompt: SHADOWDARK_SYSTEM_PROMPT,
     userPrompt,
     temperature: 0,
   });
