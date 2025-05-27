@@ -11,6 +11,7 @@ function cleanHeader(raw: string): string {
     .trim();
 }
 
+//! classify blocks by programmatically analyzing headers
 export function classifyBlock(block: ContentBlock): ClassifiedContent {
   const headerWords = cleanHeader(block.header).toLowerCase().split(/\s+/);
 

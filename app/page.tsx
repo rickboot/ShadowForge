@@ -5,17 +5,20 @@ import dynamic from 'next/dynamic'; // skip SSR. pdfjs-dist needs DOM during bui
 import ThreeJsBackground from '@/components/ThreeJsBackground';
 import { DEFAULT_INPUT_TEXT } from '@/lib/constants/text';
 
+// Dynamic import to prevent errors with pdfjs-dist during build (which may occur server side)
 const ShadowForgeLayout = dynamic(
   () => import('@/components/ShadowForgeLayout'),
   { ssr: false },
 );
 
+//! Top level state management - setInput, setOutput, setLoading, setBlockBasedConversion
 export default function Home() {
   const [input, setInput] = useState(DEFAULT_INPUT_TEXT);
   const [output, setOutput] = useState('');
   const [loading, setLoading] = useState(false);
   const [blockBasedConversion, setBlockBasedConversion] = useState(true);
 
+  //! Handler calls conversion API
   const handleConvert = async () => {
     setLoading(true);
     setOutput('Strange runes flicker as ancient syntax is transmuted...');

@@ -13,6 +13,7 @@ export function convertToBlocks(
   text = sanitizeText(text);
   const lines = text.split('\n');
 
+  //! blocks are normally header + paragraphs, but can be just a header, or just paragraphs
   const blocks: ContentBlock[] = [];
 
   let sequence = 1;
@@ -23,9 +24,8 @@ export function convertToBlocks(
   lines.forEach((line, lineIndex) => {
 
     if (isHeader(line)) {
-
+      //! if previous header or paragraphs, push block
       if (paragraphs.length > 0 || prevHeader) {
-        // flush previous block
         blocks.push({
           id: uuidv4(),
           adventureId,
@@ -39,7 +39,7 @@ export function convertToBlocks(
         paragraphs = [];
       }
 
-      // new block
+      //! start new block
       prevHeader = line;
       lineStart = lineIndex + 1;
 
@@ -48,7 +48,7 @@ export function convertToBlocks(
     }
   });
 
-  // final block
+  //! final block
   if (paragraphs.length > 0 || prevHeader) {
     blocks.push({
       id: uuidv4(),

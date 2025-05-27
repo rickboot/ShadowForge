@@ -28,6 +28,7 @@ export default function ShadowForgeLayout({
 }: ShadowForgeLayoutProps) {
   const [previewMode, setPreviewMode] = useState(true);
 
+  //! file drop handler
   const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault();
     const file = e.dataTransfer.files?.[0];
@@ -49,7 +50,7 @@ export default function ShadowForgeLayout({
         color: 'var(--foreground)',
       }}
     >
-      {/* INPUT SECTION */}
+      {/* ===== INPUT SECTION ===== */}
       <section className="z-10 flex min-h-0 flex-1 flex-col space-y-4 overflow-hidden">
         <h2 className="text-2xl font-medium">Paste 5e Content Here</h2>
         <textarea
@@ -88,7 +89,7 @@ export default function ShadowForgeLayout({
         </div>
       </section>
 
-      {/* OUTPUT SECTION */}
+      {/* ===== OUTPUT SECTION ===== */}
       <section className="z-10 flex min-h-0 flex-1 flex-col space-y-4 overflow-hidden">
         <h2 className="text-2xl font-medium">Shadowdark Content</h2>
         <div

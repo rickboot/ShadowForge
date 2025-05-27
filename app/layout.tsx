@@ -1,3 +1,5 @@
+//! server side - layout.tsx is always server side
+//! ClientLayout is imported to provide client side functionality
 import './globals.css';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
@@ -19,7 +21,7 @@ export const metadata: Metadata = {
   description: 'Convert DnD 5e content to Shadowdark',
 };
 
-// Initialize theme on client side BEFORE React mounts
+//! Initialize theme on client side BEFORE React mounts - this is a hack to prevent theme from causing hydration errors
 const themeInitScript = `
 (function() {
   try {

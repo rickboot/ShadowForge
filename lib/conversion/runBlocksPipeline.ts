@@ -10,8 +10,11 @@ export async function runBlocksPipeline(
     adventureId?: string,
 ) {
 
+    //! classify blocks to content types
     const blocksRaw = convertToBlocks(adventureId ?? DEFAULT_ADVENTURE_ID, text);
+
     const keywordClassified = classifyWithKeywords(blocksRaw);
+
     const unknownBlocks = keywordClassified.filter((block) => block.contentType === 'Unknown');
     const llmClassified = await classifyWithLLM(unknownBlocks);
 
@@ -20,6 +23,7 @@ export async function runBlocksPipeline(
         ...llmClassified,
     ];
 
+    //! convert classified blocks to Shadowdark
     const CONTENT_TYPES_TO_CONVERT = [
         'Room', 'Encounter', 'Dungeon', 'Site', 'PointOfInterest',
         'Treasure', 'Monster', 'Character', 'NPC',
@@ -31,6 +35,8 @@ export async function runBlocksPipeline(
 
     const convertedChunks: string[] = [];
     let tokenUsage = 0;
+
+    //TODO: Chunk via context window max tokens?
 
     for (const block of blocksToConvert) {
         try {
@@ -46,6 +52,8 @@ export async function runBlocksPipeline(
         }
     }
 
+
+    //! combine and return chunks
     const convertedText = convertedChunks.join('\n\n');
 
     if (process.env.NODE_ENV !== 'production') {

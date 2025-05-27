@@ -23,6 +23,7 @@ export function addTokenUsage(newUsage: number) {
   );
 }
 
+//! Re-enable for naive token limiting
 export function canUseTokens(newUsage: number) {
   const currentUsage = getTokenUsage();
   return currentUsage + newUsage <= DAILY_TOKEN_LIMIT;

@@ -1,7 +1,9 @@
+//! A layer underneath layout.tsx that runs on the client
 'use client';
 import NavBar from './NavBar';
 import { useEffect, useState } from 'react';
 
+//! Theme management and app layout
 export default function ClientLayout({
   children,
 }: {
