@@ -5,7 +5,7 @@ import { ChatCompletionMessageParam } from 'openai/resources';
 export const deepseekProvider: ModelProvider = {
   name: 'deepseek',
 
-  async call({ systemPrompt, userPrompt, model, temperature = 0.3 }) {
+  async call({ systemPrompt, userPrompt, model, temperature = 0 }) {
     const openai = new OpenAI({
       baseURL: 'https://api.deepseek.com/v1', // No trailing slash
       apiKey: process.env.DEEPSEEK_API_KEY,
