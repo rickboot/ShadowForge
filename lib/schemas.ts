@@ -4,22 +4,22 @@ export const DnDFiveEStatBlock = z.object({
     name: z.string(),
     armor_class: z.number(),
     hit_points: z.number(),
-    challenge_rating: z.number(),
-    traits: z.array(z.object({ name: z.string(), text: z.string() })),
-    actions: z.array(z.object({ name: z.string(), text: z.string() })),
+    challenge_rating: z.union([z.number(), z.string()]),
+    traits: z.array(z.object({ name: z.string(), text: z.string() })).default([]),
+    actions: z.array(z.object({ name: z.string(), text: z.string() })).default([]),
 })
 
 export type DndFiveE = z.infer<typeof DnDFiveEStatBlock>;
 
 export const SDStatBlock = z.object({
     name: z.string(),
-    level: z.number(),
-    AC: z.number(),
-    HP: z.number(),
-    attack_bonus: z.number(),
-    damage_per_hit: z.number(),
-    movement: z.number(),
-    abilities: z.array(z.object({ name: z.string(), text: z.string() })),
+    level: z.number().int().min(0).max(10),
+    armor_class: z.number().int().min(1).max(25),
+    hit_points: z.number().int().min(1).max(300),
+    attack_bonus: z.number().int().min(0).max(15),
+    damage_per_hit: z.string(), // eg. '2d8'
+    movement: z.number().int().min(0).max(100),
+    abilities: z.array(z.object({ name: z.string(), text: z.string() })).default([]),
 })
 
-export type SDStatBlock = z.infer<typeof SDStatBlock>;
+export type SD = z.infer<typeof SDStatBlock>;
