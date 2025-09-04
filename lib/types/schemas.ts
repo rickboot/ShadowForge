@@ -4,7 +4,10 @@ export const DnDFiveEStatBlock = z.object({
     name: z.string(),
     armor_class: z.number(),
     hit_points: z.number(),
-    challenge_rating: z.union([z.number(), z.string()]),
+    challenge_rating: z.union([
+        z.number().min(0).max(30), // Integer CR values 0-30
+        z.enum(["1/8", "1/4", "1/2"]) // Fractional CR values
+    ]),
     traits: z.array(z.object({ name: z.string(), text: z.string() })).default([]),
     actions: z.array(z.object({ name: z.string(), text: z.string() })).default([]),
 })
