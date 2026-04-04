@@ -4,6 +4,7 @@ import { LLMRole, getLLMConfig } from '@/lib/llm/llmConfig';
 import { deepseekProvider } from '@/lib/llm/providers/deepseekProvider';
 import { openAIProvider } from '@/lib/llm/providers/openAiProvider';
 import { groqProvider } from './providers/groqProvider';
+import { LLM_TIMEOUT_MS } from '@/lib/constants/limits';
 
 interface CallLLMOptions {
   systemPrompt: string;
@@ -25,26 +26,35 @@ function getProvider(providerName: string): ModelProvider {
   }
 }
 
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error(`LLM request timed out after ${ms}ms`)), ms),
+    ),
+  ]);
+}
+
 export async function callLLMAPI({ systemPrompt, userPrompt, temperature = 0, role }: CallLLMOptions): Promise<string> {
   const llm = getLLMConfig(role);
   const provider = getProvider(llm.provider);
-  return provider.call({ model: llm.model, systemPrompt, userPrompt, temperature });
+  return withTimeout(
+    provider.call({ model: llm.model, systemPrompt, userPrompt, temperature }),
+    LLM_TIMEOUT_MS,
+  );
 }
 
 export async function callLLMStructured<T>(
-  options: CallLLMOptions & { schema: z.ZodType<T> }
+  options: CallLLMOptions & { schema: z.ZodType<T> },
 ): Promise<T> {
   const { systemPrompt, userPrompt, temperature = 0, role, schema } = options;
   const llm = getLLMConfig(role);
   const provider = getProvider(llm.provider);
 
-  const raw = await provider.call({
-    model: llm.model,
-    systemPrompt,
-    userPrompt,
-    temperature,
-    responseFormat: 'json_object',
-  });
+  const raw = await withTimeout(
+    provider.call({ model: llm.model, systemPrompt, userPrompt, temperature, responseFormat: 'json_object' }),
+    LLM_TIMEOUT_MS,
+  );
 
   let parsed: unknown;
   try {
