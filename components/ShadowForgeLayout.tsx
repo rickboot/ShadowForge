@@ -91,7 +91,20 @@ export default function ShadowForgeLayout({
             borderColor: 'var(--surface-contrast)',
           }}
         >
-          {previewMode ? (
+          {loading && !output ? (
+            <div className="flex h-full flex-col items-center justify-center gap-3 opacity-60">
+              <div className="flex gap-1.5">
+                <span className="bg-[var(--button-bg)] h-2 w-2 animate-bounce rounded-full [animation-delay:-0.3s]" />
+                <span className="bg-[var(--button-bg)] h-2 w-2 animate-bounce rounded-full [animation-delay:-0.15s]" />
+                <span className="bg-[var(--button-bg)] h-2 w-2 animate-bounce rounded-full" />
+              </div>
+              <p className="text-sm">
+                {progress
+                  ? `Converting ${progress.completed} of ${progress.total} blocks…`
+                  : 'Classifying content…'}
+              </p>
+            </div>
+          ) : previewMode ? (
             <div className="prose prose-sm dark:prose-invert markdown-body max-w-none">
               <ReactMarkdown>{output}</ReactMarkdown>
             </div>
