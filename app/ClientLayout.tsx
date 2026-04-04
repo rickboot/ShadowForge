@@ -2,6 +2,10 @@
 'use client';
 import NavBar from './NavBar';
 import { useEffect, useState } from 'react';
+import { TelemetryProvider, useTelemetry } from '@/lib/context/TelemetryContext';
+import TelemetryPanel from '@/components/ui/TelemetryPanel';
+import { BarChart2 } from 'lucide-react';
+import { buttonClasses } from '@/lib/styles/sharedStyles';
 
 //! Theme management and app layout
 export default function ClientLayout({
@@ -43,17 +47,43 @@ export default function ClientLayout({
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header>
-        <NavBar theme={theme} toggleTheme={toggleTheme} />
-      </header>
-      <main className="min-h-0 flex-1">{children}</main>
-      <footer
-        className="border-t py-4 text-center text-sm"
-        style={{ borderColor: 'var(--border)' }}
-      >
+    <TelemetryProvider>
+      <div className="flex min-h-screen flex-col">
+        <header>
+          <NavBar theme={theme} toggleTheme={toggleTheme} />
+        </header>
+        <main className="min-h-0 flex-1">{children}</main>
+        <Footer />
+      </div>
+    </TelemetryProvider>
+  );
+}
+
+function Footer() {
+  const { telemetry } = useTelemetry();
+  const [showTelemetry, setShowTelemetry] = useState(false);
+
+  return (
+    <footer
+      className="relative border-t px-4 py-4 text-sm"
+      style={{ borderColor: 'var(--border)' }}
+    >
+      <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         &copy; 2025 Rick Allen. Convert responsibly.
-      </footer>
-    </div>
+      </span>
+      <div className="flex justify-end">
+        <button
+          className={buttonClasses}
+          onClick={() => setShowTelemetry(v => !v)}
+          disabled={!telemetry}
+          title={telemetry ? 'Show telemetry' : 'Run a conversion to see telemetry'}
+        >
+          <BarChart2 size={16} />
+        </button>
+      </div>
+      {showTelemetry && telemetry && (
+        <TelemetryPanel telemetry={telemetry} onClose={() => setShowTelemetry(false)} />
+      )}
+    </footer>
   );
 }

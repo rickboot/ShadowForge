@@ -4,7 +4,7 @@ import { callConversionAPI } from '@/lib/conversion/callConversionAPI';
 import dynamic from 'next/dynamic';
 import ThreeJsBackground from '@/components/ThreeJsBackground';
 import { DEFAULT_INPUT_TEXT } from '@/lib/constants/text';
-import { Telemetry } from '@/lib/types/llm';
+import { useTelemetry } from '@/lib/context/TelemetryContext';
 
 const ShadowForgeLayout = dynamic(
   () => import('@/components/ShadowForgeLayout'),
@@ -15,16 +15,16 @@ export default function Home() {
   const [input, setInput] = useState(DEFAULT_INPUT_TEXT);
   const [output, setOutput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [telemetry, setTelemetry] = useState<Telemetry | null>(null);
+  const { setTelemetry } = useTelemetry();
 
   const handleConvert = async () => {
     setLoading(true);
     setOutput('Strange runes flicker as ancient syntax is transmuted...');
 
     try {
-      const { convertedText, telemetry: t } = await callConversionAPI(input);
+      const { convertedText, telemetry } = await callConversionAPI(input);
       setOutput(convertedText);
-      setTelemetry(t);
+      setTelemetry(telemetry);
     } catch (error) {
       if (error instanceof Error) {
         console.error('Conversion error:', error);
@@ -44,7 +44,6 @@ export default function Home() {
         input={input}
         output={output}
         loading={loading}
-        telemetry={telemetry}
         setInput={setInput}
         handleConvert={handleConvert}
       />

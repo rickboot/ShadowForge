@@ -9,9 +9,11 @@ interface TelemetryPanelProps {
 }
 
 export default function TelemetryPanel({ telemetry, onClose }: TelemetryPanelProps) {
+  const totalTokens = telemetry.inputTokens + telemetry.outputTokens;
+
   return (
     <div
-      className="absolute bottom-16 right-4 z-50 w-72 rounded-lg border p-5 shadow-xl"
+      className="absolute bottom-full right-4 mb-2 w-72 rounded-lg border p-5 shadow-xl"
       style={{
         backgroundColor: 'var(--background)',
         borderColor: 'var(--surface-contrast)',
@@ -48,8 +50,16 @@ export default function TelemetryPanel({ telemetry, onClose }: TelemetryPanelPro
           style={{ borderColor: 'var(--surface-contrast)' }}
         >
           <dt className="opacity-60">Total tokens</dt>
-          <dd className="font-mono font-semibold">
-            {(telemetry.inputTokens + telemetry.outputTokens).toLocaleString()}
+          <dd className="font-mono font-semibold">{totalTokens.toLocaleString()}</dd>
+        </div>
+        <div className="flex justify-between">
+          <dt className="opacity-60">Est. cost</dt>
+          <dd className="font-mono">
+            {telemetry.cost === null
+              ? '—'
+              : telemetry.cost < 0.01
+              ? '< $0.01'
+              : `$${telemetry.cost.toFixed(4)}`}
           </dd>
         </div>
       </dl>

@@ -5,6 +5,7 @@ import { renderToMarkdown } from './renderToMarkdown';
 import { ConvertedBlock } from '@/lib/schemas';
 import { DEFAULT_ADVENTURE_ID } from '@/lib/constants/app';
 import { Telemetry, LLMResult } from '@/lib/types/llm';
+import { calculateCost } from '@/lib/pricing/modelPricing';
 
 const CONVERTIBLE_TYPES = new Set([
   'Room', 'Encounter', 'Dungeon', 'Site', 'PointOfInterest',
@@ -15,7 +16,8 @@ function aggregateTelemetry(results: LLMResult[]): Telemetry {
   const models = [...new Set(results.map(r => r.model))];
   const inputTokens = results.reduce((sum, r) => sum + r.usage.inputTokens, 0);
   const outputTokens = results.reduce((sum, r) => sum + r.usage.outputTokens, 0);
-  return { models, inputTokens, outputTokens };
+  const cost = calculateCost(results.map(r => ({ model: r.model, inputTokens: r.usage.inputTokens, outputTokens: r.usage.outputTokens })));
+  return { models, inputTokens, outputTokens, cost };
 }
 
 export async function runPipeline(
@@ -25,7 +27,7 @@ export async function runPipeline(
   // 1. Parse text into blocks
   const blocks = convertToBlocks(adventureId ?? DEFAULT_ADVENTURE_ID, text);
   if (blocks.length === 0) {
-    return { convertedText: 'No content blocks found.', telemetry: { models: [], inputTokens: 0, outputTokens: 0 } };
+    return { convertedText: 'No content blocks found.', telemetry: { models: [], inputTokens: 0, outputTokens: 0, cost: 0 } };
   }
 
   // 2. Classify all blocks in a single LLM call

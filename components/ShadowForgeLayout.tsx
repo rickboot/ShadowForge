@@ -5,17 +5,12 @@ import ReactMarkdown from 'react-markdown';
 import CopyButton from './ui/CopyButton';
 import DownloadButton from './ui/DownloadButton';
 import UploadButton from './ui/UploadButton';
-import TelemetryPanel from './ui/TelemetryPanel';
 import { extractTextFromPDF } from '@/lib/utils/extractPdfText';
-import { Telemetry } from '@/lib/types/llm';
-import { BarChart2 } from 'lucide-react';
-import { buttonClasses } from '@/lib/styles/sharedStyles';
 
 interface ShadowForgeLayoutProps {
   input: string;
   output: string;
   loading: boolean;
-  telemetry: Telemetry | null;
   setInput: (val: string) => void;
   handleConvert: () => void;
 }
@@ -24,12 +19,10 @@ export default function ShadowForgeLayout({
   input,
   output,
   loading,
-  telemetry,
   setInput,
   handleConvert,
 }: ShadowForgeLayoutProps) {
   const [previewMode, setPreviewMode] = useState(true);
-  const [showTelemetry, setShowTelemetry] = useState(false);
 
   //! file drop handler
   const handleDrop = async (e: React.DragEvent) => {
@@ -83,7 +76,7 @@ export default function ShadowForgeLayout({
       </section>
 
       {/* ===== OUTPUT SECTION ===== */}
-      <section className="relative z-10 flex min-h-0 flex-1 flex-col space-y-4 overflow-hidden">
+      <section className="z-10 flex min-h-0 flex-1 flex-col space-y-4 overflow-hidden">
         <h2 className="text-2xl font-medium">Shadowdark Content</h2>
         <div
           className="bg-surface/10 hover:bg-surface/20 h-[500px] w-full overflow-auto rounded border p-4 transition-colors duration-300"
@@ -105,14 +98,6 @@ export default function ShadowForgeLayout({
         <div className="mb-2 flex h-12 items-center justify-center gap-12">
           <CopyButton text={output} />
           <DownloadButton content={output} filename="sd-conversion.md" />
-          <button
-            className={buttonClasses}
-            onClick={() => setShowTelemetry(v => !v)}
-            disabled={!telemetry}
-            title={telemetry ? 'Show telemetry' : 'Run a conversion to see telemetry'}
-          >
-            <BarChart2 size={16} />
-          </button>
           <label className="flex items-center justify-center gap-2 text-sm">
             <span>Preview Mode</span>
             <input
@@ -124,9 +109,6 @@ export default function ShadowForgeLayout({
             />
           </label>
         </div>
-        {showTelemetry && telemetry && (
-          <TelemetryPanel telemetry={telemetry} onClose={() => setShowTelemetry(false)} />
-        )}
       </section>
     </div>
   );

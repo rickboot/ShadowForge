@@ -13,6 +13,7 @@ export interface Telemetry {
   models: string[];
   inputTokens: number;
   outputTokens: number;
+  cost: number | null;
 }
 
 export interface ModelProvider {
