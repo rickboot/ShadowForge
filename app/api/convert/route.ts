@@ -27,8 +27,8 @@ export async function POST(req: NextRequest) {
   const { text, adventureId } = parsed.data;
 
   try {
-    const { convertedText } = await runPipeline(text, adventureId);
-    return NextResponse.json({ convertedText });
+    const { convertedText, telemetry } = await runPipeline(text, adventureId);
+    return NextResponse.json({ convertedText, telemetry });
   } catch (error) {
     console.error('[/api/convert] Pipeline error:', error);
     return NextResponse.json({ error: 'Conversion failed' }, { status: 500 });

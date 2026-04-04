@@ -3,13 +3,14 @@ import { buildClassificationUserPrompt, getClassificationSystemPrompt } from '@/
 import { ClassificationResponseSchema } from '@/lib/schemas';
 import { ContentBlock } from '@/lib/constants/content';
 import { ContentType } from '@/lib/constants/conversion';
+import { LLMResult } from '@/lib/types/llm';
 
 export type ClassifiedBlock = ContentBlock & { contentType: ContentType };
 
-export async function classifyWithLLM(blocks: ContentBlock[]): Promise<ClassifiedBlock[]> {
+export async function classifyWithLLM(blocks: ContentBlock[]): Promise<{ blocks: ClassifiedBlock[]; llmResult: LLMResult }> {
   const input = blocks.map(b => ({ id: b.id, header: b.header, paragraphs: b.paragraphs }));
 
-  const response = await callLLMStructured({
+  const { data: response, llmResult } = await callLLMStructured({
     systemPrompt: getClassificationSystemPrompt(),
     userPrompt: buildClassificationUserPrompt(input),
     role: 'classify',
@@ -18,8 +19,11 @@ export async function classifyWithLLM(blocks: ContentBlock[]): Promise<Classifie
 
   const typeMap = new Map(response.blocks.map(b => [b.id, b.contentType]));
 
-  return blocks.map(b => ({
-    ...b,
-    contentType: typeMap.get(b.id) ?? 'Unknown',
-  }));
+  return {
+    blocks: blocks.map(b => ({
+      ...b,
+      contentType: typeMap.get(b.id) ?? 'Unknown',
+    })),
+    llmResult,
+  };
 }

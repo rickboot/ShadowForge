@@ -1,3 +1,20 @@
+export interface TokenUsage {
+  inputTokens: number;
+  outputTokens: number;
+}
+
+export interface LLMResult {
+  text: string;
+  model: string;
+  usage: TokenUsage;
+}
+
+export interface Telemetry {
+  models: string[];
+  inputTokens: number;
+  outputTokens: number;
+}
+
 export interface ModelProvider {
   name: string;
   call(params: {
@@ -6,5 +23,5 @@ export interface ModelProvider {
     model: string;
     temperature?: number;
     responseFormat?: 'json_object';
-  }): Promise<string>;
+  }): Promise<LLMResult>;
 }

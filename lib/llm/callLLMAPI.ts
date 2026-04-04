@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ModelProvider } from '@/lib/types/llm';
+import { ModelProvider, LLMResult } from '@/lib/types/llm';
 import { LLMRole, getLLMConfig } from '@/lib/llm/llmConfig';
 import { deepseekProvider } from '@/lib/llm/providers/deepseekProvider';
 import { openAIProvider } from '@/lib/llm/providers/openAiProvider';
@@ -35,7 +35,7 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   ]);
 }
 
-export async function callLLMAPI({ systemPrompt, userPrompt, temperature = 0, role }: CallLLMOptions): Promise<string> {
+export async function callLLMAPI({ systemPrompt, userPrompt, temperature = 0, role }: CallLLMOptions): Promise<LLMResult> {
   const llm = getLLMConfig(role);
   const provider = getProvider(llm.provider);
   return withTimeout(
@@ -46,22 +46,22 @@ export async function callLLMAPI({ systemPrompt, userPrompt, temperature = 0, ro
 
 export async function callLLMStructured<T>(
   options: CallLLMOptions & { schema: z.ZodType<T> },
-): Promise<T> {
+): Promise<{ data: T; llmResult: LLMResult }> {
   const { systemPrompt, userPrompt, temperature = 0, role, schema } = options;
   const llm = getLLMConfig(role);
   const provider = getProvider(llm.provider);
 
-  const raw = await withTimeout(
+  const llmResult = await withTimeout(
     provider.call({ model: llm.model, systemPrompt, userPrompt, temperature, responseFormat: 'json_object' }),
     LLM_TIMEOUT_MS,
   );
 
   let parsed: unknown;
   try {
-    parsed = JSON.parse(raw);
+    parsed = JSON.parse(llmResult.text);
   } catch {
-    throw new Error(`LLM returned invalid JSON: ${raw.slice(0, 200)}`);
+    throw new Error(`LLM returned invalid JSON: ${llmResult.text.slice(0, 200)}`);
   }
 
-  return schema.parse(parsed);
+  return { data: schema.parse(parsed), llmResult };
 }

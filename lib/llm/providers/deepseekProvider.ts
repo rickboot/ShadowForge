@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { ModelProvider } from '../../types/llm';
+import { ModelProvider, LLMResult } from '../../types/llm';
 import { ChatCompletionMessageParam } from 'openai/resources';
 
 let client: OpenAI | null = null;
@@ -11,7 +11,7 @@ function getClient(): OpenAI {
 export const deepseekProvider: ModelProvider = {
   name: 'deepseek',
 
-  async call({ systemPrompt, userPrompt, model, temperature = 0, responseFormat }) {
+  async call({ systemPrompt, userPrompt, model, temperature = 0, responseFormat }): Promise<LLMResult> {
     const messages: ChatCompletionMessageParam[] = [
       { role: 'system', content: systemPrompt },
       { role: 'user', content: userPrompt },
@@ -24,6 +24,13 @@ export const deepseekProvider: ModelProvider = {
       ...(responseFormat === 'json_object' && { response_format: { type: 'json_object' } }),
     });
 
-    return completion.choices[0]?.message?.content?.trim() ?? '';
+    return {
+      text: completion.choices[0]?.message?.content?.trim() ?? '',
+      model,
+      usage: {
+        inputTokens: completion.usage?.prompt_tokens ?? 0,
+        outputTokens: completion.usage?.completion_tokens ?? 0,
+      },
+    };
   },
 };
