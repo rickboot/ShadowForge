@@ -1,4 +1,6 @@
 import { NextRequest } from 'next/server';
+
+export const dynamic = 'force-dynamic';
 import { z } from 'zod';
 import { convertToBlocks } from '@/lib/conversion/convertToBlocks';
 import { classifyWithLLM } from '@/lib/conversion/classifyWithLLM';
@@ -113,6 +115,8 @@ export async function POST(req: NextRequest) {
     headers: {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no',
     },
   });
 }

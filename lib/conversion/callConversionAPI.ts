@@ -60,17 +60,25 @@ export async function callConversionAPI(
     return;
   }
 
+  let finished = false;
   try {
     for await (const event of readSSE(response.body.getReader())) {
       if (event.type === 'block') {
         callbacks.onBlock(event.content, event.completed, event.total);
       } else if (event.type === 'done') {
+        finished = true;
         callbacks.onDone(event.telemetry);
       } else if (event.type === 'error') {
+        finished = true;
         callbacks.onError(event.message ?? 'Conversion failed.');
       }
     }
   } catch {
-    callbacks.onError('Conversion failed: lost connection to server.');
+    callbacks.onError('Connection lost during conversion.');
+    return;
+  }
+
+  if (!finished) {
+    callbacks.onError('Conversion failed: server closed the connection unexpectedly.');
   }
 }
