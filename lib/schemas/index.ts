@@ -18,7 +18,7 @@ export const ContentBlockSchema = z.object({
 // Minimal response from LLM — only the id→contentType mapping we need
 export const ClassificationItemSchema = z.object({
   id: z.string(),
-  contentType: ContentTypeSchema,
+  contentType: ContentTypeSchema.catch('Unknown'),
 });
 
 export const ClassificationResponseSchema = z.object({

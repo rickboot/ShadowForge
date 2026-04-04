@@ -11,5 +11,10 @@ export function getClassificationSystemPrompt(): string {
 }
 
 export function buildClassificationUserPrompt(blocks: BlockInput[]): string {
-  return JSON.stringify(blocks, null, 2);
+  const trimmed = blocks.map(b => ({
+    id: b.id,
+    header: b.header,
+    firstParagraph: b.paragraphs[0] ?? '',
+  }));
+  return JSON.stringify(trimmed, null, 2);
 }

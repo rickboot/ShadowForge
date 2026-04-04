@@ -45,9 +45,17 @@ async function classifyInChunks(blocks: ReturnType<typeof convertToBlocks>) {
 
   for (let i = 0; i < blocks.length; i += CLASSIFY_CHUNK_SIZE) {
     const chunk = blocks.slice(i, i + CLASSIFY_CHUNK_SIZE);
-    const { blocks: classifiedChunk, llmResult } = await classifyWithLLM(chunk);
-    classified.push(...classifiedChunk);
-    llmResults.push(llmResult);
+    try {
+      const { blocks: classifiedChunk, llmResult } = await classifyWithLLM(chunk);
+      classified.push(...classifiedChunk);
+      llmResults.push(llmResult);
+    } catch (err) {
+      console.error(`[classifyInChunks] Chunk ${i}–${i + chunk.length} failed:`, err);
+      // Fall back: mark all blocks in this chunk as Unknown so conversion can still proceed
+      for (const block of chunk) {
+        classified.push({ ...block, contentType: 'Unknown' });
+      }
+    }
   }
 
   return { classified, llmResults };
@@ -126,9 +134,10 @@ export async function POST(req: NextRequest) {
 
       await send({ type: 'done', telemetry: aggregateTelemetry(llmResults) });
     } catch (err) {
+      const message = err instanceof Error ? err.message : 'Conversion failed.';
       console.error('[/api/convert] Pipeline error:', err);
       try {
-        await send({ type: 'error', message: 'Conversion failed.' });
+        await send({ type: 'error', message });
       } catch { /* writer may already be closed */ }
     } finally {
       clearInterval(heartbeat);
