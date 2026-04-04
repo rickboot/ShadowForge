@@ -16,6 +16,8 @@ jest.mock('@/lib/prompts/classificationPrompt', () => ({
 import { callLLMStructured } from '@/lib/llm/callLLMAPI';
 const mockCallLLMStructured = callLLMStructured as jest.MockedFunction<typeof callLLMStructured>;
 
+const mockLLMResult = { text: '', model: 'gpt-4o-mini', usage: { inputTokens: 0, outputTokens: 0 } };
+
 const makeBlock = (overrides: Partial<ContentBlock> = {}): ContentBlock => ({
   id: 'test-id',
   adventureId: 'adv-1',
@@ -34,13 +36,11 @@ describe('classifyWithLLM', () => {
       makeBlock({ id: 'id-2', header: 'Introduction', sequence: 2 }),
     ];
     mockCallLLMStructured.mockResolvedValue({
-      blocks: [
-        { id: 'id-1', contentType: 'Room' },
-        { id: 'id-2', contentType: 'Intro' },
-      ],
+      data: { blocks: [{ id: 'id-1', contentType: 'Room' }, { id: 'id-2', contentType: 'Intro' }] },
+      llmResult: mockLLMResult,
     });
 
-    const result = await classifyWithLLM(blocks);
+    const { blocks: result } = await classifyWithLLM(blocks);
 
     expect(result).toHaveLength(2);
     expect(result[0]).toMatchObject({ id: 'id-1', contentType: 'Room', header: 'Cave Entrance' });
@@ -48,22 +48,20 @@ describe('classifyWithLLM', () => {
   });
 
   it('defaults to Unknown when LLM omits a block', async () => {
-    const blocks = [
-      makeBlock({ id: 'id-1' }),
-      makeBlock({ id: 'id-2', sequence: 2 }),
-    ];
+    const blocks = [makeBlock({ id: 'id-1' }), makeBlock({ id: 'id-2', sequence: 2 })];
     mockCallLLMStructured.mockResolvedValue({
-      blocks: [{ id: 'id-1', contentType: 'Room' }],
+      data: { blocks: [{ id: 'id-1', contentType: 'Room' }] },
+      llmResult: mockLLMResult,
     });
 
-    const result = await classifyWithLLM(blocks);
+    const { blocks: result } = await classifyWithLLM(blocks);
 
     expect(result[0].contentType).toBe('Room');
     expect(result[1].contentType).toBe('Unknown');
   });
 
   it('calls LLM with classify role', async () => {
-    mockCallLLMStructured.mockResolvedValue({ blocks: [] });
+    mockCallLLMStructured.mockResolvedValue({ data: { blocks: [] }, llmResult: mockLLMResult });
     await classifyWithLLM([makeBlock()]);
     expect(mockCallLLMStructured).toHaveBeenCalledWith(
       expect.objectContaining({ role: 'classify' }),
@@ -71,8 +69,8 @@ describe('classifyWithLLM', () => {
   });
 
   it('returns empty array for empty input', async () => {
-    mockCallLLMStructured.mockResolvedValue({ blocks: [] });
-    const result = await classifyWithLLM([]);
+    mockCallLLMStructured.mockResolvedValue({ data: { blocks: [] }, llmResult: mockLLMResult });
+    const { blocks: result } = await classifyWithLLM([]);
     expect(result).toEqual([]);
   });
 });

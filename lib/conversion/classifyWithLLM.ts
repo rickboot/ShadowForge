@@ -17,7 +17,9 @@ export async function classifyWithLLM(blocks: ContentBlock[]): Promise<{ blocks:
     schema: ClassificationResponseSchema,
   });
 
-  const typeMap = new Map(response.blocks.map(b => [b.id, b.contentType]));
+  const typeMap = new Map<string, ContentType>(
+    response.blocks.map(b => [b.id, b.contentType as ContentType])
+  );
 
   return {
     blocks: blocks.map(b => ({

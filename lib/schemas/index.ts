@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CONTENT_TYPES } from '@/lib/constants/conversion';
+import { CONTENT_TYPES, ContentType } from '@/lib/constants/conversion';
 
 // ─── Content Types ────────────────────────────────────────────────────────────
 
@@ -18,7 +18,10 @@ export const ContentBlockSchema = z.object({
 // Minimal response from LLM — only the id→contentType mapping we need
 export const ClassificationItemSchema = z.object({
   id: z.string(),
-  contentType: ContentTypeSchema.catch('Unknown'),
+  contentType: z.preprocess(
+    (v) => (CONTENT_TYPES as readonly string[]).includes(String(v)) ? v : 'Unknown',
+    ContentTypeSchema,
+  ),
 });
 
 export const ClassificationResponseSchema = z.object({
