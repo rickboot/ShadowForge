@@ -23,10 +23,6 @@ const RequestSchema = z.object({
 
 const encoder = new TextEncoder();
 
-function send(controller: ReadableStreamDefaultController, data: object) {
-  controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
-}
-
 function aggregateTelemetry(results: LLMResult[]): Telemetry {
   const models = [...new Set(results.map(r => r.model))];
   const inputTokens = results.reduce((sum, r) => sum + r.usage.inputTokens, 0);
@@ -55,63 +51,67 @@ export async function POST(req: NextRequest) {
 
   const { text, adventureId } = parsed.data;
 
-  const stream = new ReadableStream({
-    async start(controller) {
-      try {
-        const blocks = convertToBlocks(adventureId ?? DEFAULT_ADVENTURE_ID, text);
+  const { readable, writable } = new TransformStream();
+  const writer = writable.getWriter();
 
-        if (blocks.length === 0) {
-          send(controller, { type: 'error', message: 'No content blocks found.' });
-          return;
-        }
+  const send = (data: object) =>
+    writer.write(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
 
-        send(controller, { type: 'start' });
+  (async () => {
+    try {
+      const blocks = convertToBlocks(adventureId ?? DEFAULT_ADVENTURE_ID, text);
 
-        const { blocks: classified, llmResult: classifyResult } = await classifyWithLLM(blocks);
-        const toConvert = classified.filter(b => CONVERTIBLE_TYPES.has(b.contentType));
-
-        if (toConvert.length === 0) {
-          send(controller, { type: 'error', message: 'No convertible content found in the input.' });
-          return;
-        }
-
-        send(controller, { type: 'classified', total: toConvert.length });
-
-        const llmResults: LLMResult[] = [classifyResult];
-        let completed = 0;
-
-        await Promise.allSettled(
-          toConvert.map(async (block) => {
-            try {
-              const input = [block.header, ...block.paragraphs].filter(Boolean).join('\n\n');
-              const { block: converted, llmResult } = await convertToShadowdark(input, block.contentType);
-              llmResults.push(llmResult);
-              completed++;
-              send(controller, {
-                type: 'block',
-                content: renderBlockToMarkdown(converted),
-                completed,
-                total: toConvert.length,
-              });
-            } catch (err) {
-              completed++;
-              console.error(`[/api/convert] Block "${block.header}" failed:`, err);
-              send(controller, { type: 'block_error', completed, total: toConvert.length });
-            }
-          }),
-        );
-
-        send(controller, { type: 'done', telemetry: aggregateTelemetry(llmResults) });
-      } catch (err) {
-        console.error('[/api/convert] Pipeline error:', err);
-        send(controller, { type: 'error', message: 'Conversion failed.' });
-      } finally {
-        controller.close();
+      if (blocks.length === 0) {
+        await send({ type: 'error', message: 'No content blocks found.' });
+        return;
       }
-    },
-  });
 
-  return new Response(stream, {
+      await send({ type: 'start' });
+
+      const { blocks: classified, llmResult: classifyResult } = await classifyWithLLM(blocks);
+      const toConvert = classified.filter(b => CONVERTIBLE_TYPES.has(b.contentType));
+
+      if (toConvert.length === 0) {
+        await send({ type: 'error', message: 'No convertible content found in the input.' });
+        return;
+      }
+
+      await send({ type: 'classified', total: toConvert.length });
+
+      const llmResults: LLMResult[] = [classifyResult];
+      let completed = 0;
+
+      await Promise.allSettled(
+        toConvert.map(async (block) => {
+          try {
+            const input = [block.header, ...block.paragraphs].filter(Boolean).join('\n\n');
+            const { block: converted, llmResult } = await convertToShadowdark(input, block.contentType);
+            llmResults.push(llmResult);
+            completed++;
+            await send({
+              type: 'block',
+              content: renderBlockToMarkdown(converted),
+              completed,
+              total: toConvert.length,
+            });
+          } catch (err) {
+            completed++;
+            console.error(`[/api/convert] Block "${block.header}" failed:`, err);
+            await send({ type: 'block_error', completed, total: toConvert.length });
+          }
+        }),
+      );
+
+      await send({ type: 'done', telemetry: aggregateTelemetry(llmResults) });
+    } catch (err) {
+      console.error('[/api/convert] Pipeline error:', err);
+      await send({ type: 'error', message: 'Conversion failed.' });
+    } finally {
+      writer.close();
+    }
+  })();
+
+  return new Response(readable, {
     headers: {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
