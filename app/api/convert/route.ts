@@ -1,15 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { runConversionPipeline } from '@/lib/conversion/runConversionPipeline';
+import { z } from 'zod';
+import { runPipeline } from '@/lib/conversion/runPipeline';
+import { MAX_INPUT_CHARS } from '@/lib/constants/limits';
+
+const RequestSchema = z.object({
+  text: z.string().min(1, 'text is required').max(MAX_INPUT_CHARS, `Input exceeds ${MAX_INPUT_CHARS} character limit`),
+  adventureId: z.string().optional(),
+});
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { text, adventureId } = body;
-
-  if (!text || typeof text !== 'string') {
-    return NextResponse.json({ error: 'Invalid input: text is required' }, { status: 400 });
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
 
-  const { convertedText } = await runConversionPipeline({ text, adventureId });
+  const parsed = RequestSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: parsed.error.errors[0]?.message ?? 'Invalid request' },
+      { status: 400 },
+    );
+  }
 
-  return NextResponse.json({ convertedText });
+  const { text, adventureId } = parsed.data;
+
+  try {
+    const { convertedText } = await runPipeline(text, adventureId);
+    return NextResponse.json({ convertedText });
+  } catch (error) {
+    console.error('[/api/convert] Pipeline error:', error);
+    return NextResponse.json({ error: 'Conversion failed' }, { status: 500 });
+  }
 }
