@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CONTENT_TYPES, ContentType } from '@/lib/constants/conversion';
+import { CONTENT_TYPES } from '@/lib/constants/conversion';
 
 // ─── Content Types ────────────────────────────────────────────────────────────
 
