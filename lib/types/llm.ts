@@ -5,5 +5,6 @@ export interface ModelProvider {
     userPrompt: string;
     model: string;
     temperature?: number;
+    responseFormat?: 'json_object';
   }): Promise<string>;
 }

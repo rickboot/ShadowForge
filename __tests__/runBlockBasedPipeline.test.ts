@@ -4,6 +4,7 @@ dotenv.config({ path: '.env.local' });
 import 'openai/shims/node';
 import { runBlocksPipeline } from '@/lib/conversion/runBlocksPipeline';
 
+const hasApiKey = !!process.env.OPENAI_API_KEY;
 describe('runBlocksPipeline', () => {
     const sampleInput = `
 1. Maze of Twisty Little Passages
@@ -13,7 +14,7 @@ Any attempt to map this area without magical aid results in confusion. A creatur
 
 `.trim();
 
-    test('should process blocks and return convertedText and tokenUsage', async () => {
+    (hasApiKey ? test : test.skip)('should process blocks and return convertedText and tokenUsage', async () => {
         const result = await runBlocksPipeline(sampleInput, 'test-adventure-id');
 
         expect(result).toHaveProperty('convertedText');
