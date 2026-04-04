@@ -24,7 +24,7 @@ export async function classifyWithLLM(blocks: ContentBlock[]): Promise<{ blocks:
   return {
     blocks: blocks.map(b => ({
       ...b,
-      contentType: typeMap.get(b.id) ?? 'Unknown',
+      contentType: (typeMap.get(b.id) ?? 'Unknown') as ContentType,
     })),
     llmResult,
   };
