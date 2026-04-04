@@ -33,7 +33,8 @@
     "react-markdown": "^10.1.0",
     "three": "^0.176.0",
     "ts-jest": "^29.3.2",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

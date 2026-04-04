@@ -2,32 +2,28 @@ import OpenAI from 'openai';
 import { ModelProvider } from '../../types/llm';
 import { ChatCompletionMessageParam } from 'openai/resources';
 
+let client: OpenAI | null = null;
+function getClient(): OpenAI {
+  if (!client) client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  return client;
+}
+
 export const openAIProvider: ModelProvider = {
   name: 'openai',
 
-  async call({ systemPrompt, userPrompt, model, temperature }) {
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-      dangerouslyAllowBrowser: process.env.NODE_ENV !== 'production',
-    });
+  async call({ systemPrompt, userPrompt, model, temperature = 0, responseFormat }) {
     const messages: ChatCompletionMessageParam[] = [
       { role: 'system', content: systemPrompt },
       { role: 'user', content: userPrompt },
     ];
 
-    try {
-      const completion = await openai.chat.completions.create({
-        model,
-        temperature,
-        messages,
-      });
-      return completion.choices[0]?.message?.content?.trim() || '';
-    } catch (error) {
-      console.error('[OpenAIProvider] Error:', error);
-      if (error instanceof Error) {
-        return `OpenAI error: ${error.message}`;
-      }
-      return 'OpenAI error: Unknown error occurred.';
-    }
+    const completion = await getClient().chat.completions.create({
+      model,
+      temperature,
+      messages,
+      ...(responseFormat === 'json_object' && { response_format: { type: 'json_object' } }),
+    });
+
+    return completion.choices[0]?.message?.content?.trim() ?? '';
   },
 };
