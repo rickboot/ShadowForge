@@ -16,7 +16,7 @@ function createD20Wireframe(
 ): LineSegments {
   const geometry = new WireframeGeometry(new IcosahedronGeometry(radius, 0));
   const material = new LineBasicMaterial({
-    color: 0x02816f,
+    color: 0xc8ff00,
     opacity: 0.5,
     transparent: true,
   });
