@@ -15,26 +15,30 @@ export default function Home() {
   const [input, setInput] = useState(DEFAULT_INPUT_TEXT);
   const [output, setOutput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState<{ completed: number; total: number } | null>(null);
   const { setTelemetry } = useTelemetry();
 
   const handleConvert = async () => {
     setLoading(true);
-    setOutput('Strange runes flicker as ancient syntax is transmuted...');
+    setOutput('');
+    setProgress(null);
 
-    try {
-      const { convertedText, telemetry } = await callConversionAPI(input);
-      setOutput(convertedText);
-      setTelemetry(telemetry);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('Conversion error:', error);
-        setOutput(error.message || 'Error during conversion.');
-      } else {
-        setOutput('An unexpected error occurred.');
-      }
-    } finally {
-      setLoading(false);
-    }
+    await callConversionAPI(input, {
+      onBlock: (markdown, completed, total) => {
+        setOutput(prev => prev ? prev + '\n\n' + markdown : markdown);
+        setProgress({ completed, total });
+      },
+      onDone: (telemetry) => {
+        setTelemetry(telemetry);
+        setLoading(false);
+        setProgress(null);
+      },
+      onError: (message) => {
+        setOutput(message);
+        setLoading(false);
+        setProgress(null);
+      },
+    });
   };
 
   return (
@@ -44,6 +48,7 @@ export default function Home() {
         input={input}
         output={output}
         loading={loading}
+        progress={progress}
         setInput={setInput}
         handleConvert={handleConvert}
       />

@@ -11,6 +11,7 @@ interface ShadowForgeLayoutProps {
   input: string;
   output: string;
   loading: boolean;
+  progress: { completed: number; total: number } | null;
   setInput: (val: string) => void;
   handleConvert: () => void;
 }
@@ -19,6 +20,7 @@ export default function ShadowForgeLayout({
   input,
   output,
   loading,
+  progress,
   setInput,
   handleConvert,
 }: ShadowForgeLayoutProps) {
@@ -69,7 +71,11 @@ export default function ShadowForgeLayout({
             disabled={loading || !input.trim()}
             className="focus:ring-accent/50 w-30 rounded-md bg-[var(--button-bg)] px-2 py-1 text-[var(--button-text)] transition-colors duration-300 hover:bg-[var(--button-hover-bg)] focus:ring-2 focus:outline-none disabled:opacity-50"
           >
-            {loading ? 'Converting...' : 'Convert'}
+            {loading
+              ? progress
+                ? `Converting ${progress.completed}/${progress.total}...`
+                : 'Classifying...'
+              : 'Convert'}
           </button>
           <UploadButton onLoad={setInput} />
         </div>
