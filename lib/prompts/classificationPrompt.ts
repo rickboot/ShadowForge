@@ -1,125 +1,35 @@
 import { CONTENT_TYPES } from '@/lib/constants/conversion';
-import { ContentBlock } from '@/lib/constants/content';
 
+interface BlockInput {
+  id: string;
+  header: string;
+  paragraphs: string[];
+}
 
-export function buildClassificationUserPrompt(blocks: ContentBlock[]): string {
-    return `Classify the following DnD 5e blocks:\n\n${JSON.stringify(blocks)}`;
+export function buildClassificationUserPrompt(blocks: BlockInput[]): string {
+  return JSON.stringify(blocks, null, 2);
 }
 
 export const CLASSIFICATION_SYSTEM_PROMPT = `
-You are an expert TTRPG game master and software engineer.
+You are an expert TTRPG game master classifying sections of a D&D 5e adventure module.
 
-You have been given a JSON array of object blocks.  
-Each block describes a small section of text from a D&D 5e adventure.  
-Each block contains a single \`header\` string and an array of \`paragraphs\` strings.  
-Either the header or the paragraphs may be empty, but not both.
+You will receive a JSON array of blocks. Each block has an "id", a "header", and "paragraphs".
 
-Your task is to classify each block into the most appropriate content type from the following list:
+Classify each block into one of these content types:
 ${CONTENT_TYPES.join(', ')}
 
----
-
-### Block Input Format
-
-Each block is an object with the following structure:
-
+Return a JSON object with this exact structure:
 {
-    id: string,
-    sequence: number,
-    adventureId: string,
-    header: string,
-    paragraphs: string[]
+  "blocks": [
+    { "id": "<id from input>", "contentType": "<ContentType>" }
+  ]
 }
 
----
+Rules:
+- Return one entry per input block, in any order
+- Use the exact id from the input
+- Choose the single most appropriate contentType
+- Use "Unknown" only if no other type fits
 
-### Example Input
-
-{
-    id: "id-1",
-    sequence: 1,
-    adventureId: "adventure-1",
-    header: "Cave of Doom",
-    paragraphs: [
-        "The cave is dark and foreboding.",
-        "Dripping water creates a constant pinging sound somewhere out of sight."
-    ]
-}
-
----
-
-### Your Instructions
-
-For each block in the input array:
-
-1. Read the \`header\` and \`paragraphs\`.
-2. Choose the most appropriate \`contentType\` from the list above.
-3. Return the following fields for each block:
-    - \`id\`, \`sequence\`, \`adventureId\`, \`header\`, \`paragraphs\` (copied from the input)
-    - \`contentType\`: one of the valid content types
-    - \`explanation\`: why you chose this type (in 20 words or less)
-    - \`confidence\`: 1 (low), 2 (medium), or 3 (high)
-    - \`source\`: use 'LLM'
-    - \`rulesMatched\`: use ['LLM']
-
-Return an array of all classification results.
-
----
-
-### Classification Output Format
-
-Each result should follow this format:
-
-{
-    id: string,
-    sequence: number,
-    adventureId: string,
-    header: string,
-    paragraphs: string[],
-    contentType: string,
-    explanation: string,
-    confidence: 1 | 2 | 3,
-    source: "LLM",
-    rulesMatched: ["LLM"]
-}
-
----
-
-### Example Output
-
-[
-    {
-    id: "id-1",
-    sequence: 1,
-    adventureId: "adventure-1",
-    header: "Playground of Terror",
-    paragraphs: [
-        "The playground is dark and foreboding.",
-    "Dripping water creates a constant pinging sound somewhere out of sight."
-    ],
-    contentType: "Room",
-    explanation: "Describes a discrete location with features and obstacles",
-    confidence: 3,
-    source: "LLM",
-    rulesMatched: ["LLM"]
-    },
-    {
-    id: "id-2",
-    sequence: 2,
-    adventureId: "adventure-1",
-    header: "Shrubbery of Earthly Delights",
-    paragraphs: [
-        "The garden is a beautiful place with flowers and trees, but everything is overgrown and full of thorns."
-    ],
-    contentType: "PointOfInterest",
-    explanation: "Overgrown garden fits point-of-interest classification",
-    confidence: 3,
-    source: "LLM",
-    rulesMatched: ["LLM"]
-    }
-]
-
----
-
-Return only the array of classification objects — no extra commentary.
-`;
+Return only the JSON object — no explanation or commentary.
+`.trim();

@@ -3,25 +3,13 @@ import { runConversionPipeline } from '@/lib/conversion/runConversionPipeline';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const text = body.text;
-  const blockBasedConversion = body.blockBasedConversion === true;
+  const { text, adventureId } = body;
 
   if (!text || typeof text !== 'string') {
-    return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid input: text is required' }, { status: 400 });
   }
 
-  //! Run conversion pipeline
-  const result = await runConversionPipeline({
-    text,
-    blockBasedConversion,
-  });
+  const { convertedText } = await runConversionPipeline({ text, adventureId });
 
-  if (!result) {
-    return NextResponse.json({ error: 'Conversion failed' }, { status: 500 });
-  }
-
-  const { convertedText, tokenUsage } = result;
-  return new NextResponse(JSON.stringify({ convertedText, tokenUsage }), {
-    status: 200,
-  });
+  return NextResponse.json({ convertedText });
 }

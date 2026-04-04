@@ -15,16 +15,14 @@ export const ContentBlockSchema = z.object({
   paragraphs: z.array(z.string()),
 });
 
-export const ClassifiedBlockSchema = ContentBlockSchema.extend({
+// Minimal response from LLM — only the id→contentType mapping we need
+export const ClassificationItemSchema = z.object({
+  id: z.string(),
   contentType: ContentTypeSchema,
-  explanation: z.string(),
-  confidence: z.union([z.literal(1), z.literal(2), z.literal(3)]),
-  source: z.literal('LLM'),
-  rulesMatched: z.array(z.string()),
 });
 
 export const ClassificationResponseSchema = z.object({
-  blocks: z.array(ClassifiedBlockSchema),
+  blocks: z.array(ClassificationItemSchema),
 });
 
 // ─── Conversion ───────────────────────────────────────────────────────────────
@@ -66,7 +64,7 @@ export const ConversionResponseSchema = z.object({
 
 // ─── Inferred Types ───────────────────────────────────────────────────────────
 
-export type ClassifiedBlock = z.infer<typeof ClassifiedBlockSchema>;
+export type ClassificationItem = z.infer<typeof ClassificationItemSchema>;
 export type ClassificationResponse = z.infer<typeof ClassificationResponseSchema>;
 export type ConvertedBlock = z.infer<typeof ConvertedBlockSchema>;
 export type ConversionResponse = z.infer<typeof ConversionResponseSchema>;
