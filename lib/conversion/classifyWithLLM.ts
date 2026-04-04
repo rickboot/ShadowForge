@@ -1,5 +1,5 @@
 import { callLLMStructured } from '@/lib/llm/callLLMAPI';
-import { buildClassificationUserPrompt, CLASSIFICATION_SYSTEM_PROMPT } from '@/lib/prompts/classificationPrompt';
+import { buildClassificationUserPrompt, getClassificationSystemPrompt } from '@/lib/prompts/classificationPrompt';
 import { ClassificationResponseSchema } from '@/lib/schemas';
 import { ContentBlock } from '@/lib/constants/content';
 import { ContentType } from '@/lib/constants/conversion';
@@ -10,7 +10,7 @@ export async function classifyWithLLM(blocks: ContentBlock[]): Promise<Classifie
   const input = blocks.map(b => ({ id: b.id, header: b.header, paragraphs: b.paragraphs }));
 
   const response = await callLLMStructured({
-    systemPrompt: CLASSIFICATION_SYSTEM_PROMPT,
+    systemPrompt: getClassificationSystemPrompt(),
     userPrompt: buildClassificationUserPrompt(input),
     role: 'classify',
     schema: ClassificationResponseSchema,
