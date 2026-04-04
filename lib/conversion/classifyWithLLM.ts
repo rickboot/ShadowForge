@@ -1,17 +1,25 @@
-import { callLLMAPI } from '../llm/callLLMAPI';
-import { buildClassificationUserPrompt, CLASSIFICATION_SYSTEM_PROMPT } from '../prompts/classificationPrompt';
-import { ClassifiedContent } from '../constants/content';
-import { ContentBlock } from '../constants/content';
+import { callLLMStructured } from '@/lib/llm/callLLMAPI';
+import { buildClassificationUserPrompt, CLASSIFICATION_SYSTEM_PROMPT } from '@/lib/prompts/classificationPrompt';
+import { ClassificationResponseSchema } from '@/lib/schemas';
+import { ContentBlock } from '@/lib/constants/content';
+import { ContentType } from '@/lib/constants/conversion';
 
-export async function classifyWithLLM(blocks: ContentBlock[]): Promise<ClassifiedContent[]> {
-  const userPrompt = buildClassificationUserPrompt(blocks);
+export type ClassifiedBlock = ContentBlock & { contentType: ContentType };
 
-  const result = await callLLMAPI({
+export async function classifyWithLLM(blocks: ContentBlock[]): Promise<ClassifiedBlock[]> {
+  const input = blocks.map(b => ({ id: b.id, header: b.header, paragraphs: b.paragraphs }));
+
+  const response = await callLLMStructured({
     systemPrompt: CLASSIFICATION_SYSTEM_PROMPT,
-    userPrompt,
-    temperature: 0,
+    userPrompt: buildClassificationUserPrompt(input),
+    role: 'classify',
+    schema: ClassificationResponseSchema,
   });
 
-  // TODO: Shape checking and error handling
-  return JSON.parse(result);
+  const typeMap = new Map(response.blocks.map(b => [b.id, b.contentType]));
+
+  return blocks.map(b => ({
+    ...b,
+    contentType: typeMap.get(b.id) ?? 'Unknown',
+  }));
 }

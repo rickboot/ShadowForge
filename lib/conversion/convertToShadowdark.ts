@@ -1,14 +1,13 @@
-import { callLLMAPI } from '@/lib/llm/callLLMAPI';
+import { callLLMStructured } from '@/lib/llm/callLLMAPI';
 import { buildShadowdarkConversionPrompt, SHADOWDARK_SYSTEM_PROMPT } from '@/lib/prompts/shadowdarkPrompt';
+import { ConvertedBlockSchema, ConvertedBlock } from '@/lib/schemas';
+import { ContentType } from '@/lib/constants/conversion';
 
-export async function convertToShadowdark(input: string): Promise<string> {
-  const userPrompt = buildShadowdarkConversionPrompt(input);
-
-  const result = await callLLMAPI({
+export async function convertToShadowdark(input: string, contentType?: ContentType): Promise<ConvertedBlock> {
+  return callLLMStructured({
     systemPrompt: SHADOWDARK_SYSTEM_PROMPT,
-    userPrompt,
-    temperature: 0,
+    userPrompt: buildShadowdarkConversionPrompt(input, contentType),
+    role: 'convert',
+    schema: ConvertedBlockSchema,
   });
-
-  return result || 'Conversion failed.';
 }

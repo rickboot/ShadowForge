@@ -11,8 +11,6 @@ interface ShadowForgeLayoutProps {
   input: string;
   output: string;
   loading: boolean;
-  blockBasedConversion: boolean;
-  setBlockBasedConversion: (val: boolean) => void;
   setInput: (val: string) => void;
   handleConvert: () => void;
 }
@@ -21,8 +19,6 @@ export default function ShadowForgeLayout({
   input,
   output,
   loading,
-  blockBasedConversion,
-  setBlockBasedConversion,
   setInput,
   handleConvert,
 }: ShadowForgeLayoutProps) {
@@ -76,16 +72,6 @@ export default function ShadowForgeLayout({
             {loading ? 'Converting...' : 'Convert'}
           </button>
           <UploadButton onLoad={setInput} />
-          <label className="flex items-center justify-center gap-2 text-sm">
-            <span>Block-based Conversion</span>
-            <input
-              type="checkbox"
-              checked={blockBasedConversion}
-              onChange={(e) => setBlockBasedConversion(e.target.checked)}
-              className="form-checkbox border-surface-contrast h-4 w-4 rounded-sm"
-              style={{ accentColor: 'var(--button-bg)' }}
-            />
-          </label>
         </div>
       </section>
 

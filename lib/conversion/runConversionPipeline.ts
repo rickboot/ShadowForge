@@ -1,25 +1,15 @@
-import { runBlocksPipeline } from './runBlocksPipeline';
-import { runSimplePipeline } from './runSimplePipeline';
+import { runPipeline } from './runPipeline';
 
-interface runConversionPipelineProps {
+interface RunConversionPipelineProps {
   text: string;
   adventureId?: string;
-  blockBasedConversion?: boolean;
 }
 
-export async function runConversionPipeline({
-  text,
-  adventureId,
-  blockBasedConversion,
-}: runConversionPipelineProps) {
+export async function runConversionPipeline({ text, adventureId }: RunConversionPipelineProps) {
   try {
-    if (blockBasedConversion) {
-      return await runBlocksPipeline(text, adventureId);
-    } else {
-      return await runSimplePipeline(text);
-    }
+    return await runPipeline(text, adventureId);
   } catch (error) {
-    console.error('Conversion pipeline failed:', error);
-    return { convertedText: 'Conversion failed due to an internal error.', tokenUsage: 0 };
+    console.error('[runConversionPipeline] Failed:', error);
+    return { convertedText: 'Conversion failed due to an internal error.' };
   }
 }
