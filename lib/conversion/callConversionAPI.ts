@@ -10,10 +10,19 @@ export async function callConversionAPI(inputText: string): Promise<{ convertedT
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Conversion failed.');
+    let message = `Conversion failed (${response.status}).`;
+    try {
+      const body = await response.json();
+      if (typeof body?.error === 'string') message = body.error;
+    } catch { /* non-JSON error body — keep default message */ }
+    throw new Error(message);
   }
 
-  const { convertedText, telemetry } = await response.json();
-  return { convertedText, telemetry };
+  let body: { convertedText: string; telemetry: Telemetry };
+  try {
+    body = await response.json();
+  } catch {
+    throw new Error('Conversion failed: unexpected server response.');
+  }
+  return { convertedText: body.convertedText, telemetry: body.telemetry };
 }
