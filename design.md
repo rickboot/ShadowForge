@@ -6,177 +6,200 @@
 
 ## 1. Introduction & Overview
 
-**Purpose:**  
-ShadowForge is an AI-powered web tool for Game Masters (GMs) who want to convert Dungeons & Dragons 5e content (monsters, treasure, encounters) into Shadowdark RPG style and mechanics. The app uses a file/text input interface and a LangChain-powered LLM backend to provide plausible conversion suggestions.
+**Purpose:**
+ShadowForge is an AI-powered web tool for Game Masters who want to convert D&D 5e content (monsters, treasure, encounters, rooms) into Shadowdark RPG format. It uses a multi-stage LLM pipeline to parse, classify, and convert adventure content, returning structured markdown ready for use at the table.
 
-**Target Audience:**  
-GMs familiar with both 5e and Shadowdark RPG who wish to adapt published adventures, stat blocks, or content for use in Shadowdark campaigns.
+**Target Audience:**
+GMs familiar with both 5e and Shadowdark who want to run published 5e adventures using Shadowdark rules without doing all the mechanical conversion by hand.
 
 **Core Functionality:**
 
-- Convert 5e content into Shadowdark-style output
-- Accept file uploads (PDF, DOCX) and direct text input
-- Use LangChain and LLM API (e.g., OpenAI) to generate output
-- Display clean, copyable results for GM editing
-- Handle input ephemerally and securely
+- Parse adventure text into semantic content blocks
+- Classify blocks by type using a fast LLM
+- Convert relevant blocks in parallel using a capable LLM with structured JSON output
+- Render structured output to GM-ready Shadowdark markdown
+- Accept text paste or PDF/txt file uploads
+- No user data stored; all processing is ephemeral
 
 ---
 
 ## 2. Goals
 
-- Provide GMs with useful Shadowdark conversion suggestions
-- Accept content via file uploads or text input
-- Return plausible, readable Shadowdark-style output
-- Operate transparently with clear limits on automation and copyright
-- Function as a helpful assistant, not a replacement for GM judgment
+- Fast, accurate Shadowdark conversion with minimal GM editing required
+- Support multiple LLM providers with configurable model-per-task routing
+- Reliable structured output via Zod schema validation
+- Clean, maintainable codebase with full test coverage of core logic
+- Prompt iteration without touching TypeScript source
 
 ---
 
 ## 3. Non-Goals
 
-- Storing user input or uploaded files
-- Providing perfectly balanced, ready-to-play stat blocks
-- Supporting non-text formats (images, ZIPs, etc.)
-- Integrating with VTTs or supporting exports beyond plain text
-- User accounts, content history, or database storage (for now)
+- Perfectly balanced, ready-to-play stat blocks (GM judgment always required)
+- User accounts, session history, or persistent storage
+- VTT integrations (future consideration)
+- DOCX support (deferred; PDF partially supported via client-side extraction)
+- Token tracking or client-side rate limiting (removed; server-side limits preferred)
 
 ---
 
-## 4. Architecture Overview
+## 4. Architecture
 
-**Frontend:**
+### Frontend
 
-- Next.js + React (SPA)
-- Tailwind CSS
-- File upload + textarea input UI
-- Displays AI-generated conversion
+- Next.js 15 + React 19, TypeScript, Tailwind CSS 4
+- Single-page UI: textarea input, file upload/drag-drop, markdown preview toggle, copy/download
+- Three.js animated D20 wireframe background (React Three Fiber)
+- Client calls `/api/convert` and renders the returned markdown
 
-**Backend:**
+### Backend
 
 - Next.js API Routes (Node.js, TypeScript)
-- Formidable for file uploads
-- pdf-parse (PDF) and mammoth (DOCX) for text extraction
-- LangChain.js for prompt management and LLM calls
-- OpenAI GPT-4 or Claude 3 via API key
+- `POST /api/convert` — Zod-validated request, 20K character input limit, 60s LLM timeout
+- Delegates to `runPipeline()`, returns `{ convertedText: string }`
 
-**Data Flow:**
+### Pipeline (`lib/conversion/runPipeline.ts`)
 
-1. User inputs content (upload or text)
-2. Frontend sends it to backend API
-3. Backend extracts/processes input
-4. LangChain builds and sends prompt to LLM
-5. LLM responds with Shadowdark output
-6. Backend returns the result to frontend
-7. Frontend displays output and deletes temp file (if any)
+```
+Input text
+  │
+  ▼
+sanitizeText()          — remove OCR artifacts, normalize whitespace
+  │
+  ▼
+convertToBlocks()       — split into ContentBlock[] (header + paragraphs)
+  │
+  ▼
+classifyWithLLM()       — single LLM call (classify role), returns {id, contentType}[]
+  │
+  ▼
+filter()                — keep Room, Encounter, Dungeon, Site, PointOfInterest,
+  │                        Monster, Treasure, Character, NPC
+  ▼
+Promise.allSettled()    — parallel LLM calls (convert role), each returns ConvertedBlock
+  │
+  ▼
+renderToMarkdown()      — pure function, ConvertedBlock[] → markdown string
+  │
+  ▼
+{ convertedText }
+```
 
----
+### LLM Layer (`lib/llm/`)
 
-## 5. UI/UX Design
+- `callLLMAPI()` — plain string response
+- `callLLMStructured<T>()` — requests `json_object` format, JSON.parses, Zod-validates, returns typed `T`
+- Both wrapped with `withTimeout()` (default 60s)
+- `getLLMConfig(role?)` — reads `LLM_CLASSIFY_MODEL` / `LLM_CONVERT_MODEL` env vars with sensible defaults
+- Providers: OpenAI, DeepSeek, Groq (all via OpenAI-compatible SDK); lazy singleton clients
 
-- **Clean single-page interface**
-- Toggle between “Text Input” and “File Upload”
-- Dropdown to select conversion type:
-  - Monster Stat Block
-  - Treasure Parcel
-  - Encounter Text
-  - Generic Text Block
-- Submit button: “Convert”
-- Output area: formatted result with “Copy” button
-- Error display: file type errors, LLM API failure, etc.
+### Schemas (`lib/schemas/index.ts`)
 
----
+Key Zod schemas:
 
-## 6. Backend API Design
+| Schema | Purpose |
+|--------|---------|
+| `ClassificationResponseSchema` | `{ blocks: [{ id, contentType }] }` — lightweight classify response |
+| `ConvertedBlockSchema` | `{ header, boxedText?, enemies[]?, traps[]?, treasure[]?, gmNotes? }` |
+| `ConversionResponseSchema` | Wraps array of `ConvertedBlock` |
 
-| Endpoint            | Method | Description                        |
-| ------------------- | ------ | ---------------------------------- |
-| `/api/convert/text` | POST   | Accepts raw text + conversion type |
-| `/api/convert/file` | POST   | Accepts DOCX/PDF + conversion type |
+### Prompts (`lib/prompts/system/`)
 
-**Security:**
+System prompts stored as `.md` files, loaded and cached at startup via `loadPrompt()`. Edit prompts without touching TypeScript.
 
-- Sanitize inputs
-- API key stored in `.env.local`
-- No persistent file storage
-- Rate limiting (future)
-
----
-
-## 7. LangChain Conversion Service
-
-**Responsibilities:**
-
-- Prompt construction (with few-shot examples)
-- Shadowdark principles (low HP, gritty, GP=XP, etc.)
-- Conversion types handled:
-  - Monster stat blocks
-  - Treasure items
-  - Room/encounter text
-  - Generic text
-- LLM interaction via LangChain’s `LLMChain` or equivalent
-- Result parsing and formatting
-
-**Few-shot example prompt formats** will be stored in a `prompts/` folder and mapped to conversion types.
+- `classification.md` — instructs LLM to return `{ blocks: [{ id, contentType }] }`
+- `conversion.md` — instructs LLM to return a `ConvertedBlock` JSON object with Shadowdark conversion rules
 
 ---
 
-## 8. Data Handling & Storage
+## 5. Conversion Rules
 
-- Files stored temporarily in memory or disk using `formidable`
-- Files deleted immediately after response or error
-- Logging excludes user input or content
-- API key stored securely
-
----
-
-## 9. Legal & Ethical Considerations
-
-- Users must confirm they own the rights to input content
-- Output is AI-generated and not guaranteed balanced
-- No Wizards of the Coast content may be referenced by name without the text
-- No persistent data retention
-- Use of tool constitutes agreement with terms (to be shown in UI)
+| Rule | Detail |
+|------|--------|
+| Coin scaling | Divide all 5e coin values by 10 |
+| Currency | 1 gp = 10 sp = 100 cp; combine where possible |
+| XP | 1 gp = 1 XP; shown inline next to treasure items |
+| Magic items | +1/+2 included as-is; +3/legendary flagged in `gmNotes` |
+| Enemies | Shadowdark format: HD, AC, attack+damage, morale |
+| Traps | Mechanical traps + gameplay-affecting secrets only |
+| Boxed text | Lightly edited from source; no invented mood or lighting |
 
 ---
 
-## 10. Load & Save (MVP+1)
+## 6. API
 
-**Future Feature:**
+### `POST /api/convert`
 
-- Allow user to export converted result as `.txt` or `.md`
-- Allow local save/load of conversion sessions (in-browser storage or manual download)
+**Request:**
+```json
+{
+  "text": "string (max 20,000 chars)",
+  "adventureId": "string (optional)"
+}
+```
 
----
+**Response:**
+```json
+{
+  "convertedText": "string (markdown)"
+}
+```
 
-## 11. Tickets / MVP Milestones
+**Errors:**
 
-The project is tracked via GitHub Issues and categorized into:
-
-- `frontend`
-- `backend`
-- `api`
-- `infra`
-- `ai/prompt`
-
-Initial ticket list includes:
-
-- Project scaffolding
-- Upload handling
-- File parsing
-- API routes
-- LangChain conversion service
-- Prompt modules
-- Output rendering
-- Environment variable setup
-- File deletion post-processing
+| Status | Cause |
+|--------|-------|
+| 400 | Missing/empty text, exceeds character limit, invalid JSON body |
+| 500 | Pipeline or LLM failure |
 
 ---
 
-## 12. Future Considerations
+## 7. Environment Variables
 
-- Add sliders for tone/difficulty
-- Support `.txt` or `.md` input
-- User feedback rating per conversion
-- Optional login for persistent sessions
-- Previews: monster card formatting, treasure tables
-- "Shadowdarkify" common 5e module names and room descriptions
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `LLM_CLASSIFY_MODEL` | `openai-gpt-4o-mini` | Model key for block classification |
+| `LLM_CONVERT_MODEL` | `openai-gpt-4o` | Model key for Shadowdark conversion |
+| `LLM_MODEL` | `openai-gpt-4o-mini` | Legacy fallback if role vars not set |
+| `OPENAI_API_KEY` | — | Required for OpenAI provider |
+| `DEEPSEEK_API_KEY` | — | Required for DeepSeek provider |
+| `GROQ_API_KEY` | — | Required for Groq provider |
+
+Model keys are defined in `lib/llm/llmConfig.ts`.
+
+---
+
+## 8. Testing
+
+42 tests, no live LLM calls required.
+
+| Test file | Coverage |
+|-----------|---------|
+| `schemas.test.ts` | Zod schema validation — valid/invalid inputs |
+| `renderToMarkdown.test.ts` | Pure renderer — all sections, formatting, edge cases |
+| `classifyWithLLM.test.ts` | Classification — contentType merge, Unknown fallback, role |
+| `runPipeline.test.ts` | Pipeline logic — filtering, parallel convert, failure handling |
+| `api.convert.test.ts` | API route — validation, size limit, 400/500 responses |
+| `convertToBlocks.test.ts` | Block parser — headers, paragraphs, edge cases |
+
+---
+
+## 9. Data Handling & Security
+
+- No user input stored; all processing in-memory per request
+- API keys in `.env.local`, never exposed to client
+- Input size capped at 20,000 characters server-side
+- LLM requests time out after 60 seconds
+- Zod validation on all LLM outputs — malformed responses throw, not silently corrupt
+
+---
+
+## 10. Future Considerations
+
+- Semantic memory via embeddings for cross-room context consistency
+- User-editable conversion rule mappings (homebrew support)
+- Adventure-level party scaling (monsters, traps, treasure adjusted by level/size)
+- VTT integration (Foundry VTT, Fantasy Grounds)
+- Server-side PDF extraction (current client-side extraction is fragile for complex layouts)
+- Streaming API response for progressive output on large documents
+- Automatic adventure generation

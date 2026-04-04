@@ -2,58 +2,127 @@
 
 # ShadowForge
 
-**Convert D&D 5e content to Shadowdark RPG using AI-powered tools.**
+**Convert D&D 5e content to Shadowdark RPG using AI.**
 
-ShadowForge is an AI-powered, web app designed to help tabletop RPG game masters (GMs) convert Dungeons & Dragons (D&D) content into the gritty, old-school format of the [Shadowdark](https://www.thearcanelibrary.com/pages/shadowdark) RPG (role-playing game) rules. It assists with transforming monster stats, treasure parcels, room descriptions, and rule mechanics (like skill checks) into formats suitable for direct use in Shadowdark games.
+ShadowForge is an AI-powered web app that helps Game Masters convert D&D 5e adventures — monster stats, treasure parcels, room descriptions, encounters — into [Shadowdark RPG](https://www.thearcanelibrary.com/pages/shadowdark) format. It handles the mechanical translation so the GM can focus on running the game.
 
-This tool addresses a common challenge faced by GMs wanting to use 5e adventures in Shadowdark: the conversion process is often slow, manual, and tedious, requiring constant referencing of multiple rulebooks. ShadowForge aims to make this process faster and easier, while ensuring the final creative decisions remain firmly in the hands of the GM.
+Usage-limited [beta is live](https://shadow-forge-git-main-rickboots-projects.vercel.app/). Don't tell your friends yet.
 
-_NOTE: The project is currently in the Minimum Viable Product (MVP) development stage; some features described below are planned or in progress._
+---
 
-Usage-limited [Shadowforge beta](https://shadow-forge-git-main-rickboots-projects.vercel.app/) is live. Don't tell your friends yet!
-Nerdy types can view the code on the [Shadowforge Github repo](https://github.com/rickboot/ShadowForge).
+## Features
 
-**Features**
+- **Structured AI conversion** — content is parsed into semantic blocks, classified by type, and converted in parallel using structured LLM outputs (Zod-validated JSON)
+- **Multi-provider LLM support** — OpenAI, Anthropic, DeepSeek, Groq; configurable per task role (classify vs. convert)
+- **Shadowdark rule enforcement** — coin scaling (÷10), GP=XP, HD/AC/morale stat format, magic item balance warnings
+- **Flexible input** — paste text directly or upload PDF/txt files
+- **GM-ready markdown output** — boxed text, enemies, traps, treasure; copy or download
+- **Markdown preview** — toggle between rendered preview and raw markdown
 
-- **AI-Powered Conversion:** Uses multistage LLMs (OpenAI compatibleAPIs) to generate Shadowdark equivalents of D&D adventure content.
-- **Flexible Input:** Accepts direct text pasting or file uploads (PDF/txt).
-- **Targeted Conversion:** Options to convert specific elements like **Monster Stats**, **Treasure Blocks** (adjusting for **Shadowdark economy/GP=XP**), **Encounters/Rooms** (including rule mechanics like **skill check DCs**), or generic text blocks.
-- **Structured Prompts:** Leverages LangChain to route input to task-specific prompt templates that inject core Shadowdark design principles and rules for more accurate conversion.
-- **GM-Friendly Output:** Results are formatted in text and markdown (e.g., using boxed text, clear headings, concise notes) designed for **easy readability and use by the GM at the table**.
-- **Dual Output Modes:** (Planned) Option to generate both a GM version (with full details) and a player-facing version (e.g., read-aloud text only).
-- **Original Text Preservation:** (Planned) Option to include the original 5e text alongside the conversion for easy comparison and reference.
-- **LLM Token Estimation and Counting:** (Planned) Track, optimize, and limit LLM API spend.
+---
 
-**Example Use Case**
+## How It Works
 
-A GM uploads a text file of a D&D 5e adventure module. ShadowForge extracts the text, normalizes it, and breaks it into manageable chunks based on room descriptions. The GM selects the "Encounter/Room Text" conversion option. ShadowForge processes each chunk, returning Shadowdark-ready room versions—complete with appropriate read-aloud text, simplified monster stats reflecting Shadowdark lethality, potential light-based traps or environmental effects, and relevant treasure parcels adjusted for a GP=XP system.
+1. Paste or upload D&D 5e adventure text
+2. ShadowForge sanitizes and parses it into content blocks
+3. A fast/cheap LLM classifies each block (Room, Monster, Treasure, Lore, etc.)
+4. Convertible blocks (Room, Encounter, Monster, NPC, Treasure, etc.) are sent in parallel to a capable LLM
+5. Each block is returned as structured JSON and rendered to Shadowdark-formatted markdown
 
-**Tech Stack & Pipeline**
+---
 
-- **Frontend:** Next.js, React, Tailwind CSS
-- **Backend:** Node.js, Next.js API Routes
-- **LLM Pipeline:** LangChain.js utilizing GPT-3.5 Turbo (chosen for favorable token limits and cost-efficiency).
-- **File Handling:** Text extraction from PDF/text uploads (using `pdf-parse`).
-- **Preprocessing:** Includes text normalization routines to improve content quality from potential OCR errors and ensure input consistency for the LLM.
-- **Processing Strategy:** Implements input chunking to manage LLM context window limitations, allowing for the processing of large documents.
-- **Development:** TypeScript, ESLint, Prettier, and maybe a little Python
-- **Deployment:** Vercel
+## Tech Stack
 
-**Prompt Strategy**
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js 15, React 19, TypeScript, Tailwind CSS 4 |
+| Backend | Next.js API Routes, Node.js |
+| LLM | OpenAI SDK (OpenAI-compatible endpoints for DeepSeek, Groq) |
+| Schema validation | Zod |
+| File handling | pdfjs-dist (client-side PDF extraction) |
+| 3D background | Three.js, React Three Fiber |
+| Testing | Jest, ts-jest |
+| Deployment | Vercel |
 
-ShadowForge employs carefully engineered prompts designed to capture Shadowdark’s core gameplay principles:
+---
 
-- Stingy, loot-based economy (GP=XP focus)
-- Low HP, high-tension encounters
-- Emphasis on light/dark mechanics (integrated where appropriate)
-- Classic fantasy tone
+## Configuration
 
-Each content type (monster, treasure, room) utilizes distinct `PromptTemplate`s within LangChain. These prompts were iteratively tested using content from official 5e modules (e.g., _Curse of Strahd_, _The Sunless Citadel_) to refine the output style, rules adherence, and overall pacing to feel appropriate for Shadowdark gameplay.
+Set environment variables in `.env.local`:
 
-**Future Plans**
+```env
+# Model for classification (cheap/fast recommended)
+LLM_CLASSIFY_MODEL=openai-gpt-4o-mini
 
-- Implement semantic memory for better context consistency between connected rooms or encounters.
-- Develop full adventure chunking with automatic classification (Room vs. Lore vs. GM Guidance).
-- Introduce user-editable conversion mappings for handling homebrew rules or custom preferences.
-- Explore potential VTT integration (e.g., Fantasy Grounds, Foundry VTT).
-- Automatic adventure generation.
+# Model for conversion (capable recommended)
+LLM_CONVERT_MODEL=openai-gpt-4o
+
+# API keys — only the key matching your chosen provider(s) is required
+OPENAI_API_KEY=...
+DEEPSEEK_API_KEY=...
+GROQ_API_KEY=...
+```
+
+Available model keys: see `lib/llm/llmConfig.ts`.
+
+---
+
+## Conversion Rules
+
+- **Economy**: all coin values divided by 10 (5e → Shadowdark scale)
+- **XP**: 1 gp = 1 XP (added inline next to treasure)
+- **Stat blocks**: HD, AC, attack roll + damage, morale score
+- **Magic items**: +1/+2 included as-is; +3/legendary flagged with a GM balance warning
+- **Traps & secrets**: mechanical traps and gameplay-affecting hidden elements only
+
+---
+
+## Project Structure
+
+```
+app/
+  api/convert/route.ts      # POST endpoint — validates input, calls pipeline
+  page.tsx                  # Main UI page
+components/
+  ShadowForgeLayout.tsx     # Input/output UI, file upload, preview toggle
+  ThreeJsD20.tsx            # Animated 3D D20 background
+lib/
+  conversion/
+    runPipeline.ts          # Unified pipeline: parse → classify → convert → render
+    convertToBlocks.ts      # Splits text into header+paragraph blocks
+    classifyWithLLM.ts      # Single LLM call to classify all blocks
+    convertToShadowdark.ts  # Per-block structured LLM conversion
+    renderToMarkdown.ts     # Pure renderer: ConvertedBlock[] → markdown string
+    sanitizeText.ts         # OCR artifact removal, whitespace normalization
+  llm/
+    callLLMAPI.ts           # callLLMAPI() and callLLMStructured<T>() with timeout
+    llmConfig.ts            # Model registry + role-based config (classify/convert)
+    providers/              # OpenAI, DeepSeek, Groq (OpenAI-compatible)
+  prompts/
+    system/                 # classification.md, conversion.md — edit without touching code
+    loadPrompt.ts           # Reads and caches .md prompt files at startup
+  schemas/
+    index.ts                # Zod schemas: ClassificationResponse, ConvertedBlock, etc.
+__tests__/                  # Jest tests — schemas, renderer, pipeline, API route
+```
+
+---
+
+## Running Locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Future Plans
+
+- Semantic memory for context consistency across connected rooms
+- User-editable conversion rule mappings (homebrew support)
+- VTT integration (Foundry VTT, Fantasy Grounds)
+- Adventure-level party scaling (monsters, traps, treasure)
+- Automatic adventure generation
