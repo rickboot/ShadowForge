@@ -1,6 +1,4 @@
 import { NextRequest } from 'next/server';
-
-export const dynamic = 'force-dynamic';
 import { z } from 'zod';
 import { convertToBlocks } from '@/lib/conversion/convertToBlocks';
 import { classifyWithLLM } from '@/lib/conversion/classifyWithLLM';
@@ -10,11 +8,16 @@ import { calculateCost } from '@/lib/pricing/modelPricing';
 import { LLMResult, Telemetry } from '@/lib/types/llm';
 import { MAX_INPUT_CHARS } from '@/lib/constants/limits';
 import { DEFAULT_ADVENTURE_ID } from '@/lib/constants/app';
+import { ClassifiedBlock } from '@/lib/conversion/classifyWithLLM';
+
+export const dynamic = 'force-dynamic';
 
 const CONVERTIBLE_TYPES = new Set([
   'Room', 'Encounter', 'Dungeon', 'Site', 'PointOfInterest',
   'Treasure', 'Monster', 'Character', 'NPC',
 ]);
+
+const CLASSIFY_CHUNK_SIZE = 20;
 
 const RequestSchema = z.object({
   text: z.string().min(1, 'text is required').max(MAX_INPUT_CHARS, `Input exceeds ${MAX_INPUT_CHARS} character limit`),
@@ -33,6 +36,21 @@ function aggregateTelemetry(results: LLMResult[]): Telemetry {
     outputTokens: r.usage.outputTokens,
   })));
   return { models, inputTokens, outputTokens, cost };
+}
+
+/** Classify blocks in chunks to avoid token limit failures on large inputs. */
+async function classifyInChunks(blocks: ReturnType<typeof convertToBlocks>) {
+  const llmResults: LLMResult[] = [];
+  const classified: ClassifiedBlock[] = [];
+
+  for (let i = 0; i < blocks.length; i += CLASSIFY_CHUNK_SIZE) {
+    const chunk = blocks.slice(i, i + CLASSIFY_CHUNK_SIZE);
+    const { blocks: classifiedChunk, llmResult } = await classifyWithLLM(chunk);
+    classified.push(...classifiedChunk);
+    llmResults.push(llmResult);
+  }
+
+  return { classified, llmResults };
 }
 
 export async function POST(req: NextRequest) {
@@ -57,6 +75,10 @@ export async function POST(req: NextRequest) {
   const send = (data: object) =>
     writer.write(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
 
+  const heartbeat = setInterval(() => {
+    writer.write(encoder.encode(': keepalive\n\n')).catch(() => {});
+  }, 5000);
+
   (async () => {
     try {
       const blocks = convertToBlocks(adventureId ?? DEFAULT_ADVENTURE_ID, text);
@@ -68,7 +90,7 @@ export async function POST(req: NextRequest) {
 
       await send({ type: 'start' });
 
-      const { blocks: classified, llmResult: classifyResult } = await classifyWithLLM(blocks);
+      const { classified, llmResults: classifyResults } = await classifyInChunks(blocks);
       const toConvert = classified.filter(b => CONVERTIBLE_TYPES.has(b.contentType));
 
       if (toConvert.length === 0) {
@@ -78,7 +100,7 @@ export async function POST(req: NextRequest) {
 
       await send({ type: 'classified', total: toConvert.length });
 
-      const llmResults: LLMResult[] = [classifyResult];
+      const llmResults: LLMResult[] = [...classifyResults];
       let completed = 0;
 
       await Promise.allSettled(
@@ -105,9 +127,12 @@ export async function POST(req: NextRequest) {
       await send({ type: 'done', telemetry: aggregateTelemetry(llmResults) });
     } catch (err) {
       console.error('[/api/convert] Pipeline error:', err);
-      await send({ type: 'error', message: 'Conversion failed.' });
+      try {
+        await send({ type: 'error', message: 'Conversion failed.' });
+      } catch { /* writer may already be closed */ }
     } finally {
-      writer.close();
+      clearInterval(heartbeat);
+      try { writer.close(); } catch { /* already closed */ }
     }
   })();
 
